@@ -1,7 +1,7 @@
 import React from "react";
 
 type Params = {
-  id: string;
+  id: number;
 };
 
 type UserProfilePageProps = {

@@ -56,6 +56,72 @@ module.exports = require("next/dist/compiled/next-server/app-page.runtime.dev.js
 
 /***/ }),
 
+/***/ "assert":
+/*!*************************!*\
+  !*** external "assert" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("assert");
+
+/***/ }),
+
+/***/ "events":
+/*!*************************!*\
+  !*** external "events" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ "https":
+/*!************************!*\
+  !*** external "https" ***!
+  \************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
+
+/***/ }),
+
+/***/ "os":
+/*!*********************!*\
+  !*** external "os" ***!
+  \*********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("os");
+
+/***/ }),
+
 /***/ "path":
 /*!***********************!*\
   !*** external "path" ***!
@@ -67,6 +133,28 @@ module.exports = require("path");
 
 /***/ }),
 
+/***/ "stream":
+/*!*************************!*\
+  !*** external "stream" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ "tty":
+/*!**********************!*\
+  !*** external "tty" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tty");
+
+/***/ }),
+
 /***/ "url":
 /*!**********************!*\
   !*** external "url" ***!
@@ -75,6 +163,28 @@ module.exports = require("path");
 
 "use strict";
 module.exports = require("url");
+
+/***/ }),
+
+/***/ "util":
+/*!***********************!*\
+  !*** external "util" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("util");
+
+/***/ }),
+
+/***/ "zlib":
+/*!***********************!*\
+  !*** external "zlib" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
 
 /***/ }),
 
@@ -109,13 +219,24 @@ eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__web
 
 /***/ }),
 
-/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?server=true!":
-/*!******************************************************************************************************!*\
-  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?server=true! ***!
-  \******************************************************************************************************/
-/***/ (() => {
+/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5CEjord%5C%5COneDrive%5C%5CDesktop%5C%5CGymApp%5C%5Cuniongym%5C%5Csrc%5C%5Capp%5C%5Cprofile%5C%5Cpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=true!":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5CEjord%5C%5COneDrive%5C%5CDesktop%5C%5CGymApp%5C%5Cuniongym%5C%5Csrc%5C%5Capp%5C%5Cprofile%5C%5Cpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=true! ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
+eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./src/app/profile/page.tsx */ \"(ssr)/./src/app/profile/page.tsx\"));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LWZsaWdodC1jbGllbnQtZW50cnktbG9hZGVyLmpzP21vZHVsZXM9JTdCJTIycmVxdWVzdCUyMiUzQSUyMkMlM0ElNUMlNUNVc2VycyU1QyU1Q0Vqb3JkJTVDJTVDT25lRHJpdmUlNUMlNUNEZXNrdG9wJTVDJTVDR3ltQXBwJTVDJTVDdW5pb25neW0lNUMlNUNzcmMlNUMlNUNhcHAlNUMlNUNwcm9maWxlJTVDJTVDcGFnZS50c3glMjIlMkMlMjJpZHMlMjIlM0ElNUIlNUQlN0Qmc2VydmVyPXRydWUhIiwibWFwcGluZ3MiOiJBQUFBLGdLQUF1SCIsInNvdXJjZXMiOlsid2VicGFjazovL3VuaW9uZ3ltLz9hOWE1Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCgvKiB3ZWJwYWNrTW9kZTogXCJlYWdlclwiICovIFwiQzpcXFxcVXNlcnNcXFxcRWpvcmRcXFxcT25lRHJpdmVcXFxcRGVza3RvcFxcXFxHeW1BcHBcXFxcdW5pb25neW1cXFxcc3JjXFxcXGFwcFxcXFxwcm9maWxlXFxcXHBhZ2UudHN4XCIpO1xuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22C%3A%5C%5CUsers%5C%5CEjord%5C%5COneDrive%5C%5CDesktop%5C%5CGymApp%5C%5Cuniongym%5C%5Csrc%5C%5Capp%5C%5Cprofile%5C%5Cpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=true!\n");
 
+/***/ }),
+
+/***/ "(ssr)/./src/app/profile/page.tsx":
+/*!**********************************!*\
+  !*** ./src/app/profile/page.tsx ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Profilepage)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ \"(ssr)/./node_modules/axios/lib/axios.js\");\n/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ \"(ssr)/./node_modules/next/dist/api/link.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);\n/* __next_internal_client_entry_do_not_use__ default auto */ \n\n\n\nfunction Profilepage() {\n    const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);\n    const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(false);\n    const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);\n    (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(()=>{\n        const getUserDetails = async ()=>{\n            setLoading(true);\n            setError(null);\n            try {\n                const res = await axios__WEBPACK_IMPORTED_MODULE_3__[\"default\"].get(\"/api/users/user\");\n                setData(res.data.data.id);\n                console.log(res.data);\n            } catch (err) {\n                setError(\"Failed to fetch user details.\");\n            } finally{\n                setLoading(false);\n            }\n        };\n        getUserDetails();\n    }, []);\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: \"max-w-4xl mx-auto p-6 font-sans\",\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                className: \"text-3xl font-semibold text-gray-900 text-center\",\n                children: \"Profile\"\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                lineNumber: 30,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"hr\", {\n                className: \"my-4 border-gray-300\"\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                lineNumber: 33,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                className: \"text-lg text-gray-700 text-center\",\n                children: \"Welcome to your profile page.\"\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                lineNumber: 34,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                className: \"mt-6 text-center\",\n                children: loading ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                    className: \"text-gray-500\",\n                    children: \"Loading...\"\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                    lineNumber: 39,\n                    columnNumber: 11\n                }, this) : error ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                    className: \"text-red-600\",\n                    children: error\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                    lineNumber: 41,\n                    columnNumber: 11\n                }, this) : data ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                    className: \"text-xl\",\n                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(next_link__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n                        href: `/profile/${data}`,\n                        className: \"text-blue-500 hover:underline\",\n                        children: [\n                            \"There is \",\n                            data,\n                            \" Profile Details\"\n                        ]\n                    }, void 0, true, {\n                        fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                        lineNumber: 44,\n                        columnNumber: 13\n                    }, this)\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                    lineNumber: 43,\n                    columnNumber: 11\n                }, this) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                    className: \"text-xl text-gray-600\",\n                    children: \"No user details available\"\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                    lineNumber: 52,\n                    columnNumber: 11\n                }, this)\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                lineNumber: 37,\n                columnNumber: 7\n            }, this)\n        ]\n    }, void 0, true, {\n        fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n        lineNumber: 29,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvYXBwL3Byb2ZpbGUvcGFnZS50c3giLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7QUFDMEI7QUFDRztBQUNzQjtBQUVwQyxTQUFTSztJQUN0QixNQUFNLENBQUNDLE1BQU1DLFFBQVEsR0FBR0gsK0NBQVFBLENBQWdCO0lBQ2hELE1BQU0sQ0FBQ0ksU0FBU0MsV0FBVyxHQUFHTCwrQ0FBUUEsQ0FBVTtJQUNoRCxNQUFNLENBQUNNLE9BQU9DLFNBQVMsR0FBR1AsK0NBQVFBLENBQWdCO0lBRWxERCxnREFBU0EsQ0FBQztRQUNSLE1BQU1TLGlCQUFpQjtZQUNyQkgsV0FBVztZQUNYRSxTQUFTO1lBQ1QsSUFBSTtnQkFDRixNQUFNRSxNQUFNLE1BQU1iLDZDQUFLQSxDQUFDYyxHQUFHLENBQUM7Z0JBQzVCUCxRQUFRTSxJQUFJUCxJQUFJLENBQUNBLElBQUksQ0FBQ1MsRUFBRTtnQkFDeEJDLFFBQVFDLEdBQUcsQ0FBQ0osSUFBSVAsSUFBSTtZQUN0QixFQUFFLE9BQU9ZLEtBQVU7Z0JBQ2pCUCxTQUFTO1lBQ1gsU0FBVTtnQkFDUkYsV0FBVztZQUNiO1FBQ0Y7UUFDQUc7SUFDRixHQUFHLEVBQUU7SUFFTCxxQkFDRSw4REFBQ087UUFBSUMsV0FBVTs7MEJBQ2IsOERBQUNDO2dCQUFHRCxXQUFVOzBCQUFtRDs7Ozs7OzBCQUdqRSw4REFBQ0U7Z0JBQUdGLFdBQVU7Ozs7OzswQkFDZCw4REFBQ0c7Z0JBQUVILFdBQVU7MEJBQW9DOzs7Ozs7MEJBR2pELDhEQUFDRDtnQkFBSUMsV0FBVTswQkFDWlosd0JBQ0MsOERBQUNlO29CQUFFSCxXQUFVOzhCQUFnQjs7Ozs7MkJBQzNCVixzQkFDRiw4REFBQ2E7b0JBQUVILFdBQVU7OEJBQWdCVjs7Ozs7MkJBQzNCSixxQkFDRiw4REFBQ2tCO29CQUFHSixXQUFVOzhCQUNaLDRFQUFDbkIsaURBQUlBO3dCQUNId0IsTUFBTSxDQUFDLFNBQVMsRUFBRW5CLEtBQUssQ0FBQzt3QkFDeEJjLFdBQVU7OzRCQUNYOzRCQUNXZDs0QkFBSzs7Ozs7Ozs7Ozs7eUNBSW5CLDhEQUFDa0I7b0JBQUdKLFdBQVU7OEJBQXdCOzs7Ozs7Ozs7Ozs7Ozs7OztBQUtoRCIsInNvdXJjZXMiOlsid2VicGFjazovL3VuaW9uZ3ltLy4vc3JjL2FwcC9wcm9maWxlL3BhZ2UudHN4P2M0ZTYiXSwic291cmNlc0NvbnRlbnQiOlsiXCJ1c2UgY2xpZW50XCI7XHJcbmltcG9ydCBheGlvcyBmcm9tIFwiYXhpb3NcIjtcclxuaW1wb3J0IExpbmsgZnJvbSBcIm5leHQvbGlua1wiO1xyXG5pbXBvcnQgUmVhY3QsIHsgdXNlRWZmZWN0LCB1c2VTdGF0ZSB9IGZyb20gXCJyZWFjdFwiO1xyXG5cclxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUHJvZmlsZXBhZ2UoKSB7XHJcbiAgY29uc3QgW2RhdGEsIHNldERhdGFdID0gdXNlU3RhdGU8c3RyaW5nIHwgbnVsbD4obnVsbCk7XHJcbiAgY29uc3QgW2xvYWRpbmcsIHNldExvYWRpbmddID0gdXNlU3RhdGU8Ym9vbGVhbj4oZmFsc2UpO1xyXG4gIGNvbnN0IFtlcnJvciwgc2V0RXJyb3JdID0gdXNlU3RhdGU8c3RyaW5nIHwgbnVsbD4obnVsbCk7XHJcblxyXG4gIHVzZUVmZmVjdCgoKSA9PiB7XHJcbiAgICBjb25zdCBnZXRVc2VyRGV0YWlscyA9IGFzeW5jICgpID0+IHtcclxuICAgICAgc2V0TG9hZGluZyh0cnVlKTtcclxuICAgICAgc2V0RXJyb3IobnVsbCk7XHJcbiAgICAgIHRyeSB7XHJcbiAgICAgICAgY29uc3QgcmVzID0gYXdhaXQgYXhpb3MuZ2V0KFwiL2FwaS91c2Vycy91c2VyXCIpO1xyXG4gICAgICAgIHNldERhdGEocmVzLmRhdGEuZGF0YS5pZCk7XHJcbiAgICAgICAgY29uc29sZS5sb2cocmVzLmRhdGEpO1xyXG4gICAgICB9IGNhdGNoIChlcnI6IGFueSkge1xyXG4gICAgICAgIHNldEVycm9yKFwiRmFpbGVkIHRvIGZldGNoIHVzZXIgZGV0YWlscy5cIik7XHJcbiAgICAgIH0gZmluYWxseSB7XHJcbiAgICAgICAgc2V0TG9hZGluZyhmYWxzZSk7XHJcbiAgICAgIH1cclxuICAgIH07XHJcbiAgICBnZXRVc2VyRGV0YWlscygpO1xyXG4gIH0sIFtdKTtcclxuXHJcbiAgcmV0dXJuIChcclxuICAgIDxkaXYgY2xhc3NOYW1lPVwibWF4LXctNHhsIG14LWF1dG8gcC02IGZvbnQtc2Fuc1wiPlxyXG4gICAgICA8aDEgY2xhc3NOYW1lPVwidGV4dC0zeGwgZm9udC1zZW1pYm9sZCB0ZXh0LWdyYXktOTAwIHRleHQtY2VudGVyXCI+XHJcbiAgICAgICAgUHJvZmlsZVxyXG4gICAgICA8L2gxPlxyXG4gICAgICA8aHIgY2xhc3NOYW1lPVwibXktNCBib3JkZXItZ3JheS0zMDBcIiAvPlxyXG4gICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LWxnIHRleHQtZ3JheS03MDAgdGV4dC1jZW50ZXJcIj5cclxuICAgICAgICBXZWxjb21lIHRvIHlvdXIgcHJvZmlsZSBwYWdlLlxyXG4gICAgICA8L3A+XHJcbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXQtNiB0ZXh0LWNlbnRlclwiPlxyXG4gICAgICAgIHtsb2FkaW5nID8gKFxyXG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1ncmF5LTUwMFwiPkxvYWRpbmcuLi48L3A+XHJcbiAgICAgICAgKSA6IGVycm9yID8gKFxyXG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1yZWQtNjAwXCI+e2Vycm9yfTwvcD5cclxuICAgICAgICApIDogZGF0YSA/IChcclxuICAgICAgICAgIDxoMiBjbGFzc05hbWU9XCJ0ZXh0LXhsXCI+XHJcbiAgICAgICAgICAgIDxMaW5rXHJcbiAgICAgICAgICAgICAgaHJlZj17YC9wcm9maWxlLyR7ZGF0YX1gfVxyXG4gICAgICAgICAgICAgIGNsYXNzTmFtZT1cInRleHQtYmx1ZS01MDAgaG92ZXI6dW5kZXJsaW5lXCJcclxuICAgICAgICAgICAgPlxyXG4gICAgICAgICAgICAgIFRoZXJlIGlzIHtkYXRhfSBQcm9maWxlIERldGFpbHNcclxuICAgICAgICAgICAgPC9MaW5rPlxyXG4gICAgICAgICAgPC9oMj5cclxuICAgICAgICApIDogKFxyXG4gICAgICAgICAgPGgyIGNsYXNzTmFtZT1cInRleHQteGwgdGV4dC1ncmF5LTYwMFwiPk5vIHVzZXIgZGV0YWlscyBhdmFpbGFibGU8L2gyPlxyXG4gICAgICAgICl9XHJcbiAgICAgIDwvZGl2PlxyXG4gICAgPC9kaXY+XHJcbiAgKTtcclxufVxyXG4iXSwibmFtZXMiOlsiYXhpb3MiLCJMaW5rIiwiUmVhY3QiLCJ1c2VFZmZlY3QiLCJ1c2VTdGF0ZSIsIlByb2ZpbGVwYWdlIiwiZGF0YSIsInNldERhdGEiLCJsb2FkaW5nIiwic2V0TG9hZGluZyIsImVycm9yIiwic2V0RXJyb3IiLCJnZXRVc2VyRGV0YWlscyIsInJlcyIsImdldCIsImlkIiwiY29uc29sZSIsImxvZyIsImVyciIsImRpdiIsImNsYXNzTmFtZSIsImgxIiwiaHIiLCJwIiwiaDIiLCJocmVmIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./src/app/profile/page.tsx\n");
 
 /***/ }),
 
@@ -126,7 +247,7 @@ eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__web
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Header)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ \"(ssr)/./node_modules/next/dist/api/link.js\");\n/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/navigation */ \"(ssr)/./node_modules/next/dist/api/navigation.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);\n/* __next_internal_client_entry_do_not_use__ default auto */ \n\n\n\nconst navLinks = [\n    {\n        href: \"/Signup\",\n        label: \"Signup\"\n    },\n    {\n        href: \"/Login\",\n        label: \"Login\"\n    },\n    {\n        href: \"/Logout\",\n        label: \"Logout\"\n    }\n];\nfunction Header() {\n    const pathname = (0,next_navigation__WEBPACK_IMPORTED_MODULE_2__.usePathname)();\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"header\", {\n        className: \"flex justify-between items-center py-4 px-7 border-b\",\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                className: \"w-[35px] h-[35px]\",\n                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(next_link__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n                    href: \"/\",\n                    children: \"EJ\"\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                    lineNumber: 27,\n                    columnNumber: 9\n                }, this)\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                lineNumber: 26,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"nav\", {\n                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"ul\", {\n                    className: \"flex gap-x-5 text-[14px]\",\n                    children: navLinks.map((link)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(next_link__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n                                href: link.href,\n                                className: `${pathname === link.href ? \"text-zinc-900\" : \"text-zinc-400\"}`,\n                                children: link.label\n                            }, void 0, false, {\n                                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                                lineNumber: 34,\n                                columnNumber: 15\n                            }, this)\n                        }, link.href, false, {\n                            fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                            lineNumber: 33,\n                            columnNumber: 13\n                        }, this))\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                    lineNumber: 31,\n                    columnNumber: 9\n                }, this)\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                lineNumber: 30,\n                columnNumber: 7\n            }, this)\n        ]\n    }, void 0, true, {\n        fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n        lineNumber: 25,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvY29tcG9uZW50cy9IZWFkZXIudHN4IiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7O0FBQzZCO0FBQ2lCO0FBQ3BCO0FBRTFCLE1BQU1HLFdBQVc7SUFDZjtRQUNFQyxNQUFNO1FBQ05DLE9BQU87SUFDVDtJQUNBO1FBQ0VELE1BQU07UUFDTkMsT0FBTztJQUNUO0lBQ0E7UUFDRUQsTUFBTTtRQUNOQyxPQUFPO0lBQ1Q7Q0FDRDtBQUVjLFNBQVNDO0lBQ3RCLE1BQU1DLFdBQVdOLDREQUFXQTtJQUU1QixxQkFDRSw4REFBQ087UUFBT0MsV0FBVTs7MEJBQ2hCLDhEQUFDQztnQkFBR0QsV0FBVTswQkFDWiw0RUFBQ1QsaURBQUlBO29CQUFDSSxNQUFLOzhCQUFJOzs7Ozs7Ozs7OzswQkFHakIsOERBQUNPOzBCQUNDLDRFQUFDQztvQkFBR0gsV0FBVTs4QkFDWE4sU0FBU1UsR0FBRyxDQUFDLENBQUNDLHFCQUNiLDhEQUFDQztzQ0FDQyw0RUFBQ2YsaURBQUlBO2dDQUNISSxNQUFNVSxLQUFLVixJQUFJO2dDQUNmSyxXQUFXLENBQUMsRUFDVkYsYUFBYU8sS0FBS1YsSUFBSSxHQUFHLGtCQUFrQixnQkFDNUMsQ0FBQzswQ0FFRFUsS0FBS1QsS0FBSzs7Ozs7OzJCQVBOUyxLQUFLVixJQUFJOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFlOUIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly91bmlvbmd5bS8uL3NyYy9jb21wb25lbnRzL0hlYWRlci50c3g/YTY5NiJdLCJzb3VyY2VzQ29udGVudCI6WyJcInVzZSBjbGllbnRcIjtcclxuaW1wb3J0IExpbmsgZnJvbSBcIm5leHQvbGlua1wiO1xyXG5pbXBvcnQgeyB1c2VQYXRobmFtZSB9IGZyb20gXCJuZXh0L25hdmlnYXRpb25cIjtcclxuaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiO1xyXG5cclxuY29uc3QgbmF2TGlua3MgPSBbXHJcbiAge1xyXG4gICAgaHJlZjogXCIvU2lnbnVwXCIsXHJcbiAgICBsYWJlbDogXCJTaWdudXBcIixcclxuICB9LFxyXG4gIHtcclxuICAgIGhyZWY6IFwiL0xvZ2luXCIsXHJcbiAgICBsYWJlbDogXCJMb2dpblwiLFxyXG4gIH0sXHJcbiAge1xyXG4gICAgaHJlZjogXCIvTG9nb3V0XCIsXHJcbiAgICBsYWJlbDogXCJMb2dvdXRcIixcclxuICB9LFxyXG5dO1xyXG5cclxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gSGVhZGVyKCkge1xyXG4gIGNvbnN0IHBhdGhuYW1lID0gdXNlUGF0aG5hbWUoKTtcclxuXHJcbiAgcmV0dXJuIChcclxuICAgIDxoZWFkZXIgY2xhc3NOYW1lPVwiZmxleCBqdXN0aWZ5LWJldHdlZW4gaXRlbXMtY2VudGVyIHB5LTQgcHgtNyBib3JkZXItYlwiPlxyXG4gICAgICA8aDIgY2xhc3NOYW1lPVwidy1bMzVweF0gaC1bMzVweF1cIj5cclxuICAgICAgICA8TGluayBocmVmPVwiL1wiPkVKPC9MaW5rPlxyXG4gICAgICA8L2gyPlxyXG5cclxuICAgICAgPG5hdj5cclxuICAgICAgICA8dWwgY2xhc3NOYW1lPVwiZmxleCBnYXAteC01IHRleHQtWzE0cHhdXCI+XHJcbiAgICAgICAgICB7bmF2TGlua3MubWFwKChsaW5rKSA9PiAoXHJcbiAgICAgICAgICAgIDxsaSBrZXk9e2xpbmsuaHJlZn0+XHJcbiAgICAgICAgICAgICAgPExpbmtcclxuICAgICAgICAgICAgICAgIGhyZWY9e2xpbmsuaHJlZn1cclxuICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YCR7XHJcbiAgICAgICAgICAgICAgICAgIHBhdGhuYW1lID09PSBsaW5rLmhyZWYgPyBcInRleHQtemluYy05MDBcIiA6IFwidGV4dC16aW5jLTQwMFwiXHJcbiAgICAgICAgICAgICAgICB9YH1cclxuICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICB7bGluay5sYWJlbH1cclxuICAgICAgICAgICAgICA8L0xpbms+XHJcbiAgICAgICAgICAgIDwvbGk+XHJcbiAgICAgICAgICApKX1cclxuICAgICAgICA8L3VsPlxyXG4gICAgICA8L25hdj5cclxuICAgIDwvaGVhZGVyPlxyXG4gICk7XHJcbn1cclxuIl0sIm5hbWVzIjpbIkxpbmsiLCJ1c2VQYXRobmFtZSIsIlJlYWN0IiwibmF2TGlua3MiLCJocmVmIiwibGFiZWwiLCJIZWFkZXIiLCJwYXRobmFtZSIsImhlYWRlciIsImNsYXNzTmFtZSIsImgyIiwibmF2IiwidWwiLCJtYXAiLCJsaW5rIiwibGkiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./src/components/Header.tsx\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Header)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ \"(ssr)/./node_modules/next/dist/api/link.js\");\n/* harmony import */ var next_navigation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/navigation */ \"(ssr)/./node_modules/next/dist/api/navigation.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);\n/* __next_internal_client_entry_do_not_use__ default auto */ \n\n\n\nconst navLinks = [\n    {\n        href: \"/signup\",\n        label: \"Signup\"\n    },\n    {\n        href: \"/login\",\n        label: \"Login\"\n    },\n    {\n        href: \"/logout\",\n        label: \"Logout\"\n    }\n];\nfunction Header() {\n    const pathname = (0,next_navigation__WEBPACK_IMPORTED_MODULE_2__.usePathname)();\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"header\", {\n        className: \"flex justify-between items-center py-4 px-7 border-b\",\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                className: \"w-[35px] h-[35px]\",\n                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(next_link__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n                    href: \"/\",\n                    children: \"EJ\"\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                    lineNumber: 27,\n                    columnNumber: 9\n                }, this)\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                lineNumber: 26,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"nav\", {\n                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"ul\", {\n                    className: \"flex gap-x-5 text-[14px]\",\n                    children: navLinks.map((link)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(next_link__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n                                href: link.href,\n                                className: `${pathname === link.href ? \"text-zinc-900\" : \"text-zinc-400\"}`,\n                                children: link.label\n                            }, void 0, false, {\n                                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                                lineNumber: 34,\n                                columnNumber: 15\n                            }, this)\n                        }, link.href, false, {\n                            fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                            lineNumber: 33,\n                            columnNumber: 13\n                        }, this))\n                }, void 0, false, {\n                    fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                    lineNumber: 31,\n                    columnNumber: 9\n                }, this)\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n                lineNumber: 30,\n                columnNumber: 7\n            }, this)\n        ]\n    }, void 0, true, {\n        fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\components\\\\Header.tsx\",\n        lineNumber: 25,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvY29tcG9uZW50cy9IZWFkZXIudHN4IiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7O0FBQzZCO0FBQ2lCO0FBQ3BCO0FBRTFCLE1BQU1HLFdBQVc7SUFDZjtRQUNFQyxNQUFNO1FBQ05DLE9BQU87SUFDVDtJQUNBO1FBQ0VELE1BQU07UUFDTkMsT0FBTztJQUNUO0lBQ0E7UUFDRUQsTUFBTTtRQUNOQyxPQUFPO0lBQ1Q7Q0FDRDtBQUVjLFNBQVNDO0lBQ3RCLE1BQU1DLFdBQVdOLDREQUFXQTtJQUU1QixxQkFDRSw4REFBQ087UUFBT0MsV0FBVTs7MEJBQ2hCLDhEQUFDQztnQkFBR0QsV0FBVTswQkFDWiw0RUFBQ1QsaURBQUlBO29CQUFDSSxNQUFLOzhCQUFJOzs7Ozs7Ozs7OzswQkFHakIsOERBQUNPOzBCQUNDLDRFQUFDQztvQkFBR0gsV0FBVTs4QkFDWE4sU0FBU1UsR0FBRyxDQUFDLENBQUNDLHFCQUNiLDhEQUFDQztzQ0FDQyw0RUFBQ2YsaURBQUlBO2dDQUNISSxNQUFNVSxLQUFLVixJQUFJO2dDQUNmSyxXQUFXLENBQUMsRUFDVkYsYUFBYU8sS0FBS1YsSUFBSSxHQUFHLGtCQUFrQixnQkFDNUMsQ0FBQzswQ0FFRFUsS0FBS1QsS0FBSzs7Ozs7OzJCQVBOUyxLQUFLVixJQUFJOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFlOUIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly91bmlvbmd5bS8uL3NyYy9jb21wb25lbnRzL0hlYWRlci50c3g/YTY5NiJdLCJzb3VyY2VzQ29udGVudCI6WyJcInVzZSBjbGllbnRcIjtcclxuaW1wb3J0IExpbmsgZnJvbSBcIm5leHQvbGlua1wiO1xyXG5pbXBvcnQgeyB1c2VQYXRobmFtZSB9IGZyb20gXCJuZXh0L25hdmlnYXRpb25cIjtcclxuaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiO1xyXG5cclxuY29uc3QgbmF2TGlua3MgPSBbXHJcbiAge1xyXG4gICAgaHJlZjogXCIvc2lnbnVwXCIsXHJcbiAgICBsYWJlbDogXCJTaWdudXBcIixcclxuICB9LFxyXG4gIHtcclxuICAgIGhyZWY6IFwiL2xvZ2luXCIsXHJcbiAgICBsYWJlbDogXCJMb2dpblwiLFxyXG4gIH0sXHJcbiAge1xyXG4gICAgaHJlZjogXCIvbG9nb3V0XCIsXHJcbiAgICBsYWJlbDogXCJMb2dvdXRcIixcclxuICB9LFxyXG5dO1xyXG5cclxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gSGVhZGVyKCkge1xyXG4gIGNvbnN0IHBhdGhuYW1lID0gdXNlUGF0aG5hbWUoKTtcclxuXHJcbiAgcmV0dXJuIChcclxuICAgIDxoZWFkZXIgY2xhc3NOYW1lPVwiZmxleCBqdXN0aWZ5LWJldHdlZW4gaXRlbXMtY2VudGVyIHB5LTQgcHgtNyBib3JkZXItYlwiPlxyXG4gICAgICA8aDIgY2xhc3NOYW1lPVwidy1bMzVweF0gaC1bMzVweF1cIj5cclxuICAgICAgICA8TGluayBocmVmPVwiL1wiPkVKPC9MaW5rPlxyXG4gICAgICA8L2gyPlxyXG5cclxuICAgICAgPG5hdj5cclxuICAgICAgICA8dWwgY2xhc3NOYW1lPVwiZmxleCBnYXAteC01IHRleHQtWzE0cHhdXCI+XHJcbiAgICAgICAgICB7bmF2TGlua3MubWFwKChsaW5rKSA9PiAoXHJcbiAgICAgICAgICAgIDxsaSBrZXk9e2xpbmsuaHJlZn0+XHJcbiAgICAgICAgICAgICAgPExpbmtcclxuICAgICAgICAgICAgICAgIGhyZWY9e2xpbmsuaHJlZn1cclxuICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YCR7XHJcbiAgICAgICAgICAgICAgICAgIHBhdGhuYW1lID09PSBsaW5rLmhyZWYgPyBcInRleHQtemluYy05MDBcIiA6IFwidGV4dC16aW5jLTQwMFwiXHJcbiAgICAgICAgICAgICAgICB9YH1cclxuICAgICAgICAgICAgICA+XHJcbiAgICAgICAgICAgICAgICB7bGluay5sYWJlbH1cclxuICAgICAgICAgICAgICA8L0xpbms+XHJcbiAgICAgICAgICAgIDwvbGk+XHJcbiAgICAgICAgICApKX1cclxuICAgICAgICA8L3VsPlxyXG4gICAgICA8L25hdj5cclxuICAgIDwvaGVhZGVyPlxyXG4gICk7XHJcbn1cclxuIl0sIm5hbWVzIjpbIkxpbmsiLCJ1c2VQYXRobmFtZSIsIlJlYWN0IiwibmF2TGlua3MiLCJocmVmIiwibGFiZWwiLCJIZWFkZXIiLCJwYXRobmFtZSIsImhlYWRlciIsImNsYXNzTmFtZSIsImgyIiwibmF2IiwidWwiLCJtYXAiLCJsaW5rIiwibGkiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./src/components/Header.tsx\n");
 
 /***/ }),
 
@@ -156,10 +277,22 @@ eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__
 /*!**********************************!*\
   !*** ./src/app/profile/page.tsx ***!
   \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Profilepage)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n\n\nfunction Profilepage() {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                children: \"Profile\"\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                lineNumber: 6,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"hr\", {}, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                lineNumber: 7,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                children: \"Profile page\"\n            }, void 0, false, {\n                fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n                lineNumber: 8,\n                columnNumber: 7\n            }, this)\n        ]\n    }, void 0, true, {\n        fileName: \"C:\\\\Users\\\\Ejord\\\\OneDrive\\\\Desktop\\\\GymApp\\\\uniongym\\\\src\\\\app\\\\profile\\\\page.tsx\",\n        lineNumber: 5,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9zcmMvYXBwL3Byb2ZpbGUvcGFnZS50c3giLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQTBCO0FBRVgsU0FBU0M7SUFDdEIscUJBQ0UsOERBQUNDOzswQkFDQyw4REFBQ0M7MEJBQUc7Ozs7OzswQkFDSiw4REFBQ0M7Ozs7OzBCQUNELDhEQUFDQzswQkFBRTs7Ozs7Ozs7Ozs7O0FBR1QiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly91bmlvbmd5bS8uL3NyYy9hcHAvcHJvZmlsZS9wYWdlLnRzeD9jNGU2Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tIFwicmVhY3RcIjtcclxuXHJcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFByb2ZpbGVwYWdlKCkge1xyXG4gIHJldHVybiAoXHJcbiAgICA8ZGl2PlxyXG4gICAgICA8aDE+UHJvZmlsZTwvaDE+XHJcbiAgICAgIDxociAvPlxyXG4gICAgICA8cD5Qcm9maWxlIHBhZ2U8L3A+XHJcbiAgICA8L2Rpdj5cclxuICApO1xyXG59XHJcbiJdLCJuYW1lcyI6WyJSZWFjdCIsIlByb2ZpbGVwYWdlIiwiZGl2IiwiaDEiLCJociIsInAiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(rsc)/./src/app/profile/page.tsx\n");
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var next_dist_build_webpack_loaders_next_flight_loader_module_proxy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next/dist/build/webpack/loaders/next-flight-loader/module-proxy */ "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-loader/module-proxy.js");
+
+
+const proxy = await (0,next_dist_build_webpack_loaders_next_flight_loader_module_proxy__WEBPACK_IMPORTED_MODULE_0__.createProxy)(String.raw`C:\Users\Ejord\OneDrive\Desktop\GymApp\uniongym\src\app\profile\page.tsx`)
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (proxy.default);
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } }, 1);
 
 /***/ }),
 
@@ -226,7 +359,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fprofile%2Fpage&page=%2Fprofile%2Fpage&appPaths=%2Fprofile%2Fpage&pagePath=private-next-app-dir%2Fprofile%2Fpage.tsx&appDir=C%3A%5CUsers%5CEjord%5COneDrive%5CDesktop%5CGymApp%5Cuniongym%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=C%3A%5CUsers%5CEjord%5COneDrive%5CDesktop%5CGymApp%5Cuniongym&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc","vendor-chunks/mime-db","vendor-chunks/axios","vendor-chunks/follow-redirects","vendor-chunks/debug","vendor-chunks/form-data","vendor-chunks/asynckit","vendor-chunks/combined-stream","vendor-chunks/mime-types","vendor-chunks/proxy-from-env","vendor-chunks/ms","vendor-chunks/supports-color","vendor-chunks/delayed-stream","vendor-chunks/has-flag"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fprofile%2Fpage&page=%2Fprofile%2Fpage&appPaths=%2Fprofile%2Fpage&pagePath=private-next-app-dir%2Fprofile%2Fpage.tsx&appDir=C%3A%5CUsers%5CEjord%5COneDrive%5CDesktop%5CGymApp%5Cuniongym%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=C%3A%5CUsers%5CEjord%5COneDrive%5CDesktop%5CGymApp%5Cuniongym&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
 module.exports = __webpack_exports__;
 
 })();

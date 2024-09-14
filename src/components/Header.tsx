@@ -5,15 +5,15 @@ import React from "react";
 
 const navLinks = [
   {
-    href: "/Signup",
+    href: "/signup",
     label: "Signup",
   },
   {
-    href: "/Login",
+    href: "/login",
     label: "Login",
   },
   {
-    href: "/Logout",
+    href: "/logout",
     label: "Logout",
   },
 ];

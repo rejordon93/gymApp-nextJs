@@ -22,7 +22,7 @@ export default function SignupPage() {
       setIsLoading(true);
       const response = await axios.post("/api/users/signup", user);
       console.log("Signup success", response.data);
-      router.push("/Login");
+      router.push("/login");
     } catch (error) {
       setError("An unexpected error occurred.");
     } finally {
