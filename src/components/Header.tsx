@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
 
 const navLinks = [
   {
@@ -23,8 +24,13 @@ export default function Header() {
 
   return (
     <header className="flex justify-between items-center py-4 px-7 border-b">
-      <h2 className="w-[35px] h-[35px]">
-        <Link href="/">EJ</Link>
+      <h2 className="w-[35px] h-[35px] flex items-center justify-center">
+        <Link href="/">
+          <FontAwesomeIcon
+            icon={faDumbbell}
+            className="text-2xl text-gray-900"
+          />
+        </Link>
       </h2>
 
       <nav>
