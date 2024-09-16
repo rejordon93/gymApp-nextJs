@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 const navLinks = [
   {
@@ -18,6 +19,8 @@ const navLinks = [
     label: "Logout",
   },
 ];
+
+const token = getDataFromToken;
 
 export default function Header() {
   const pathname = usePathname();
