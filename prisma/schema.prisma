@@ -8,10 +8,30 @@ generator client {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  username    String   @unique
-  email       String   @unique
-  password    String   // Note: Use `@required` in your application logic, not in Prisma schema
-  createdAt   DateTime @default(now())
-  editedAt    DateTime @default(now()) @updatedAt
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
+  password  String    // Ensure this is encrypted in your app logic
+  createdAt DateTime  @default(now())
+  editedAt  DateTime  @default(now()) @updatedAt
+
+  // Define the relation to Workouts
+  workouts  Workouts[]
+}
+
+model Workouts {
+  id        Int      @id @default(autoincrement())
+  equipment String
+  duration  String
+  checkin      DateTime // Define the correct type for date
+  user_id   Int      // Foreign key field
+
+  createdAt DateTime  @default(now())
+  editedAt  DateTime  @default(now()) @updatedAt
+
+  // Define the relation and foreign key to User
+  user      User     @relation(fields: [user_id], references: [id])
+
+  // Ensure the foreign key is properly set
+  @@index([user_id])
 }
