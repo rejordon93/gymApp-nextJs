@@ -11,13 +11,14 @@ type DataProps = {
 export default function GymVisitsPage() {
   const [data, setData] = useState<DataProps | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     axios
-      .get("/api/users/user")
+      .get("/api/users/user", { withCredentials: true }) // Ensure cookies are sent
       .then((response) => {
-        setData(response.data.data);
+        // Make sure the data path matches the server response structure
+        setData(response.data.user); // Adjust based on actual response structure
         console.log("User page", response.data);
       })
       .catch((error) => {

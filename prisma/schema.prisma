@@ -15,15 +15,15 @@ model User {
   createdAt DateTime  @default(now())
   editedAt  DateTime  @default(now()) @updatedAt
 
-  // Define the relation to Workouts
-  workouts  Workouts[]
+  // Define the relation to Workout
+  workouts  Workout[]
 }
 
-model Workouts {
+model Workout {
   id        Int      @id @default(autoincrement())
   equipment String
   duration  String
-  checkin      DateTime // Define the correct type for date
+  checkin   DateTime // Define the correct type for date
   user_id   Int      // Foreign key field
 
   createdAt DateTime  @default(now())

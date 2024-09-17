@@ -26,9 +26,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    const workouts = await prisma.workout.findMany({
+      where: { user_id: userId }, // Filter workouts by user ID
+      select: {
+        id: true,
+        equipment: true,
+        duration: true,
+        checkin: true,
+      },
+    });
+
     return NextResponse.json({
       message: "User Found",
-      data: user,
+      user,
+      workouts, // Return workouts data as well
     });
   } catch (error: any) {
     console.error("Error fetching user:", error.message);
