@@ -15,7 +15,7 @@ export default function GymVisitsPage() {
 
   useEffect(() => {
     axios
-      .get("/api/users/user", { withCredentials: true }) // Ensure cookies are sent
+      .get("/api/users/profile", { withCredentials: true }) // Ensure cookies are sent
       .then((response) => {
         // Make sure the data path matches the server response structure
         setData(response.data.user); // Adjust based on actual response structure
