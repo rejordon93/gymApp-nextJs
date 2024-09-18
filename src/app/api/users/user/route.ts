@@ -1,10 +1,12 @@
-import { getDataFromToken } from "@/helpers/getDataFromToken";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = await getDataFromToken(request);
+    const userId = getDataFromToken(request);
+
+    console.log("User ID:", userId);
 
     if (userId === null) {
       return NextResponse.json(
@@ -22,29 +24,79 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
     const workouts = await prisma.workout.findMany({
-      where: { user_id: userId }, // Filter workouts by user ID
+      where: { user_id: userId },
       select: {
         id: true,
         equipment: true,
         duration: true,
         checkin: true,
+        user_id: true,
+        createdAt: true,
+        editedAt: true,
       },
     });
+
+    console.log("Workouts Data:", workouts);
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
     return NextResponse.json({
       message: "User Found",
       user,
-      workouts, // Return workouts data as well
+      workouts,
     });
   } catch (error: any) {
     console.error("Error fetching user:", error.message);
     return NextResponse.json(
       { error: "Failed to fetch user" },
+      { status: 400 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // Retrieve and validate the request body
+    const { equipment, duration, checkin } = await request.json();
+
+    if (!equipment || !duration || !checkin) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Get the user ID from the token
+    const userId = getDataFromToken(request);
+
+    if (userId === null) {
+      return NextResponse.json(
+        { error: "Invalid token or no user found" },
+        { status: 401 }
+      );
+    }
+
+    // Create the new workout in the database
+    const workout = await prisma.workout.create({
+      data: {
+        equipment,
+        duration,
+        checkin: new Date(checkin), // Ensure date format is correct
+        user_id: userId,
+      },
+    });
+
+    return NextResponse.json({
+      message: "Workout added successfully",
+      workout,
+    });
+  } catch (error: any) {
+    console.error("Error adding workout:", error.message);
+    return NextResponse.json(
+      { error: "Failed to add workout" },
       { status: 400 }
     );
   }
