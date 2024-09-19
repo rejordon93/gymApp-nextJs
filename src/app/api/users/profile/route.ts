@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
   try {
     // Retrieve and validate the request body
     const { equipment, duration, checkin } = await request.json();
+    console.log(equipment, duration, checkin);
 
     if (!equipment || !duration || !checkin) {
       return NextResponse.json(

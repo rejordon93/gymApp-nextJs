@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useAppContext } from "@/context/context";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,12 +14,17 @@ export default function LoginPage() {
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { setToken } = useAppContext();
 
   const onLogin = async () => {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
       console.log(response);
+      const { token } = response.data; // Directly access response data
+
+      setToken(token);
+      console.log(token);
       router.push("/profile");
     } catch (error: any) {
       console.log("Login failed", error.message);
