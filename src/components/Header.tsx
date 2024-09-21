@@ -3,8 +3,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
+import { useAppContext } from "@/context/context"; // Make sure to import your context
 
-const navLinks = [
+const publicNavLinks = [
   {
     href: "/signup",
     label: "Signup",
@@ -12,6 +13,21 @@ const navLinks = [
   {
     href: "/login",
     label: "Login",
+  },
+];
+
+const privateNavLinks = [
+  {
+    href: "/profile",
+    label: "Profile",
+  },
+  {
+    href: "/workouts",
+    label: "Workouts",
+  },
+  {
+    href: "/planner",
+    label: "Planner",
   },
   {
     href: "/logout",
@@ -21,6 +37,10 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const { token } = useAppContext(); // Access the token from context
+
+  // Determine which links to display based on the token
+  const navLinks = token ? privateNavLinks : publicNavLinks;
 
   return (
     <header className="flex justify-between items-center py-4 px-7 border-b">

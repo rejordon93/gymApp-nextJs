@@ -53,37 +53,52 @@ export default function Home() {
             have expanded over the years — from Bothell to Redmond and finally
             Issaquah — our vision has always stayed the same.
           </p>
-          <Link href={"/"}>
-            <button className="px-8 py-3 bg-indigo-600 text-center text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300">
-              Learn More
-            </button>
-          </Link>
+          {/* Button wrapper for centering */}
+          <div className="flex justify-center">
+            <Link href={"/"}>
+              <button className="px-6 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-md shadow-md hover:bg-indigo-700 transition duration-300">
+                Learn More
+              </button>
+            </Link>
+          </div>
         </div>
 
         {/* Equipment Section */}
-        <div className="md:col-span-2 bg-[#007874] p-8 rounded-lg shadow-md space-y-6">
-          <h1 className="text-4xl font-bold text-white text-center">
-            LATEST & GREATEST EQUIPMENT
-          </h1>
-          <p className="text-lg text-white text-center">
-            With a vast array of cutting-edge equipment and technologies
-            alongside traditional workout gear, you'll always have full access
-            to all the tools you need at any 365 Fitness location.
-          </p>
-          <ul className="list-none space-y-4 text-center">
-            <li className="flex items-center justify-center text-white text-lg">
-              <FaCheckCircle className="text-green-400 mr-3" /> Heart-Pumping
-              Cardio Machines
-            </li>
-            <li className="flex items-center justify-center text-white text-lg">
-              <FaCheckCircle className="text-green-400 mr-3" /> Strength
-              Training Equipment
-            </li>
-            <li className="flex items-center justify-center text-white text-lg">
-              <FaCheckCircle className="text-green-400 mr-3" /> Complete Range
-              of Free Weights
-            </li>
-          </ul>
+        <div className="md:col-span-2 bg-[#007874] p-8 rounded-lg shadow-md space-y-6 flex flex-col md:flex-row items-start">
+          <div className="md:w-1/2 space-y-4">
+            <h1 className="text-4xl font-bold text-white">
+              LATEST & GREATEST EQUIPMENT
+            </h1>
+            <p className="text-lg text-white max-w-[90%]">
+              With a vast array of cutting-edge equipment and technologies
+              alongside traditional workout gear, you'll always have full access
+              to all the tools you need at any 365 Fitness location.
+            </p>
+          </div>
+
+          {/* Adjusted right section for the list */}
+          <div className="md:w-1/2 flex justify-end">
+            <ul className="list-none space-y-4 w-full max-w-[80%]">
+              <li className="flex items-center text-white text-lg border border-white p-4 rounded-lg w-full transition duration-300 hover:bg-green-500 hover:text-black">
+                <FaCheckCircle className="text-green-400 mr-3" />
+                <span className="flex-1 text-left">
+                  Heart-Pumping Cardio Machines
+                </span>
+              </li>
+              <li className="flex items-center text-white text-lg border border-white p-4 rounded-lg w-full transition duration-300 hover:bg-green-500 hover:text-black">
+                <FaCheckCircle className="text-green-400 mr-3" />
+                <span className="flex-1 text-left">
+                  Strength Training Equipment
+                </span>
+              </li>
+              <li className="flex items-center text-white text-lg border border-white p-4 rounded-lg w-full transition duration-300 hover:bg-green-500 hover:text-black">
+                <FaCheckCircle className="text-green-400 mr-3" />
+                <span className="flex-1 text-left">
+                  Complete Range of Free Weights
+                </span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
