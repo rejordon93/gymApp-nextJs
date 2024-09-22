@@ -1,15 +1,16 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import BarChart from "@/components/BarChart";
 
-type DataProps = {
-  id: number;
-  username: string;
-  email: string;
+type WorkoutDataProps = {
+  label: string; // This will be the workout's equipment or checkin date
+  calories: number;
+  duration: number; // You can add other fields if needed
 };
 
 export default function GymVisitsPage() {
-  const [data, setData] = useState<DataProps | null>(null);
+  const [data, setData] = useState<WorkoutDataProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,8 +18,17 @@ export default function GymVisitsPage() {
     axios
       .get("/api/users/profile", { withCredentials: true }) // Ensure cookies are sent
       .then((response) => {
-        setData(response.data.user); // Adjust based on actual response structure
-        console.log("User page", response.data);
+        const workouts = response.data.workouts.map((workout: any) => ({
+          label: `${workout.equipment} on ${new Date(
+            workout.checkin
+          ).toLocaleDateString()}`, // Use equipment and date as label
+          calories: workout.calories || 0,
+          duration: workout.duration || 0, // If you want to include duration
+          repetitions: workout.repetitions || 0,
+        }));
+
+        setData(workouts);
+        console.log("User workouts", workouts);
       })
       .catch((error) => {
         console.error("Error fetching data", error);
@@ -27,30 +37,13 @@ export default function GymVisitsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
-      </div>
-    );
-  if (error)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-lg font-semibold text-red-600">Error: {error}</p>
-      </div>
-    );
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-lg w-full">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Welcome, {data?.username}!
-        </h1>
-        <p className="text-gray-600 text-center">
-          Check your recent visits and manage your gym activities here.
-        </p>
-        {/* Add more content here as needed */}
-      </div>
+    <div>
+      <h1>Gym Visits</h1>
+      <BarChart data={data} />
     </div>
   );
 }

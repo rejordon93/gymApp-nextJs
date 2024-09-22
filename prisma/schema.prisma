@@ -20,18 +20,20 @@ model User {
 }
 
 model Workout {
-  id        Int      @id @default(autoincrement())
-  equipment String
-  duration  String
-  checkin   DateTime // Define the correct type for date
-  user_id   Int      // Foreign key field
+  id           Int      @id @default(autoincrement())
+  equipment    String
+  duration     Int
+  checkin      DateTime
+  calories     Int      @default(0)
+  weightLifted Int?     // Optional field
+  distance     Float?   // Optional field
+  repetitions  Int?     // Optional field
+  user_id      Int
 
-  createdAt DateTime  @default(now())
-  editedAt  DateTime  @default(now()) @updatedAt
+  createdAt    DateTime @default(now())
+  editedAt     DateTime @default(now()) @updatedAt
 
-  // Define the relation and foreign key to User
-  user      User     @relation(fields: [user_id], references: [id])
+  user         User     @relation(fields: [user_id], references: [id])
 
-  // Ensure the foreign key is properly set
   @@index([user_id])
 }

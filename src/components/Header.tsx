@@ -1,9 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDumbbell } from "@fortawesome/free-solid-svg-icons";
-import { useAppContext } from "@/context/context"; // Make sure to import your context
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter"; // MUI Fitness Icon
+import { useAppContext } from "@/context/context";
 
 const publicNavLinks = [
   {
@@ -13,6 +12,10 @@ const publicNavLinks = [
   {
     href: "/login",
     label: "Login",
+  },
+  {
+    href: "/logout",
+    label: "Logout",
   },
 ];
 
@@ -46,10 +49,8 @@ export default function Header() {
     <header className="flex justify-between items-center py-4 px-7 border-b">
       <h2 className="w-[35px] h-[35px] flex items-center justify-center">
         <Link href="/">
-          <FontAwesomeIcon
-            icon={faDumbbell}
-            className="text-2xl text-gray-900"
-          />
+          {/* Use FitnessCenterIcon from MUI */}
+          <FitnessCenterIcon className="text-2xl text-gray-900" />
         </Link>
       </h2>
 

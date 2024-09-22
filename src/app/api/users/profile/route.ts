@@ -30,6 +30,10 @@ export async function GET(request: NextRequest) {
         id: true,
         equipment: true,
         duration: true,
+        calories: true,
+        weightLifted: true,
+        distance: true,
+        repetitions: true,
         checkin: true,
         user_id: true,
         createdAt: true,
@@ -60,8 +64,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Retrieve and validate the request body
-    const { equipment, duration, checkin } = await request.json();
-    console.log(equipment, duration, checkin);
+    const {
+      equipment,
+      duration,
+      checkin,
+      calories,
+      weightLifted,
+      distance,
+      repetitions,
+    } = await request.json();
 
     if (!equipment || !duration || !checkin) {
       return NextResponse.json(
@@ -80,12 +91,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create the new workout in the database
+    // Create the new workout in the database with the new fields
     const workout = await prisma.workout.create({
       data: {
         equipment,
         duration,
         checkin: new Date(checkin), // Ensure date format is correct
+        calories: calories || 0, // Default to 0 if not provided
+        weightLifted: weightLifted || null, // Optional field
+        distance: distance || null, // Optional field
+        repetitions: repetitions || null, // Optional field
         user_id: userId,
       },
     });
