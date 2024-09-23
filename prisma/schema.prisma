@@ -21,10 +21,11 @@ model User {
 
 model Workout {
   id           Int      @id @default(autoincrement())
-  equipment    String
-  duration     Int
+  equipment    String?
+  duration     Int?
   checkin      DateTime
-  calories     Int      @default(0)
+  checkout     DateTime?
+  calories     Int?      @default(0)
   weightLifted Int?     // Optional field
   distance     Float?   // Optional field
   repetitions  Int?     // Optional field
