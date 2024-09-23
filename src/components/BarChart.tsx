@@ -2,24 +2,11 @@ import React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { Paper } from "@mui/material";
 
-type BarChartProps = {
-  data: {
-    label: string;
-    calories: number;
-    duration: number;
-    repetitions: number;
-  }[];
-};
-
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const uData = [2, 4, 6, 7, 1, 8, 3];
 
-// export function valueFormatter(value: number | null) {
-//   return `${value}mm`;
-// }
-
-const DayTrackerComponent: React.FC<BarChartProps> = ({ data }) => {
+const DayTrackerComponent = () => {
   return (
     <Paper elevation={3}>
       <BarChart
