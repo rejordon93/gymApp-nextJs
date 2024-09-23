@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     // Create workout in the database
     const workout = await prisma.workout.create({
       data: {
-        equipment: equipment || null,
+        equipment: equipment || null
         duration: duration || null,
         checkin: new Date(checkin), // Ensure date format is correct
         calories: calories || 0, // Default to 0 if not provided
