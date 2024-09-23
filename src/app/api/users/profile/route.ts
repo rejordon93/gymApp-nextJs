@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     // Create workout in the database
     const workout = await prisma.workout.create({
       data: {
-        equipment: equipment || null
+        equipment: equipment || null,
         duration: duration || null,
         checkin: new Date(checkin), // Ensure date format is correct
         calories: calories || 0, // Default to 0 if not provided
@@ -117,60 +117,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// export async function POST(request: NextRequest) {
-//   try {
-//     // Retrieve and validate the request body
-//     const {
-//       equipment,
-//       duration,
-//       checkin,
-//       calories,
-//       weightLifted,
-//       distance,
-//       repetitions,
-//     } = await request.json();
-
-//     if (!equipment || !duration || !checkin) {
-//       return NextResponse.json(
-//         { error: "Missing required fields" },
-//         { status: 400 }
-//       );
-//     }
-
-//     // Get the user ID from the token
-//     const userId = getDataFromToken(request);
-
-//     if (userId === null) {
-//       return NextResponse.json(
-//         { error: "Invalid token or no user found" },
-//         { status: 401 }
-//       );
-//     }
-
-//     // Create the new workout in the database with the new fields
-//     const workout = await prisma.workout.create({
-//       data: {
-//         equipment,
-//         duration,
-//         checkin: new Date(checkin), // Ensure date format is correct
-//         calories: calories || 0, // Default to 0 if not provided
-//         weightLifted: weightLifted || null, // Optional field
-//         distance: distance || null, // Optional field
-//         repetitions: repetitions || null, // Optional field
-//         user_id: userId,
-//       },
-//     });
-
-//     return NextResponse.json({
-//       message: "Workout added successfully",
-//       workout,
-//     });
-//   } catch (error: any) {
-//     console.error("Error adding workout:", error.message);
-//     return NextResponse.json(
-//       { error: "Failed to add workout" },
-//       { status: 400 }
-//     );
-//   }
-// }
