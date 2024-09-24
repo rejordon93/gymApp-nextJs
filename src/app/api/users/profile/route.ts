@@ -41,8 +41,6 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log("Workouts Data:", workouts);
-
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
