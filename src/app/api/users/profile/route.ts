@@ -115,3 +115,33 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json(); // Parse the incoming request body
+    let { checkin, checkout } = body;
+
+    // Ensure both checkin and checkout are Date objects
+    checkin = new Date(checkin);
+    checkout = new Date(checkout);
+
+    // Calculate duration in milliseconds (difference between checkin and checkout)
+    const duration = checkout.getTime() - checkin.getTime();
+
+    // Return the checkin, checkout, and duration values
+    return NextResponse.json(
+      {
+        message: "Check-in and Check-out updated",
+        checkin,
+        checkout,
+        duration: `${Math.floor(duration / 1000)} seconds`, // Optional: formatting duration in seconds
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Invalid request", error: error.message },
+      { status: 400 }
+    );
+  }
+}

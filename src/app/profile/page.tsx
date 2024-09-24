@@ -40,7 +40,7 @@ export default function GymVisitsPage() {
 
         const newWorkout: WorkoutDataProps = {
           equipment: response.data.equipment || "",
-          duration: response.data.duration || 30,
+          duration: response.data.duration || 0,
           calories: response.data.calories || 0,
           weightLifted: response.data.weightLifted || 0,
           distance: response.data.distance || 0,
@@ -60,29 +60,23 @@ export default function GymVisitsPage() {
       .finally(() => setLoading(false));
   };
 
-  const handleCheckOutBtn = async (workout: WorkoutDataProps) => {
+  const handleCheckOutBtn = async () => {
     setLoading(true);
     setError(null); // Reset any previous errors
 
     try {
-      // Use the workout parameter instead of fetching all data
-      console.log("Checking out workout:", workout);
+      // Send PATCH request to update the checkout time for this specific workout
+      const response = await axios.patch("/api/users/profile", {});
 
-      // Here you can process the specific workout if needed
-      if (workout.duration === 30) {
-        console.log("Workout is 30 minutes:", workout);
-        // Handle the workout check-out logic as needed
-      } else {
-        console.log("Workout does not meet the duration criteria.");
-      }
+      console.log("Checkout updated:", response.data);
     } catch (error) {
       console.error(
         "Error checking out workout",
         error.response?.data || error.message
       );
-      setError(error.message);
+      setError(error.message); // Set error state to display error message
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop the loading indicator
     }
   };
 
@@ -136,7 +130,7 @@ export default function GymVisitsPage() {
             </p>
             <button
               className="mt-2 px-2 py-1 bg-green-600 text-white rounded"
-              onClick={() => handleCheckOutBtn(workout)} // Pass the specific workout
+              onClick={handleCheckOutBtn} // Pass the specific workout
             >
               Check out
             </button>
