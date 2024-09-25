@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
+import { error } from "console";
 
 export async function GET(request: NextRequest) {
   try {
@@ -118,30 +119,42 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const body = await req.json(); // Parse the incoming request body
-    let { checkin, checkout } = body;
+    const { id, checkout, checkin } = await req.json(); // Ensure you're extracting the correct properties from the request body
 
-    // Ensure both checkin and checkout are Date objects
-    checkin = new Date(checkin);
-    checkout = new Date(checkout);
+    if (!id || !checkout || !checkin) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
-    // Calculate duration in milliseconds (difference between checkin and checkout)
-    const duration = checkout.getTime() - checkin.getTime();
+    // Convert checkin and checkout to Date objects
+    const checkinDate = new Date(checkin);
+    const checkoutDate = new Date(checkout);
 
-    // Return the checkin, checkout, and duration values
-    return NextResponse.json(
-      {
-        message: "Check-in and Check-out updated",
-        checkin,
-        checkout,
-        duration: `${Math.floor(duration / 1000)} seconds`, // Optional: formatting duration in seconds
+    // Calculate duration in milliseconds
+    const duration = (checkoutDate.getTime() - checkinDate.getTime()) / 1000; // Convert to seconds
+
+    // Update the workout in the database
+    const workout = await prisma.workout.update({
+      where: { id }, // Ensure you have the workout ID to update
+      data: {
+        checkout: checkoutDate, // Ensure this is a valid Date
+        checkin: checkinDate,
+        duration: duration || 0, // Default to 0 if duration is not calculated
+        // include any other fields you want to update here
       },
-      { status: 200 }
-    );
+    });
+
+    return NextResponse.json({
+      message: "Workout updated successfully",
+      workout,
+    });
   } catch (error) {
+    console.error("Error updating the workout:", error);
     return NextResponse.json(
-      { message: "Invalid request", error: error.message },
-      { status: 400 }
+      { error: "Failed to update workout" },
+      { status: 500 }
     );
   }
 }

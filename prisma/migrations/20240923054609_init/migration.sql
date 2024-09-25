@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE "Workout" ADD COLUMN     "checkout" TIMESTAMP(3),
-ALTER COLUMN "equipment" DROP NOT NULL,
-ALTER COLUMN "duration" DROP NOT NULL,
-ALTER COLUMN "calories" DROP NOT NULL;

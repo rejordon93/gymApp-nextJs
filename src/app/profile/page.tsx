@@ -11,6 +11,7 @@ type WorkoutDataProps = {
   checkin: string; // String because we're using ISO string
   weightLifted: number;
   distance: number;
+  id: number;
 };
 
 export default function GymVisitsPage() {
@@ -46,6 +47,7 @@ export default function GymVisitsPage() {
           distance: response.data.distance || 0,
           repetitions: response.data.repetitions || 0,
           checkin: response.data.checkin || new Date().toISOString(),
+          id: response.data.id,
         };
 
         setData((prevData) => [...prevData, newWorkout]);
@@ -65,10 +67,15 @@ export default function GymVisitsPage() {
     setError(null); // Reset any previous errors
 
     try {
-      // Send PATCH request to update the checkout time for this specific workout
-      const response = await axios.patch("/api/users/profile", {});
+      const checkoutTime = new Date().toISOString(); // Capture the current time as checkout
 
-      console.log("Checkout updated:", response.data);
+      // Send PATCH request to update the checkout time for this specific workout
+      const response = await axios.patch("/api/users/profile", {
+        checkin: new Date().toISOString(), // This could be adjusted based on your logic
+        checkout: checkoutTime,
+      });
+
+      console.log("API Response:", response.data);
     } catch (error) {
       console.error(
         "Error checking out workout",
@@ -130,7 +137,7 @@ export default function GymVisitsPage() {
             </p>
             <button
               className="mt-2 px-2 py-1 bg-green-600 text-white rounded"
-              onClick={handleCheckOutBtn} // Pass the specific workout
+              onClick={handleCheckOutBtn} // Pass the specific workout ID
             >
               Check out
             </button>
