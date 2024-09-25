@@ -139,10 +139,9 @@ export async function PATCH(req: NextRequest) {
     const workout = await prisma.workout.update({
       where: { id }, // Ensure you have the workout ID to update
       data: {
-        checkout: checkoutDate, // Ensure this is a valid Date
+        checkout: checkoutDate,
         checkin: checkinDate,
-        duration: duration || 0, // Default to 0 if duration is not calculated
-        // include any other fields you want to update here
+        duration: duration || 0,
       },
     });
 
