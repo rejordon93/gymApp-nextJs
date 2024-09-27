@@ -62,20 +62,33 @@ export default function GymVisitsPage() {
       .finally(() => setLoading(false));
   };
 
-  const handleCheckOutBtn = async () => {
+  const handleCheckOutBtn = async (workoutId: number) => {
+    // Pass workoutId as a parameter
     setLoading(true);
     setError(null); // Reset any previous errors
 
     try {
-      const checkoutTime = new Date().toISOString(); // Capture the current time as checkout
+      const checkoutTime = new Date().toISOString();
+
+      // Find the workout by ID to get the checkin time
+      const workout = data.find((w) => w.id === workoutId);
+      if (!workout) throw new Error("Workout not found");
+
+      const checkinTime = new Date(workout.checkin).getTime(); // Convert checkin to milliseconds
+      const duration = (new Date(checkoutTime).getTime() - checkinTime) / 1000; // Calculate duration in seconds
 
       // Send PATCH request to update the checkout time for this specific workout
       const response = await axios.patch("/api/users/profile", {
-        checkin: new Date().toISOString(), // This could be adjusted based on your logic
+        id: 1,
+        ids: workout.id,
+        checkin: workout.checkin, // Use the original checkin time
         checkout: checkoutTime,
+        duration: duration,
       });
 
       console.log("API Response:", response.data);
+
+      // Optionally update the state here if necessary
     } catch (error) {
       console.error(
         "Error checking out workout",
@@ -137,7 +150,7 @@ export default function GymVisitsPage() {
             </p>
             <button
               className="mt-2 px-2 py-1 bg-green-600 text-white rounded"
-              onClick={handleCheckOutBtn} // Pass the specific workout ID
+              onClick={() => handleCheckOutBtn(workout.id)}
             >
               Check out
             </button>
