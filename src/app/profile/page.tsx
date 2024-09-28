@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BarChart from "@/components/BarChart";
 
 type WorkoutDataProps = {
@@ -24,7 +24,7 @@ export default function GymVisitsPage() {
 
     axios
       .post(
-        "/api/users/profile",
+        "/api/workouts/create",
         {
           checkin: new Date().toISOString(), // Use ISO string for checkin
           equipment: "",
@@ -38,16 +38,19 @@ export default function GymVisitsPage() {
       )
       .then((response) => {
         console.log("API Response:", response.data);
-
+        const { workout } = response.data as {
+          message: string;
+          workout: WorkoutDataProps;
+        };
         const newWorkout: WorkoutDataProps = {
-          equipment: response.data.equipment || "",
-          duration: response.data.duration || 0,
-          calories: response.data.calories || 0,
-          weightLifted: response.data.weightLifted || 0,
-          distance: response.data.distance || 0,
-          repetitions: response.data.repetitions || 0,
-          checkin: response.data.checkin || new Date().toISOString(),
-          id: response.data.id,
+          equipment: workout.equipment,
+          duration: workout.duration,
+          calories: workout.calories,
+          weightLifted: workout.weightLifted,
+          distance: workout.distance,
+          repetitions: workout.repetitions,
+          checkin: workout.checkin,
+          id: workout.id,
         };
 
         setData((prevData) => [...prevData, newWorkout]);
@@ -80,7 +83,6 @@ export default function GymVisitsPage() {
       // Send PATCH request to update the checkout time for this specific workout
       const response = await axios.patch("/api/users/profile", {
         id: 1,
-        ids: workout.id,
         checkin: workout.checkin, // Use the original checkin time
         checkout: checkoutTime,
         duration: duration,
@@ -99,6 +101,10 @@ export default function GymVisitsPage() {
       setLoading(false); // Stop the loading indicator
     }
   };
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   if (loading) return <div className="text-blue-500">Loading...</div>;
   if (error)
