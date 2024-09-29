@@ -2,13 +2,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import BarChart from "@/components/BarChart";
+import { redirect } from "next/navigation";
 
 type WorkoutDataProps = {
   calories: number;
   duration: number;
   repetitions: number;
   equipment: string;
-  checkin: string; // String because we're using ISO string
+  checkin: string;
   weightLifted: number;
   distance: number;
   id: number;
@@ -18,15 +19,16 @@ export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
 
   const handleCheckinBtn = () => {
     setLoading(true);
-
+    setIsCheckedIn(true);
     axios
       .post(
         "/api/workouts/create",
         {
-          checkin: new Date().toISOString(), // Use ISO string for checkin
+          checkin: new Date().toISOString(),
           equipment: "",
           duration: 0,
           calories: 0,
@@ -42,18 +44,7 @@ export default function GymVisitsPage() {
           message: string;
           workout: WorkoutDataProps;
         };
-        const newWorkout: WorkoutDataProps = {
-          equipment: workout.equipment,
-          duration: workout.duration,
-          calories: workout.calories,
-          weightLifted: workout.weightLifted,
-          distance: workout.distance,
-          repetitions: workout.repetitions,
-          checkin: workout.checkin,
-          id: workout.id,
-        };
-
-        setData((prevData) => [...prevData, newWorkout]);
+        setData((prevData) => [...prevData, workout]);
       })
       .catch((error) => {
         console.error(
@@ -65,41 +56,50 @@ export default function GymVisitsPage() {
       .finally(() => setLoading(false));
   };
 
+  // For checking out and updating a specific workout
   const handleCheckOutBtn = async (workoutId: number) => {
-    // Pass workoutId as a parameter
     setLoading(true);
     setError(null); // Reset any previous errors
 
     try {
-      const checkoutTime = new Date().toISOString();
-
-      // Find the workout by ID to get the checkin time
+      const checkoutTime = new Date(); // Checkout time as a Date object
       const workout = data.find((w) => w.id === workoutId);
       if (!workout) throw new Error("Workout not found");
 
-      const checkinTime = new Date(workout.checkin).getTime(); // Convert checkin to milliseconds
-      const duration = (new Date(checkoutTime).getTime() - checkinTime) / 1000; // Calculate duration in seconds
+      // Calculate the duration in seconds
+      const duration =
+        (checkoutTime.getTime() - new Date(workout.checkin).getTime()) / 1000;
 
-      // Send PATCH request to update the checkout time for this specific workout
-      const response = await axios.patch("/api/users/profile", {
-        id: 1,
-        checkin: workout.checkin, // Use the original checkin time
-        checkout: checkoutTime,
+      // Send a PATCH request to update the workout's duration and checkout time
+      const response = await axios.patch("/api/workouts/create", {
+        id: workout.id,
         duration: duration,
+        checkin: workout.checkin,
+        checkout: checkoutTime.toISOString(),
       });
 
-      console.log("API Response:", response.data);
+      // Update the correct workout's duration in the state
+      setData((prevState) =>
+        prevState.map(
+          (w) => (w.id === workout.id ? { ...w, duration } : w) // Use the new duration value
+        )
+      );
 
-      // Optionally update the state here if necessary
+      console.log("API Response:", response.data);
     } catch (error) {
       console.error(
         "Error checking out workout",
         error.response?.data || error.message
       );
-      setError(error.message); // Set error state to display error message
+      setError(error.message);
     } finally {
-      setLoading(false); // Stop the loading indicator
+      setLoading(false);
     }
+  };
+
+  const handleWorkoutBtn = () => {
+    console.log("Just a Test for rediecting workout");
+    redirect("/workout");
   };
 
   useEffect(() => {
@@ -115,23 +115,28 @@ export default function GymVisitsPage() {
       <h1 className="text-3xl font-semibold mb-6 text-center">Gym Visits</h1>
       <BarChart data={data} />
       <div className="flex justify-between mt-6">
-        <div>
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
+          onClick={handleCheckinBtn}
+        >
+          Check in
+        </button>
+        {isCheckedIn && (
           <button
+            onClick={handleWorkoutBtn}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
-            onClick={handleCheckinBtn}
           >
-            Check in
+            Add Workouts
           </button>
-        </div>
-        {/* Note: You can remove this if you prefer to check out from individual workouts */}
+        )}
       </div>
       <div className="mt-6 space-y-4">
-        {data.map((workout, index) => (
+        {data.map((workout) => (
           <div
-            key={index}
+            key={workout.id}
             className="p-4 bg-gray-100 border border-gray-300 rounded-lg"
           >
-            <h3 className="font-semibold">Workout #{index + 1}</h3>
+            <h3 className="font-semibold">Workout #{workout.id}</h3>
             <p>
               <strong>Check-in:</strong>{" "}
               {new Date(workout.checkin).toLocaleString()}
@@ -140,8 +145,10 @@ export default function GymVisitsPage() {
               <strong>Equipment:</strong> {workout.equipment || "N/A"}
             </p>
             <p>
-              <strong>Duration:</strong> {workout.duration} mins
+              <strong>Duration:</strong> {Math.floor(workout.duration / 60)}{" "}
+              mins
             </p>
+
             <p>
               <strong>Calories:</strong> {workout.calories}
             </p>
@@ -154,6 +161,7 @@ export default function GymVisitsPage() {
             <p>
               <strong>Repetitions:</strong> {workout.repetitions}
             </p>
+            {/* Pass workout.id to handleCheckOutBtn */}
             <button
               className="mt-2 px-2 py-1 bg-green-600 text-white rounded"
               onClick={() => handleCheckOutBtn(workout.id)}
