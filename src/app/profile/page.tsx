@@ -1,6 +1,8 @@
 "use client";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
+import reducer from "@/context/reducer";
+import { INITIAL_STATE } from "@/context/reducer";
 import BarChart from "@/components/BarChart";
 import { redirect } from "next/navigation";
 
@@ -17,13 +19,13 @@ type WorkoutDataProps = {
 
 export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   const handleCheckinBtn = () => {
-    setLoading(true);
-    setIsCheckedIn(true);
+    dispatch({ type: "SET_LOADING", payload: true });
+
+    dispatch({ type: "ISCHECKEDIN", payload: true });
+
     axios
       .post(
         "/api/workouts/create",
@@ -51,16 +53,15 @@ export default function GymVisitsPage() {
           "Error fetching data",
           error.response?.data || error.message
         );
-        setError(error.message);
+        dispatch({ type: "SET_ERROR", payload: state.error });
       })
-      .finally(() => setLoading(false));
+      .finally(() => dispatch({ type: "SET_LOADING", payload: false }));
   };
 
   // For checking out and updating a specific workout
   const handleCheckOutBtn = async (workoutId: number) => {
-    setLoading(true);
-    setError(null); // Reset any previous errors
-
+    dispatch({ type: "SET_LOADING", payload: true });
+    dispatch({ type: "SET_ERROR", payload: null });
     try {
       const checkoutTime = new Date(); // Checkout time as a Date object
       const workout = data.find((w) => w.id === workoutId);
@@ -91,9 +92,9 @@ export default function GymVisitsPage() {
         "Error checking out workout",
         error.response?.data || error.message
       );
-      setError(error.message);
+      dispatch({ type: "SET_ERROR", payload: state.error });
     } finally {
-      setLoading(false);
+      dispatch({ type: "SET_LOADING", payload: "false" });
     }
   };
 
@@ -106,9 +107,9 @@ export default function GymVisitsPage() {
     console.log(data);
   }, [data]);
 
-  if (loading) return <div className="text-blue-500">Loading...</div>;
-  if (error)
-    return <div className="text-red-500 font-bold">Error: {error}</div>;
+  if (state.isLoading) return <div className="text-blue-500">Loading...</div>;
+  if (state.error)
+    return <div className="text-red-500 font-bold">Error: {state.error}</div>;
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -121,7 +122,7 @@ export default function GymVisitsPage() {
         >
           Check in
         </button>
-        {isCheckedIn && (
+        {state.isCheckedIn && (
           <button
             onClick={handleWorkoutBtn}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"

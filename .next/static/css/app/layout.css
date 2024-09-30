@@ -632,6 +632,9 @@ video {
 .flex-1 {
   flex: 1 1 0%;
 }
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
 .list-none {
   list-style-type: none;
 }
@@ -742,6 +745,10 @@ video {
 .bg-zinc-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(244 244 245 / var(--tw-bg-opacity));
+}
+.bg-gray-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
 }
 .object-cover {
   object-fit: cover;

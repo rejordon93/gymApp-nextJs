@@ -1,53 +1,48 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
+import reducer from "@/context/reducer";
+import { INITIAL_STATE } from "@/context/reducer";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
 export default function SignupPage() {
   const router = useRouter();
-
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-    username: "",
-  });
-  const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   // Handle signup logic
   const onSignup = async () => {
     try {
-      setIsLoading(true);
-      const response = await axios.post("/api/users/signup", user);
+      dispatch({ type: "SET_LOADING", payload: true });
+      const response = await axios.post("/api/users/signup", state.user);
       console.log("Signup success", response.data);
       router.push("/login");
     } catch (error) {
-      setError("An unexpected error occurred.");
+      dispatch({ type: "SET_ERROR", payload: "An unexpected error occurred." });
     } finally {
-      setIsLoading(false);
+      dispatch({ type: "SET_LOADING", payload: false });
     }
   };
 
   // Enable or disable the button based on form validity
   useEffect(() => {
     if (
-      user.email.length > 0 &&
-      user.password.length > 0 &&
-      user.username.length > 0
+      state.user &&
+      state.user.email.length > 0 &&
+      state.user.password.length > 0 &&
+      state.user.username.length > 0
     ) {
-      setButtonDisabled(false);
+      dispatch({ type: "BTN_DISABLED", payload: false });
     } else {
-      setButtonDisabled(true);
+      dispatch({ type: "BTN_DISABLED", payload: true });
     }
-  }, [user]);
+  }, [state.user]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          {isLoading ? "Processing" : "Signup"}
+          {state.isLoading ? "Processing" : "Signup"}
         </h1>
         <hr className="mb-6 border-gray-300" />
         <div className="space-y-4">
@@ -62,8 +57,13 @@ export default function SignupPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="text"
               id="username"
-              value={user.username}
-              onChange={(e) => setUser({ ...user, username: e.target.value })}
+              value={state.user.username}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_USER",
+                  payload: { ...state.user, username: e.target.value },
+                })
+              }
               placeholder="Enter your username"
               required
             />
@@ -79,8 +79,13 @@ export default function SignupPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="email"
               id="email"
-              value={user.email}
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              value={state.user.email}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_USER",
+                  payload: { ...state.user, email: e.target.value },
+                })
+              }
               placeholder="Enter your email"
               required
             />
@@ -96,20 +101,28 @@ export default function SignupPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="password"
               id="password"
-              value={user.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              value={state.user.password}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_USER",
+                  payload: { ...state.user, password: e.target.value },
+                })
+              }
               placeholder="Enter your password"
               required
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {state.error && (
+            <p className="text-red-500 text-sm text-center">{state.error}</p>
+          )}
 
           <button
             onClick={onSignup}
             className="w-full bg-indigo-600 text-white p-3 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={state.buttonDisabled}
           >
-            {buttonDisabled ? "No signup" : "Signup"}
+            {state.isLoading ? "Signing up..." : "Signup"}
           </button>
         </div>
 
