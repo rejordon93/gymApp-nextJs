@@ -4,7 +4,7 @@ import { useEffect, useState, useReducer } from "react";
 import reducer from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
 import BarChart from "@/components/BarChart";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type WorkoutDataProps = {
   calories: number;
@@ -20,10 +20,9 @@ type WorkoutDataProps = {
 export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-
+  const router = useRouter();
   const handleCheckinBtn = () => {
     dispatch({ type: "SET_LOADING", payload: true });
-
     dispatch({ type: "ISCHECKEDIN", payload: true });
 
     axios
@@ -62,6 +61,7 @@ export default function GymVisitsPage() {
   const handleCheckOutBtn = async (workoutId: number) => {
     dispatch({ type: "SET_LOADING", payload: true });
     dispatch({ type: "SET_ERROR", payload: null });
+
     try {
       const checkoutTime = new Date(); // Checkout time as a Date object
       const workout = data.find((w) => w.id === workoutId);
@@ -94,13 +94,13 @@ export default function GymVisitsPage() {
       );
       dispatch({ type: "SET_ERROR", payload: state.error });
     } finally {
-      dispatch({ type: "SET_LOADING", payload: "false" });
+      dispatch({ type: "SET_LOADING", payload: false });
     }
   };
 
   const handleWorkoutBtn = () => {
     console.log("Just a Test for rediecting workout");
-    redirect("/workout");
+    router.push("/workouts");
   };
 
   useEffect(() => {

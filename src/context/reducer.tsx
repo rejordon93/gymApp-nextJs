@@ -65,7 +65,7 @@ export default function reducer(state: State, action: Action): State {
     case "ISCHECKEDIN":
       return {
         ...state,
-        isCheckedIn: false,
+        isCheckedIn: true,
       };
     default:
       return state;
