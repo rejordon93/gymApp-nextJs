@@ -23,7 +23,7 @@ export default function GymVisitsPage() {
   const router = useRouter();
   const handleCheckinBtn = () => {
     dispatch({ type: "SET_LOADING", payload: true });
-    dispatch({ type: "ISCHECKEDIN", payload: true });
+    dispatch({ type: "IS_CHECKEDIN", payload: true });
 
     axios
       .post(
@@ -98,7 +98,7 @@ export default function GymVisitsPage() {
     }
   };
 
-  const handleWorkoutBtn = () => {
+  const handleWorkoutBtn = async () => {
     console.log("Just a Test for rediecting workout");
     router.push("/workouts");
   };
@@ -131,43 +131,55 @@ export default function GymVisitsPage() {
           </button>
         )}
       </div>
-      <div className="mt-6 space-y-4">
+      <div className="mt-6 space-y-6">
         {data.map((workout) => (
           <div
             key={workout.id}
-            className="p-4 bg-gray-100 border border-gray-300 rounded-lg"
+            className="p-6 bg-white shadow-md rounded-xl border border-gray-200 transition duration-300 hover:shadow-lg"
           >
-            <h3 className="font-semibold">Workout #{workout.id}</h3>
-            <p>
-              <strong>Check-in:</strong>{" "}
-              {new Date(workout.checkin).toLocaleString()}
-            </p>
-            <p>
-              <strong>Equipment:</strong> {workout.equipment || "N/A"}
-            </p>
-            <p>
-              <strong>Duration:</strong> {Math.floor(workout.duration / 60)}{" "}
-              mins
-            </p>
-
-            <p>
-              <strong>Calories:</strong> {workout.calories}
-            </p>
-            <p>
-              <strong>Weight Lifted:</strong> {workout.weightLifted} kg
-            </p>
-            <p>
-              <strong>Distance:</strong> {workout.distance} km
-            </p>
-            <p>
-              <strong>Repetitions:</strong> {workout.repetitions}
-            </p>
-            {/* Pass workout.id to handleCheckOutBtn */}
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-lg text-gray-800">
+                Workout #{workout.id}
+              </h3>
+              <span className="text-sm text-gray-500">
+                {new Date(workout.checkin).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
+            <div className="mt-4 text-gray-700 space-y-2">
+              <p className="flex justify-between">
+                <span className="font-medium">Equipment:</span>
+                <span>{workout.equipment || "N/A"}</span>
+              </p>
+              <p className="flex justify-between">
+                <span className="font-medium">Duration:</span>
+                <span>{Math.floor(workout.duration / 60)} mins</span>
+              </p>
+              <p className="flex justify-between">
+                <span className="font-medium">Calories:</span>
+                <span>{workout.calories}</span>
+              </p>
+              <p className="flex justify-between">
+                <span className="font-medium">Weight Lifted:</span>
+                <span>{workout.weightLifted} kg</span>
+              </p>
+              <p className="flex justify-between">
+                <span className="font-medium">Distance:</span>
+                <span>{workout.distance} km</span>
+              </p>
+              <p className="flex justify-between">
+                <span className="font-medium">Repetitions:</span>
+                <span>{workout.repetitions}</span>
+              </p>
+            </div>
             <button
-              className="mt-2 px-2 py-1 bg-green-600 text-white rounded"
+              className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-200"
               onClick={() => handleCheckOutBtn(workout.id)}
             >
-              Check out
+              Check Out
             </button>
           </div>
         ))}

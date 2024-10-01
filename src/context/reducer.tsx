@@ -30,7 +30,7 @@ interface Action {
     | "SET_ERROR"
     | "SET_USER"
     | "SET_LOADING"
-    | "ISCHECKEDIN";
+    | "IS_CHECKEDIN";
   payload?: any;
 }
 
@@ -62,7 +62,7 @@ export default function reducer(state: State, action: Action): State {
         ...state,
         isLoading: action.payload,
       };
-    case "ISCHECKEDIN":
+    case "IS_CHECKEDIN":
       return {
         ...state,
         isCheckedIn: true,

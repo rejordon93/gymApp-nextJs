@@ -2,6 +2,43 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
+export async function GET(req: NextRequest) {
+  try {
+    // Assuming you extract userId from token
+    const userId = getDataFromToken(req);
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Invalid token or no user found" },
+        { status: 401 }
+      );
+    }
+
+    // Fetch all workouts for the user
+    const workouts = await prisma.workout.findMany({
+      where: { user_id: userId },
+      orderBy: {
+        checkin: "desc", // Order by check-in date
+      },
+    });
+
+    if (!workouts.length) {
+      return NextResponse.json(
+        { message: "No workouts found" },
+        { status: 404 }
+      );
+    }
+
+    // Return the workouts
+    return NextResponse.json(workouts);
+  } catch (error) {
+    console.error("Error fetching workouts:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch workouts" },
+      { status: 500 }
+    );
+  }
+}
 export async function POST(req: NextRequest) {
   try {
     const {
