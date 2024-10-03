@@ -3,23 +3,15 @@ import axios from "axios";
 import { useEffect, useState, useReducer } from "react";
 import reducer from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
-import BarChart from "@/components/BarChart";
+import { useAppContext } from "@/context/context";
 import { useRouter } from "next/navigation";
-
-type WorkoutDataProps = {
-  calories: number;
-  duration: number;
-  repetitions: number;
-  equipment: string;
-  checkin: string;
-  weightLifted: number;
-  distance: number;
-  id: number;
-};
+import { WorkoutDataProps } from "../types/page";
+import BarChart from "@/components/BarChart";
 
 export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const { errorData } = useAppContext();
   const router = useRouter();
   const handleCheckinBtn = () => {
     dispatch({ type: "SET_LOADING", payload: true });
@@ -48,11 +40,9 @@ export default function GymVisitsPage() {
         setData((prevData) => [...prevData, workout]);
       })
       .catch((error) => {
-        console.error(
-          "Error fetching data",
-          error.response?.data || error.message
-        );
-        dispatch({ type: "SET_ERROR", payload: state.error });
+        errorData.setError("Error checking out workout");
+        errorData.setError(error.response?.data || error.message);
+        dispatch({ type: "SET_ERROR", payload: state.apiRequstContext.error });
       })
       .finally(() => dispatch({ type: "SET_LOADING", payload: false }));
   };
@@ -88,11 +78,8 @@ export default function GymVisitsPage() {
 
       console.log("API Response:", response.data);
     } catch (error) {
-      console.error(
-        "Error checking out workout",
-        error.response?.data || error.message
-      );
-      dispatch({ type: "SET_ERROR", payload: state.error });
+      errorData.setError("Error checking out workout");
+      dispatch({ type: "SET_ERROR", payload: state.apiRequstContext.error });
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
@@ -107,9 +94,14 @@ export default function GymVisitsPage() {
     console.log(data);
   }, [data]);
 
-  if (state.isLoading) return <div className="text-blue-500">Loading...</div>;
-  if (state.error)
-    return <div className="text-red-500 font-bold">Error: {state.error}</div>;
+  if (state.apiRequstContext.isLoading)
+    return <div className="text-blue-500">Loading...</div>;
+  if (state.apiRequstContext.error)
+    return (
+      <div className="text-red-500 font-bold">
+        Error: {state.apiRequstContext.error}
+      </div>
+    );
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -122,7 +114,7 @@ export default function GymVisitsPage() {
         >
           Check in
         </button>
-        {state.isCheckedIn && (
+        {state.toolsContext.isCheckedIn && (
           <button
             onClick={handleWorkoutBtn}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"

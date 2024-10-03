@@ -21,10 +21,32 @@ export async function GET(req: NextRequest) {
         checkin: "desc", // Order by check-in date
       },
     });
-
     if (!workouts.length) {
       return NextResponse.json(
         { message: "No workouts found" },
+        { status: 404 }
+      );
+    }
+
+    const workoutHours = await prisma.workout.findMany({
+      where: {
+        user_id: userId,
+        duration: { not: null }, // Only include workouts with a non-null duration
+      },
+      select: {
+        id: true, // Only select the `id` field
+        duration: true,
+      },
+      orderBy: {
+        duration: "desc", // Order by duration in descending order
+      },
+    });
+
+    console.log(workoutHours);
+
+    if (!workoutHours) {
+      return NextResponse.json(
+        { message: "No duration hours" },
         { status: 404 }
       );
     }

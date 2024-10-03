@@ -1,14 +1,23 @@
-interface State {
-  buttonDisabled: boolean;
+interface User {
+  email: string;
+  password: string;
+  username: string;
+}
+
+interface ApiRequstContext {
   error: string | null;
   isLoading: boolean;
   success: boolean;
+}
+interface ToolsContext {
+  buttonDisabled: boolean;
   isCheckedIn: boolean;
-  user: {
-    email: string;
-    password: string;
-    username: string;
-  };
+}
+
+interface State {
+  toolsContext: ToolsContext;
+  apiRequstContext: ApiRequstContext;
+  user: User;
 }
 
 export const INITIAL_STATE: State = {
@@ -17,11 +26,15 @@ export const INITIAL_STATE: State = {
     password: "",
     username: "",
   },
-  buttonDisabled: true,
-  error: null,
-  isLoading: false,
-  success: false,
-  isCheckedIn: false,
+  apiRequstContext: {
+    error: null,
+    isLoading: false,
+    success: false,
+  },
+  toolsContext: {
+    buttonDisabled: true,
+    isCheckedIn: false,
+  },
 };
 
 interface Action {
@@ -31,7 +44,7 @@ interface Action {
     | "SET_USER"
     | "SET_LOADING"
     | "IS_CHECKEDIN";
-  payload?: any;
+  payload?: ToolsContext | ApiRequstContext | User | boolean | string | null;
 }
 
 export default function reducer(state: State, action: Action): State {
@@ -39,33 +52,54 @@ export default function reducer(state: State, action: Action): State {
     case "BTN_DISABLED":
       return {
         ...state,
-        buttonDisabled: action.payload,
-        success: false,
-        error: null,
+        toolsContext: {
+          ...state.toolsContext,
+          buttonDisabled: action.payload as boolean,
+        },
+        apiRequstContext: {
+          ...state.apiRequstContext,
+          success: false,
+          error: null,
+        },
       };
     case "SET_ERROR":
       return {
         ...state,
-        error: action.payload,
-        success: false,
+        apiRequstContext: {
+          ...state.apiRequstContext,
+          error: action.payload as string,
+          success: false,
+        },
       };
     case "SET_USER":
       return {
         ...state,
-        user: action.payload,
-        success: true,
-        error: null,
-        isCheckedIn: true,
+        user: action.payload as User,
+        apiRequstContext: {
+          ...state.apiRequstContext,
+          success: true,
+          error: null,
+        },
+        toolsContext: {
+          ...state.toolsContext,
+          isCheckedIn: true,
+        },
       };
     case "SET_LOADING":
       return {
         ...state,
-        isLoading: action.payload,
+        apiRequstContext: {
+          ...state.apiRequstContext,
+          isLoading: action.payload as boolean,
+        },
       };
     case "IS_CHECKEDIN":
       return {
         ...state,
-        isCheckedIn: true,
+        toolsContext: {
+          ...state.toolsContext,
+          isCheckedIn: true,
+        },
       };
     default:
       return state;

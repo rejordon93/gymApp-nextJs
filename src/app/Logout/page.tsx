@@ -13,8 +13,10 @@ export default function LogoutPage() {
       await axios.get("/api/users/logout");
       toast.success("Logout successful", { duration: 5000 });
       router.push("/login");
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
       toast.error("You are already logged out", { duration: 5000 });
     }
   };

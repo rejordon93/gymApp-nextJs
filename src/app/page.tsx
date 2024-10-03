@@ -46,7 +46,7 @@ export default function Home() {
         {/* Welcome Message Section */}
         <div className="md:col-span-2 bg-white p-8 rounded-lg shadow-md space-y-6">
           <h1 className="text-4xl font-bold text-gray-800">
-            We're here to make your fitness journey the absolute best it can be!
+            Were here to make your fitness journey the absolute best it can be!
           </h1>
           <p className="text-lg text-gray-700">
             365 Fitness has been in the 425 community for over 30 years. As we
@@ -71,7 +71,7 @@ export default function Home() {
             </h1>
             <p className="text-lg text-white max-w-[90%]">
               With a vast array of cutting-edge equipment and technologies
-              alongside traditional workout gear, you'll always have full access
+              alongside traditional workout gear, youll always have full access
               to all the tools you need at any 365 Fitness location.
             </p>
           </div>

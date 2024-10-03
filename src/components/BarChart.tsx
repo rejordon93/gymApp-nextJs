@@ -24,7 +24,7 @@ const DayTrackerComponent = () => {
 
         const durationMap: number[] = [];
 
-        workouts.filter((workout) => workout.duration !== null); // the databases has a lot off nulls for not remove them
+        workouts.filter((workout) => workout.duration !== null); // the databases has a lot off nulls for not remove
         workouts.map((workout: Workout) => {
           const checkinData = new Date(workout.checkin);
           const dayIndex = checkinData.getDay();
