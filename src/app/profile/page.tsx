@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState, useReducer } from "react";
 import reducer from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
+import { ActionType } from "@/context/reducer";
 import { useAppContext } from "@/context/context";
 import { useRouter } from "next/navigation";
 import { WorkoutDataProps } from "../types/page";
@@ -14,8 +15,8 @@ export default function GymVisitsPage() {
   const { errorData } = useAppContext();
   const router = useRouter();
   const handleCheckinBtn = () => {
-    dispatch({ type: "SET_LOADING", payload: true });
-    dispatch({ type: "IS_CHECKEDIN", payload: true });
+    dispatch({ type: ActionType.SET_LOADING, payload: true });
+    dispatch({ type: ActionType.IS_CHECKEDIN, payload: true });
 
     axios
       .post(
@@ -42,15 +43,20 @@ export default function GymVisitsPage() {
       .catch((error) => {
         errorData.setError("Error checking out workout");
         errorData.setError(error.response?.data || error.message);
-        dispatch({ type: "SET_ERROR", payload: state.apiRequstContext.error });
+        dispatch({
+          type: ActionType.SET_ERROR,
+          payload: state.apiRequstContext.error,
+        });
       })
-      .finally(() => dispatch({ type: "SET_LOADING", payload: false }));
+      .finally(() =>
+        dispatch({ type: ActionType.SET_LOADING, payload: false })
+      );
   };
 
   // For checking out and updating a specific workout
   const handleCheckOutBtn = async (workoutId: number) => {
-    dispatch({ type: "SET_LOADING", payload: true });
-    dispatch({ type: "SET_ERROR", payload: null });
+    dispatch({ type: ActionType.SET_LOADING, payload: true });
+    dispatch({ type: ActionType.SET_ERROR, payload: null });
 
     try {
       const checkoutTime = new Date(); // Checkout time as a Date object
@@ -79,9 +85,12 @@ export default function GymVisitsPage() {
       console.log("API Response:", response.data);
     } catch (error) {
       errorData.setError("Error checking out workout");
-      dispatch({ type: "SET_ERROR", payload: state.apiRequstContext.error });
+      dispatch({
+        type: ActionType.SET_ERROR,
+        payload: state.apiRequstContext.error,
+      });
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: ActionType.SET_LOADING, payload: false });
     }
   };
 

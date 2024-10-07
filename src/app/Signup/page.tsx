@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useReducer } from "react";
 import reducer from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
+import { ActionType } from "@/context/reducer";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -13,14 +14,17 @@ export default function SignupPage() {
   // Handle signup logic
   const onSignup = async () => {
     try {
-      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({ type: ActionType.SET_LOADING, payload: true });
       const response = await axios.post("/api/users/signup", state.user);
       console.log("Signup success", response.data);
       router.push("/login");
     } catch (error) {
-      dispatch({ type: "SET_ERROR", payload: "An unexpected error occurred." });
+      dispatch({
+        type: ActionType.SET_ERROR,
+        payload: "An unexpected error occurred.",
+      });
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: ActionType.SET_LOADING, payload: false });
     }
   };
 
@@ -32,9 +36,9 @@ export default function SignupPage() {
       state.user.password.length > 0 &&
       state.user.username.length > 0
     ) {
-      dispatch({ type: "BTN_DISABLED", payload: false });
+      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: false });
     } else {
-      dispatch({ type: "BTN_DISABLED", payload: true });
+      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: true });
     }
   }, [state.user]);
 
@@ -60,7 +64,7 @@ export default function SignupPage() {
               value={state.user.username}
               onChange={(e) =>
                 dispatch({
-                  type: "SET_USER",
+                  type: ActionType.SET_USER,
                   payload: { ...state.user, username: e.target.value },
                 })
               }
@@ -82,7 +86,7 @@ export default function SignupPage() {
               value={state.user.email}
               onChange={(e) =>
                 dispatch({
-                  type: "SET_USER",
+                  type: ActionType.SET_USER,
                   payload: { ...state.user, email: e.target.value },
                 })
               }
@@ -104,7 +108,7 @@ export default function SignupPage() {
               value={state.user.password}
               onChange={(e) =>
                 dispatch({
-                  type: "SET_USER",
+                  type: ActionType.SET_USER,
                   payload: { ...state.user, password: e.target.value },
                 })
               }

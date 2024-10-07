@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useReducer } from "react";
 import { useRouter } from "next/navigation";
 import reducer from "@/context/reducer";
+import { ActionType } from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
 import axios from "axios";
 import { useAppContext } from "@/context/context";
@@ -14,7 +15,7 @@ export default function LoginPage() {
 
   const onLogin = async () => {
     try {
-      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({ type: ActionType.SET_LOADING, payload: true });
       const response = await axios.post("/api/users/login", state.user);
       const { token } = response.data;
       userData.setToken(token);
@@ -25,19 +26,19 @@ export default function LoginPage() {
       }
 
       dispatch({
-        type: "SET_ERROR",
+        type: ActionType.SET_ERROR,
         payload: "Login failed. Please try again.",
       });
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: ActionType.SET_LOADING, payload: false });
     }
   };
 
   useEffect(() => {
     if (state.user?.email?.length > 0 && state.user?.password?.length > 0) {
-      dispatch({ type: "BTN_DISABLED", payload: false });
+      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: false });
     } else {
-      dispatch({ type: "BTN_DISABLED", payload: true });
+      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: true });
     }
   }, [state.user]);
 
@@ -63,7 +64,7 @@ export default function LoginPage() {
               value={state.user.email}
               onChange={(e) =>
                 dispatch({
-                  type: "SET_USER",
+                  type: ActionType.SET_USER,
                   payload: { ...state.user, email: e.target.value },
                 })
               }
@@ -85,7 +86,7 @@ export default function LoginPage() {
               value={state.user.password}
               onChange={(e) =>
                 dispatch({
-                  type: "SET_USER",
+                  type: ActionType.SET_USER,
                   payload: { ...state.user, password: e.target.value },
                 })
               }

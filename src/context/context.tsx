@@ -2,7 +2,7 @@
 // src/context/context.ts
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
-interface LoginState {
+interface UserState {
   token: string | null;
   setToken: (token: string) => void;
 }
@@ -14,7 +14,7 @@ interface ErrorState {
 
 // Define the shape of the context data
 interface AppContextType {
-  userData: LoginState;
+  userData: UserState;
   errorData: ErrorState;
 }
 
@@ -30,7 +30,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const userData: LoginState = { token, setToken };
+  const userData: UserState = { token, setToken };
   const errorState: ErrorState = { error, setError };
 
   return (

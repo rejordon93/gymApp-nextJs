@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { AppProvider } from "@/context/context"; // Import the provider
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
