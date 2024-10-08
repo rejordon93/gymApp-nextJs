@@ -9,8 +9,8 @@ export enum ActionType {
 
 // Action interface for setting the user.
 interface SetUserAction {
-  type: ActionType.SET_USER;
-  payload: User; // Payload is a User object
+  readonly type: ActionType.SET_USER;
+  readonly payload: User; // Payload is a User object
 }
 
 // Action interface for setting an error message.
@@ -27,8 +27,8 @@ interface SetBtnDisabledAction {
 
 // Action interface for setting the loading state.
 interface SetLoadingAction {
-  type: ActionType.SET_LOADING;
-  payload: boolean; // Payload is a boolean (loading state)
+  readonly type: ActionType.SET_LOADING;
+  readonly payload: boolean; // Payload is a boolean (loading state)
 }
 
 // Action interface for checking if the user is checked in.

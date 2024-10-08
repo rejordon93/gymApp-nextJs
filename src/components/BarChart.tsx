@@ -21,13 +21,12 @@ const DayTrackerComponent = () => {
         const response = await axios.get("/api/workouts/create");
 
         const workouts: Workout[] = response.data;
-        console.log(workouts);
 
         // Filter workouts where duration is not 0
         const filteredWorkouts = workouts.filter(
           (workout) => workout.duration !== 0
         );
-        console.log(filteredWorkouts);
+
         // Create an array of durations and check-in days, filtering out duplicates
         const durationMap: number[] = filteredWorkouts.map((workout) => {
           // Extract check-in date and convert it to a comparable format (YYYY-MM-DD)

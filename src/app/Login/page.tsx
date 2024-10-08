@@ -17,6 +17,7 @@ export default function LoginPage() {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
       const response = await axios.post("/api/users/login", state.user);
+      console.log("Login success", response.data);
       const { token } = response.data;
       userData.setToken(token);
       router.push("/profile");

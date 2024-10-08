@@ -1,0 +1,9 @@
+     i want to pass more date for users login info
+
+      const response = NextResponse.json({
+      message: "Login successful",
+      token: token,
+      email: user.email,
+      username: user.username,
+      createdAt: user.createdAt,
+    });

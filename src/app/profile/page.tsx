@@ -99,10 +99,6 @@ export default function GymVisitsPage() {
     router.push("/workouts");
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   if (state.apiRequstContext.isLoading)
     return <div className="text-blue-500">Loading...</div>;
   if (state.apiRequstContext.error)
