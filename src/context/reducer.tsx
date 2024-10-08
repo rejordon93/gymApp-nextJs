@@ -15,14 +15,14 @@ interface SetUserAction {
 
 // Action interface for setting an error message.
 interface SetErrorAction {
-  type: ActionType.SET_ERROR;
-  payload: string | null; // Payload is a string (error message)
+  readonly type: ActionType.SET_ERROR;
+  readonly payload: string | null; // Payload is a string (error message)
 }
 
 // Action interface for enabling or disabling a button.
 interface SetBtnDisabledAction {
-  type: ActionType.SET_BTN_DISABLED;
-  payload: boolean; // Payload is a boolean (button enabled/disabled state)
+  readonly type: ActionType.SET_BTN_DISABLED;
+  readonly payload: boolean; // Payload is a boolean (button enabled/disabled state)
 }
 
 // Action interface for setting the loading state.
@@ -33,8 +33,8 @@ interface SetLoadingAction {
 
 // Action interface for checking if the user is checked in.
 interface SetCheckedinAction {
-  type: ActionType.IS_CHECKEDIN;
-  payload: boolean; // Payload is a boolean (checked-in state)
+  readonly type: ActionType.IS_CHECKEDIN;
+  readonly payload: boolean; // Payload is a boolean (checked-in state)
 }
 
 // Union of all possible action types. This allows the reducer to handle multiple action types.
