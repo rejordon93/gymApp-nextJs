@@ -1,9 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useReducer } from "react";
-import reducer from "@/context/reducer";
-import { INITIAL_STATE } from "@/context/reducer";
-import { ActionType } from "@/context/reducer";
+import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -21,7 +19,7 @@ export default function SignupPage() {
     } catch (error) {
       dispatch({
         type: ActionType.SET_ERROR,
-        payload: "An unexpected error occurred.",
+        payload: error instanceof Error ? error.message : String(error),
       });
     } finally {
       dispatch({ type: ActionType.SET_LOADING, payload: false });

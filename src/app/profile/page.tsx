@@ -1,10 +1,7 @@
 "use client";
 import axios from "axios";
-import { useEffect, useState, useReducer } from "react";
-import reducer from "@/context/reducer";
-import { INITIAL_STATE } from "@/context/reducer";
-import { ActionType } from "@/context/reducer";
-import { useAppContext } from "@/context/context";
+import { useState, useReducer } from "react";
+import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
 import { useRouter } from "next/navigation";
 import { WorkoutDataProps } from "../types/page";
 import BarChart from "@/components/BarChart";
@@ -12,7 +9,6 @@ import BarChart from "@/components/BarChart";
 export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const { errorData } = useAppContext();
   const router = useRouter();
   const handleCheckinBtn = () => {
     dispatch({ type: ActionType.SET_LOADING, payload: true });
@@ -41,11 +37,9 @@ export default function GymVisitsPage() {
         setData((prevData) => [...prevData, workout]);
       })
       .catch((error) => {
-        errorData.setError("Error checking out workout");
-        errorData.setError(error.response?.data || error.message);
         dispatch({
           type: ActionType.SET_ERROR,
-          payload: state.apiRequstContext.error,
+          payload: error instanceof Error ? error.message : String(error),
         });
       })
       .finally(() =>
@@ -84,10 +78,9 @@ export default function GymVisitsPage() {
 
       console.log("API Response:", response.data);
     } catch (error) {
-      errorData.setError("Error checking out workout");
       dispatch({
         type: ActionType.SET_ERROR,
-        payload: state.apiRequstContext.error,
+        payload: "Error checking out workout",
       });
     } finally {
       dispatch({ type: ActionType.SET_LOADING, payload: false });

@@ -50,8 +50,10 @@ export async function GET(request: NextRequest) {
       user,
       workouts,
     });
-  } catch (error: any) {
-    console.error("Error fetching user:", error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error fetching user:", error.message);
+    }
     return NextResponse.json(
       { error: "Failed to fetch user" },
       { status: 400 }

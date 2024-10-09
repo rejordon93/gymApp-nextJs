@@ -5,6 +5,7 @@ export enum ActionType {
   SET_LOADING = "SET_LOADING",
   SET_BTN_DISABLED = "BTN_DISABLED",
   IS_CHECKEDIN = "IS_CHECKEDIN",
+  SET_TOKEN = "SET_TOKEN",
 }
 
 // Action interface for setting the user.
@@ -37,19 +38,26 @@ interface SetCheckedinAction {
   readonly payload: boolean; // Payload is a boolean (checked-in state)
 }
 
+interface SetTokenAction {
+  readonly type: ActionType.SET_TOKEN;
+  readonly payload: string;
+}
+
 // Union of all possible action types. This allows the reducer to handle multiple action types.
-type Action =
+export type Action =
   | SetBtnDisabledAction
   | SetErrorAction
   | SetUserAction
   | SetLoadingAction
-  | SetCheckedinAction;
+  | SetCheckedinAction
+  | SetTokenAction;
 
 // User interface to define the shape of the user object.
 interface User {
   email: string;
   password: string;
   username: string;
+  token: string;
 }
 
 // Interface for the API request context, which includes the error message, loading status, and success flag.
@@ -66,7 +74,7 @@ interface ToolsContext {
 }
 
 // The overall state of the application, which combines all contexts and the user.
-interface State {
+export interface State {
   toolsContext: ToolsContext;
   apiRequstContext: ApiRequstContext;
   user: User;
@@ -78,6 +86,7 @@ export const INITIAL_STATE: State = {
     email: "",
     password: "",
     username: "",
+    token: "",
   },
   apiRequstContext: {
     error: null,
@@ -132,6 +141,15 @@ export default function reducer(state: State, action: Action): State {
         toolsContext: {
           ...state.toolsContext,
           isCheckedIn: true, // Mark the user as checked-in.
+        },
+      };
+
+    case ActionType.SET_TOKEN:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          token: action.payload,
         },
       };
 

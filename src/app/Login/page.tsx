@@ -2,16 +2,12 @@
 import Link from "next/link";
 import { useEffect, useReducer } from "react";
 import { useRouter } from "next/navigation";
-import reducer from "@/context/reducer";
-import { ActionType } from "@/context/reducer";
-import { INITIAL_STATE } from "@/context/reducer";
+import reducer, { ActionType, INITIAL_STATE } from "@/context/reducer";
 import axios from "axios";
-import { useAppContext } from "@/context/context";
 
 export default function LoginPage() {
   const router = useRouter();
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const { userData } = useAppContext();
 
   const onLogin = async () => {
     try {
@@ -19,13 +15,10 @@ export default function LoginPage() {
       const response = await axios.post("/api/users/login", state.user);
       console.log("Login success", response.data);
       const { token } = response.data;
-      userData.setToken(token);
+      dispatch({ type: ActionType.SET_TOKEN, payload: token });
+      // userData.setToken(token);
       router.push("/profile");
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log("Login failed", error.message);
-      }
-
       dispatch({
         type: ActionType.SET_ERROR,
         payload: "Login failed. Please try again.",

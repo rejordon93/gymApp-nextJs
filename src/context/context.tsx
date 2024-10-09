@@ -1,21 +1,14 @@
 "use client";
 // src/context/context.ts
-import React, { createContext, useState, useContext, ReactNode } from "react";
-
-interface UserState {
-  token: string | null;
-  setToken: (token: string) => void;
-}
-
-interface ErrorState {
-  error: string | null;
-  setError: (error: string) => void;
-}
+import React, { createContext, useContext, ReactNode, useReducer } from "react";
+import reducer from "@/context/reducer";
+import { INITIAL_STATE } from "@/context/reducer";
+import { Action, State } from "@/context/reducer";
 
 // Define the shape of the context data
 interface AppContextType {
-  userData: UserState;
-  errorData: ErrorState;
+  state: State; // State managed by the reducer
+  dispatch: React.Dispatch<Action>; // Dispatch function for dispatching actions
 }
 
 // Create the context with a default value
@@ -27,14 +20,10 @@ type AppProviderProps = {
 
 // Export the provider
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const userData: UserState = { token, setToken };
-  const errorState: ErrorState = { error, setError };
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   return (
-    <AppContext.Provider value={{ userData, errorData: errorState }}>
+    <AppContext.Provider value={{ state, dispatch }}>
       {children}
     </AppContext.Provider>
   );
