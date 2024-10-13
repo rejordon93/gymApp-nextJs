@@ -1,6 +1,10 @@
 {
+  "/page": "app/page.js",
+  "/logout/page": "app/logout/page.js",
   "/login/page": "app/login/page.js",
   "/profile/page": "app/profile/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/workouts/create/route": "app/api/workouts/create/route.js"
+  "/api/workouts/create/route": "app/api/workouts/create/route.js",
+  "/api/users/logout/route": "app/api/users/logout/route.js",
+  "/api/users/login/route": "app/api/users/login/route.js"
 }

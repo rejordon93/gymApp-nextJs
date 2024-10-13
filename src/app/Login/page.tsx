@@ -1,21 +1,27 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import reducer, { ActionType, INITIAL_STATE } from "@/context/reducer";
+import { useAppContext } from "@/context/context";
+import { ActionType } from "@/context/reducer";
+
 import axios from "axios";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const { state, dispatch, setToken } = useAppContext(); // Use context instead of useReducer
 
   const onLogin = async () => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
       const response = await axios.post("/api/users/login", state.user);
       console.log("Login success", response.data);
+
       const { token } = response.data;
-      dispatch({ type: ActionType.SET_TOKEN, payload: token });
+      setToken(token); // Update the token using setToken from the context
+
+      console.log("Dispatched Token:", token);
+
       router.push("/profile");
     } catch (error: unknown) {
       dispatch({
@@ -33,7 +39,7 @@ export default function LoginPage() {
     } else {
       dispatch({ type: ActionType.SET_BTN_DISABLED, payload: true });
     }
-  }, [state.user]);
+  }, [state.user, dispatch]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-100">

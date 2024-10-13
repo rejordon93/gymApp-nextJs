@@ -1,6 +1,12 @@
-"use client";
 // src/context/context.ts
-import React, { createContext, useContext, ReactNode, useReducer } from "react";
+"use client";
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useReducer,
+  useState,
+} from "react";
 import reducer from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
 import { Action, State } from "@/context/reducer";
@@ -9,6 +15,8 @@ import { Action, State } from "@/context/reducer";
 interface AppContextType {
   state: State; // State managed by the reducer
   dispatch: React.Dispatch<Action>; // Dispatch function for dispatching actions
+  token: string | null; // Token state
+  setToken: React.Dispatch<React.SetStateAction<string | null>>; // Function to update the token
 }
 
 // Create the context with a default value
@@ -21,9 +29,10 @@ type AppProviderProps = {
 // Export the provider
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [token, setToken] = useState<string | null>(null); // Initialize the token state
 
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ state, dispatch, token, setToken }}>
       {children}
     </AppContext.Provider>
   );
