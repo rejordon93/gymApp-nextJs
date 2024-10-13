@@ -16,7 +16,6 @@ export default function LoginPage() {
       console.log("Login success", response.data);
       const { token } = response.data;
       dispatch({ type: ActionType.SET_TOKEN, payload: token });
-      // userData.setToken(token);
       router.push("/profile");
     } catch (error: unknown) {
       dispatch({

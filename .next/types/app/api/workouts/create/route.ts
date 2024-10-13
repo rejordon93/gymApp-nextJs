@@ -1,4 +1,4 @@
-// File: C:\Users\Ejord\OneDrive\Desktop\GymApp\uniongym\src\app\api\workouts\create\route.tsx
+// File: C:\Users\Ejord\OneDrive\Desktop\GymApp\uniongym\src\app\api\workouts\create\route.ts
 import * as entry from '../../../../../../src/app/api/workouts/create/route.js'
 import type { NextRequest } from 'next/server.js'
 

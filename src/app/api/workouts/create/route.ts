@@ -14,20 +14,6 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Fetch all workouts for the user
-    // const workouts = await prisma.workout.findMany({
-    //   where: { user_id: userId },
-    //   orderBy: {
-    //     checkin: "desc", // Order by check-in date
-    //   },
-    // });
-    // if (!workouts.length) {
-    //   return NextResponse.json(
-    //     { message: "No workouts found" },
-    //     { status: 404 }
-    //   );
-    // }
-
     const workoutHours = await prisma.workout.findMany({
       where: {
         user_id: userId,
@@ -43,8 +29,6 @@ export async function GET(req: NextRequest) {
         duration: "desc", // Order by duration in descending order
       },
     });
-
-    console.log(workoutHours);
 
     if (!workoutHours) {
       return NextResponse.json(

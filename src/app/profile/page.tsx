@@ -95,11 +95,7 @@ export default function GymVisitsPage() {
   if (state.apiRequstContext.isLoading)
     return <div className="text-blue-500">Loading...</div>;
   if (state.apiRequstContext.error)
-    return (
-      <div className="text-red-500 font-bold">
-        Error: {state.apiRequstContext.error}
-      </div>
-    );
+    return <div className="text-red-500 font-bold">Error: {}</div>;
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
