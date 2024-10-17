@@ -614,9 +614,6 @@ video {
 .max-w-3xl {
   max-width: 48rem;
 }
-.max-w-\[1200px\] {
-  max-width: 1200px;
-}
 .max-w-\[80\%\] {
   max-width: 80%;
 }
@@ -694,12 +691,6 @@ video {
 }
 .border-b {
   border-bottom-width: 1px;
-}
-.border-l {
-  border-left-width: 1px;
-}
-.border-r {
-  border-right-width: 1px;
 }
 .border-t {
   border-top-width: 1px;

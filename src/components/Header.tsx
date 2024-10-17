@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter"; // MUI Fitness Icon
-import { useAppContext } from "@/context/context";
+import { useReducer, useEffect } from "react";
+import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
 
 const publicNavLinks = [
   {
@@ -40,16 +41,22 @@ const privateNavLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const { token } = useAppContext(); // Access the token from context
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  // Determine which links to display based on the token
-  const navLinks = token ? privateNavLinks : publicNavLinks;
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      dispatch({ type: ActionType.SET_TOKEN, payload: storedToken }); // storedToken can be string or null
+    }
+  }, []);
+
+  // Determine which links to display based on the token in the state
+  const navLinks = state.user.token ? privateNavLinks : publicNavLinks;
 
   return (
     <header className="flex justify-between items-center py-4 px-7 border-b">
       <h2 className="w-[35px] h-[35px] flex items-center justify-center">
         <Link href="/">
-          {/* Use FitnessCenterIcon from MUI */}
           <FitnessCenterIcon className="text-2xl text-gray-900" />
         </Link>
       </h2>

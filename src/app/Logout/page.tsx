@@ -12,6 +12,7 @@ export default function LogoutPage() {
     try {
       await axios.get("/api/users/logout");
       toast.success("Logout successful", { duration: 5000 });
+      localStorage.removeItem("token");
       router.push("/login");
     } catch (error: unknown) {
       if (error instanceof Error) {

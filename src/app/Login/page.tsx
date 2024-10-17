@@ -9,7 +9,7 @@ import axios from "axios";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { state, dispatch, setToken } = useAppContext(); // Use context instead of useReducer
+  const { state, dispatch } = useAppContext(); // Use context instead of useReducer
 
   const onLogin = async () => {
     try {
@@ -18,8 +18,8 @@ export default function LoginPage() {
       console.log("Login success", response.data);
 
       const { token } = response.data;
-      setToken(token); // Update the token using setToken from the context
-
+      dispatch({ type: ActionType.SET_TOKEN, payload: token });
+      localStorage.setItem("token", token);
       console.log("Dispatched Token:", token);
 
       router.push("/profile");
