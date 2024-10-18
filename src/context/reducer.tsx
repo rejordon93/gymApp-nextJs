@@ -4,7 +4,7 @@ export enum ActionType {
   SET_ERROR = "SET_ERROR",
   SET_LOADING = "SET_LOADING",
   SET_BTN_DISABLED = "BTN_DISABLED",
-  IS_CHECKEDIN = "IS_CHECKEDIN",
+  SET_IS_CHECKEDIN = "IS_CHECKEDIN",
   SET_TOKEN = "SET_TOKEN",
 }
 
@@ -34,7 +34,7 @@ interface SetLoadingAction {
 
 // Action interface for checking if the user is checked in.
 interface SetCheckedinAction {
-  readonly type: ActionType.IS_CHECKEDIN;
+  readonly type: ActionType.SET_IS_CHECKEDIN;
   readonly payload: boolean; // Payload is a boolean (checked-in state)
 }
 
@@ -55,9 +55,9 @@ export type Action =
 // User interface to define the shape of the user object.
 interface User {
   email: string;
-  password: string;
-  username: string;
-  token: string;
+  password?: string;
+  username?: string;
+  token?: string;
 }
 
 // Interface for the API request context, which includes the error message, loading status, and success flag.
@@ -164,7 +164,7 @@ export default function reducer(state: State, action: Action): State {
       };
 
     // Case to handle whether the user is checked-in or not.
-    case ActionType.IS_CHECKEDIN:
+    case ActionType.SET_IS_CHECKEDIN:
       return {
         ...state,
         toolsContext: {

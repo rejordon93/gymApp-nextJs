@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter"; // MUI Fitness Icon
-import { useReducer, useEffect } from "react";
-import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import { useEffect, useContext } from "react";
+
+import { AppContext } from "@/context/context";
 
 const publicNavLinks = [
   {
@@ -41,17 +42,14 @@ const privateNavLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const context = useContext(AppContext);
+
+  const navLinks = context?.state.user.token ? privateNavLinks : publicNavLinks;
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      dispatch({ type: ActionType.SET_TOKEN, payload: storedToken }); // storedToken can be string or null
-    }
-  }, []);
-
-  // Determine which links to display based on the token in the state
-  const navLinks = state.user.token ? privateNavLinks : publicNavLinks;
+    console.log("Header rendered");
+    console.log(context?.state);
+  }, [context?.state]);
 
   return (
     <header className="flex justify-between items-center py-4 px-7 border-b">

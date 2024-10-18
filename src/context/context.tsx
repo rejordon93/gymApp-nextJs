@@ -12,7 +12,7 @@ interface AppContextType {
 }
 
 // Create the context with a default value
-const AppContext = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 type AppProviderProps = {
   children: ReactNode;

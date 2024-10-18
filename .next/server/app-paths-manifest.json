@@ -1,9 +1,7 @@
 {
-  "/login/page": "app/login/page.js",
   "/profile/page": "app/profile/page.js",
-  "/page": "app/page.js",
-  "/logout/page": "app/logout/page.js",
-  "/api/workouts/create/route": "app/api/workouts/create/route.js",
+  "/login/page": "app/login/page.js",
   "/api/users/login/route": "app/api/users/login/route.js",
-  "/api/users/logout/route": "app/api/users/logout/route.js"
+  "/api/workouts/create/route": "app/api/workouts/create/route.js",
+  "/signup/page": "app/signup/page.js"
 }

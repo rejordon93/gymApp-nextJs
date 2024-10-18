@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/context";
 import { ActionType } from "@/context/reducer";
@@ -9,17 +9,31 @@ import axios from "axios";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { state, dispatch } = useAppContext(); // Use context instead of useReducer
+  const { state, dispatch } = useAppContext();
+
+  // Local state for email and password
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username] = useState("");
 
   const onLogin = async () => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
-      const response = await axios.post("/api/users/login", state.user);
+
+      // Send the local email and password state
+      const response = await axios.post("/api/users/login", {
+        email,
+        password,
+      });
       console.log("Login success", response.data);
 
       const { token } = response.data;
       dispatch({ type: ActionType.SET_TOKEN, payload: token });
-      localStorage.setItem("token", token);
+      dispatch({
+        type: ActionType.SET_USER,
+        payload: { email, token, password, username },
+      });
+
       console.log("Dispatched Token:", token);
 
       router.push("/profile");
@@ -34,12 +48,13 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    if (state.user?.email?.length > 0 && state.user?.password?.length > 0) {
+    // Enable or disable the login button based on the email and password
+    if (email.length > 0 && password.length > 0) {
       dispatch({ type: ActionType.SET_BTN_DISABLED, payload: false });
     } else {
       dispatch({ type: ActionType.SET_BTN_DISABLED, payload: true });
     }
-  }, [state.user, dispatch]);
+  }, [email, password, dispatch]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-100">
@@ -60,13 +75,8 @@ export default function LoginPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="email"
               id="email"
-              value={state.user.email}
-              onChange={(e) =>
-                dispatch({
-                  type: ActionType.SET_USER,
-                  payload: { ...state.user, email: e.target.value },
-                })
-              }
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
             />
@@ -82,13 +92,8 @@ export default function LoginPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="password"
               id="password"
-              value={state.user.password}
-              onChange={(e) =>
-                dispatch({
-                  type: ActionType.SET_USER,
-                  payload: { ...state.user, password: e.target.value },
-                })
-              }
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
             />
