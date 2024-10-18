@@ -55,8 +55,8 @@ export type Action =
 // User interface to define the shape of the user object.
 interface User {
   email: string;
-  password?: string;
-  username?: string;
+  password: string;
+  username: string;
   token?: string;
 }
 
