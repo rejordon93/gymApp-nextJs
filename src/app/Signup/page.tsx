@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -8,12 +8,20 @@ import axios from "axios";
 export default function SignupPage() {
   const router = useRouter();
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUserName] = useState("");
 
   // Handle signup logic
   const onSignup = async () => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
-      const response = await axios.post("/api/users/signup", state.user);
+      const response = await axios.post("/api/users/signup", {
+        username,
+        password,
+        email,
+      });
       console.log("Signup success", response.data);
       router.push("/login");
     } catch (error) {
@@ -26,19 +34,14 @@ export default function SignupPage() {
     }
   };
 
-  // Enable or disable the button based on form validity
   useEffect(() => {
-    if (
-      state.user &&
-      state.user.email.length > 0 &&
-      state.user.password.length > 0 &&
-      state.user.username.length > 0
-    ) {
-      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: false });
+    // Enable the button if all fields have values, disable otherwise
+    if (email.length > 0 && password.length > 0 && username.length > 0) {
+      setButtonDisabled(false); // Enable button
     } else {
-      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: true });
+      setButtonDisabled(true); // Disable button
     }
-  }, [state.user]);
+  }, [email, password, username]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-100">
@@ -59,13 +62,8 @@ export default function SignupPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="text"
               id="username"
-              value={state.user.username}
-              onChange={(e) =>
-                dispatch({
-                  type: ActionType.SET_USER,
-                  payload: { ...state.user, username: e.target.value },
-                })
-              }
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
               placeholder="Enter your username"
               required
             />
@@ -81,13 +79,8 @@ export default function SignupPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="email"
               id="email"
-              value={state.user.email}
-              onChange={(e) =>
-                dispatch({
-                  type: ActionType.SET_USER,
-                  payload: { ...state.user, email: e.target.value },
-                })
-              }
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
             />
@@ -103,13 +96,8 @@ export default function SignupPage() {
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="password"
               id="password"
-              value={state.user.password}
-              onChange={(e) =>
-                dispatch({
-                  type: ActionType.SET_USER,
-                  payload: { ...state.user, password: e.target.value },
-                })
-              }
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
             />
@@ -123,8 +111,12 @@ export default function SignupPage() {
 
           <button
             onClick={onSignup}
-            className="w-full bg-indigo-600 text-white p-3 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            disabled={state.toolsContext.buttonDisabled}
+            className={`w-full p-3 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+              buttonDisabled
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+            }`}
+            disabled={buttonDisabled}
           >
             {state.apiRequstContext.isLoading ? "Signing up..." : "Signup"}
           </button>

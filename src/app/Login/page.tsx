@@ -14,12 +14,11 @@ export default function LoginPage() {
   // Local state for email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const onLogin = async () => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
-
       // Send the local email and password state
       const response = await axios.post("/api/users/login", {
         email,
@@ -28,12 +27,6 @@ export default function LoginPage() {
       console.log("Login success", response.data);
 
       const { token } = response.data;
-      dispatch({ type: ActionType.SET_TOKEN, payload: token });
-      dispatch({
-        type: ActionType.SET_USER,
-        payload: { email, token, password, username },
-      });
-
       console.log("Dispatched Token:", token);
 
       router.push("/profile");
@@ -48,13 +41,13 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    // Enable or disable the login button based on the email and password
+    // Check if email and password are defined before accessing .length
     if (email.length > 0 && password.length > 0) {
-      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: false });
+      setIsButtonDisabled(false);
     } else {
-      dispatch({ type: ActionType.SET_BTN_DISABLED, payload: true });
+      setIsButtonDisabled(true);
     }
-  }, [email, password, dispatch]);
+  }, [email, password]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-100">
@@ -106,11 +99,11 @@ export default function LoginPage() {
           <button
             onClick={onLogin}
             className={`w-full p-3 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-              state.toolsContext.buttonDisabled
+              isButtonDisabled
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-indigo-600 hover:bg-indigo-700 text-white"
             }`}
-            disabled={state.toolsContext.buttonDisabled}
+            disabled={isButtonDisabled}
           >
             {state.apiRequstContext.isLoading ? "Processing..." : "Login"}
           </button>
