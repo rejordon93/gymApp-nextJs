@@ -1,4 +1,6 @@
 {
-  "/signup/page": "app/signup/page.js",
-  "/login/page": "app/login/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/login/page": "app/login/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/api/workouts/create/route": "app/api/workouts/create/route.js"
 }

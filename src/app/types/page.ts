@@ -1,10 +1,11 @@
 export type WorkoutDataProps = {
-  calories: number;
-  duration: number;
-  repetitions: number;
-  equipment: string;
-  checkin: string;
-  weightLifted: number;
-  distance: number;
   id: number;
+  checkin: string; // or Date if you are using Date objects
+  checkout?: string; // or Date
+  duration: number; // Ensure this is a number
+  equipment?: string;
+  calories?: number;
+  weightLifted?: number;
+  distance?: number;
+  repetitions?: number;
 };

@@ -47,8 +47,8 @@ export default function Header() {
   const navLinks = context?.state.user.token ? privateNavLinks : publicNavLinks;
 
   useEffect(() => {
-    console.log("Header rendered");
-    console.log(context?.state);
+    console.log("Context state:", context?.state);
+    console.log("Token:", context?.state.user?.token);
   }, [context?.state]);
 
   return (

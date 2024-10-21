@@ -10,44 +10,44 @@ export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const router = useRouter();
-  const handleCheckinBtn = () => {
-    dispatch({ type: ActionType.SET_LOADING, payload: true });
-    dispatch({ type: ActionType.IS_CHECKEDIN, payload: true });
 
-    axios
-      .post(
-        "/api/workouts/create",
-        {
-          checkin: new Date().toISOString(),
-          equipment: "",
-          duration: 0,
-          calories: 0,
-          weightLifted: 0,
-          distance: 0,
-          repetitions: 0,
-        },
-        { withCredentials: true }
-      )
-      .then((response) => {
-        console.log("API Response:", response.data);
-        const { workout } = response.data as {
-          message: string;
-          workout: WorkoutDataProps;
-        };
-        setData((prevData) => [...prevData, workout]);
-      })
-      .catch((error) => {
-        dispatch({
-          type: ActionType.SET_ERROR,
-          payload: error instanceof Error ? error.message : String(error),
-        });
-      })
-      .finally(() =>
-        dispatch({ type: ActionType.SET_LOADING, payload: false })
-      );
+  const updateProfile = async () => {
+    dispatch({ type: ActionType.SET_LOADING, payload: true });
+    const newWorkout = {
+      checkin: new Date().toISOString(),
+      equipment: "",
+      duration: 0,
+      calories: 0,
+      weightLifted: 0,
+      distance: 0,
+      repetitions: 0,
+    };
+
+    try {
+      const response = await axios.post("/api/workouts/create", newWorkout, {
+        withCredentials: true,
+      });
+
+      console.log("API Response:", response.data);
+      const { workout } = response.data as {
+        message: string;
+        workout: WorkoutDataProps;
+      };
+
+      setData((prevData) => [...prevData, workout]);
+      alert("Workout added successfully!");
+    } catch (error) {
+      console.error("Error adding workout:", error);
+      dispatch({
+        type: ActionType.SET_ERROR,
+        payload: error instanceof Error ? error.message : String(error),
+      });
+      alert("Failed to add workout.");
+    } finally {
+      dispatch({ type: ActionType.SET_LOADING, payload: false });
+    }
   };
 
-  // For checking out and updating a specific workout
   const handleCheckOutBtn = async (workoutId: number) => {
     dispatch({ type: ActionType.SET_LOADING, payload: true });
     dispatch({ type: ActionType.SET_ERROR, payload: null });
@@ -71,9 +71,7 @@ export default function GymVisitsPage() {
 
       // Update the correct workout's duration in the state
       setData((prevState) =>
-        prevState.map(
-          (w) => (w.id === workout.id ? { ...w, duration } : w) // Use the new duration value
-        )
+        prevState.map((w) => (w.id === workout.id ? { ...w, duration } : w))
       );
 
       console.log("API Response:", response.data);
@@ -87,15 +85,18 @@ export default function GymVisitsPage() {
     }
   };
 
-  const handleWorkoutBtn = async () => {
-    console.log("Just a Test for rediecting workout");
-    router.push("/workouts");
-  };
-
-  if (state.apiRequstContext.isLoading)
+  // Render loading and error messages directly
+  if (state.apiRequstContext.isLoading) {
     return <div className="text-blue-500">Loading...</div>;
-  if (state.apiRequstContext.error)
-    return <div className="text-red-500 font-bold">Error: {}</div>;
+  }
+
+  if (state.apiRequstContext.error) {
+    return (
+      <div className="text-red-500 font-bold">
+        Error: {state.apiRequstContext.error}
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -104,18 +105,10 @@ export default function GymVisitsPage() {
       <div className="flex justify-between mt-6">
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
-          onClick={handleCheckinBtn}
+          onClick={updateProfile}
         >
           Check in
         </button>
-        {state.toolsContext.isCheckedIn && (
-          <button
-            onClick={handleWorkoutBtn}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
-          >
-            Add Workouts
-          </button>
-        )}
       </div>
       <div className="mt-6 space-y-6">
         {data.map((workout) => (

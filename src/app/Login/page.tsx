@@ -28,6 +28,7 @@ export default function LoginPage() {
 
       const { token } = response.data;
       console.log("Dispatched Token:", token);
+      dispatch({ type: ActionType.SET_TOKEN, payload: token });
 
       router.push("/profile");
     } catch (error: unknown) {
