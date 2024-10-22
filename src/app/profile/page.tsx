@@ -2,16 +2,19 @@
 import axios from "axios";
 import { useState, useReducer } from "react";
 import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
-import { useRouter } from "next/navigation";
+import WorkoutWeekly from "./weekleyWorkouts/page";
 import { WorkoutDataProps } from "../types/page";
 import BarChart from "@/components/BarChart";
+import toast from "react-hot-toast";
 
 export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
+  const [toggleCheckIn, setToggleCheckIn] = useState<boolean>(true);
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const router = useRouter();
 
   const updateProfile = async () => {
+    setToggleCheckIn(false);
+
     dispatch({ type: ActionType.SET_LOADING, payload: true });
     const newWorkout = {
       checkin: new Date().toISOString(),
@@ -35,7 +38,11 @@ export default function GymVisitsPage() {
       };
 
       setData((prevData) => [...prevData, workout]);
-      alert("Workout added successfully!");
+      toast("Have a good Workout!", {
+        icon: "💪",
+        duration: 3000,
+        style: { background: "#363636", color: "#fff" },
+      });
     } catch (error) {
       console.error("Error adding workout:", error);
       dispatch({
@@ -103,13 +110,16 @@ export default function GymVisitsPage() {
       <h1 className="text-3xl font-semibold mb-6 text-center">Gym Visits</h1>
       <BarChart data={data} />
       <div className="flex justify-between mt-6">
-        <button
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
-          onClick={updateProfile}
-        >
-          Check in
-        </button>
+        {toggleCheckIn ? (
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
+            onClick={updateProfile}
+          >
+            Check in
+          </button>
+        ) : null}
       </div>
+
       <div className="mt-6 space-y-6">
         {data.map((workout) => (
           <div
@@ -163,6 +173,7 @@ export default function GymVisitsPage() {
           </div>
         ))}
       </div>
+      <WorkoutWeekly />
     </div>
   );
 }
