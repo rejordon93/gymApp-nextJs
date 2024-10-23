@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 
 import { AppContext } from "@/context/context";
 
@@ -45,11 +45,6 @@ export default function Header() {
   const context = useContext(AppContext);
 
   const navLinks = context?.state.user.token ? privateNavLinks : publicNavLinks;
-
-  useEffect(() => {
-    console.log("Context state:", context?.state);
-    console.log("Token:", context?.state.user?.token);
-  }, [context?.state]);
 
   return (
     <header className="flex justify-between items-center py-4 px-7 border-b">

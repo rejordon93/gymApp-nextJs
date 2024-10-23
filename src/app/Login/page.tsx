@@ -31,7 +31,6 @@ export default function LoginPage() {
 
       const userDate = response.data;
 
-      console.log("Dispatched Token:", token);
       dispatch({ type: ActionType.SET_TOKEN, payload: token });
       dispatch({ type: ActionType.SET_USER, payload: userDate });
       router.push("/profile");

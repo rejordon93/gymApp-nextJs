@@ -28,9 +28,6 @@ export async function POST(request: NextRequest) {
     //creart token data
     const tokenData = {
       id: user.id,
-      username: user.username,
-      email: user.email,
-      createdAt: user.createdAt,
     };
 
     //create token
@@ -41,7 +38,11 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
       message: "Login successful",
       token: token,
-      user: tokenData,
+      user: {
+        username: user.username,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
       success: true,
     });
 

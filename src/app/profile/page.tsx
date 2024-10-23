@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useState, useReducer } from "react";
 import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
-import WorkoutWeekly from "./weekleyWorkouts/page";
+
 import { WorkoutDataProps } from "../types/page";
 import BarChart from "@/components/BarChart";
 import toast, { Toaster } from "react-hot-toast";
@@ -92,19 +92,6 @@ export default function GymVisitsPage() {
     }
   };
 
-  // // Render loading and error messages directly
-  // if (state.apiRequstContext.isLoading) {
-  //   return <div className="text-blue-500">Loading...</div>;
-  // }
-
-  // if (state.apiRequstContext.error) {
-  //   return (
-  //     <div className="text-red-500 font-bold">
-  //       Error: {state.apiRequstContext.error}
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-3xl font-semibold mb-6 text-center">Gym Visits</h1>
@@ -174,7 +161,6 @@ export default function GymVisitsPage() {
           </div>
         ))}
       </div>
-      <WorkoutWeekly />
     </div>
   );
 }
