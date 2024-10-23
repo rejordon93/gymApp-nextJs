@@ -3,8 +3,6 @@ export enum ActionType {
   SET_USER = "SET_USER",
   SET_ERROR = "SET_ERROR",
   SET_LOADING = "SET_LOADING",
-  SET_BTN_DISABLED = "BTN_DISABLED",
-  SET_IS_CHECKEDIN = "IS_CHECKEDIN",
   SET_TOKEN = "SET_TOKEN",
 }
 
@@ -20,22 +18,10 @@ interface SetErrorAction {
   readonly payload: string | null; // Payload is a string (error message)
 }
 
-// Action interface for enabling or disabling a button.
-interface SetBtnDisabledAction {
-  readonly type: ActionType.SET_BTN_DISABLED;
-  readonly payload: boolean; // Payload is a boolean (button enabled/disabled state)
-}
-
 // Action interface for setting the loading state.
 interface SetLoadingAction {
   readonly type: ActionType.SET_LOADING;
   readonly payload: boolean; // Payload is a boolean (loading state)
-}
-
-// Action interface for checking if the user is checked in.
-interface SetCheckedinAction {
-  readonly type: ActionType.SET_IS_CHECKEDIN;
-  readonly payload: boolean; // Payload is a boolean (checked-in state)
 }
 
 interface SetTokenAction {
@@ -45,17 +31,14 @@ interface SetTokenAction {
 
 // Union of all possible action types. This allows the reducer to handle multiple action types.
 export type Action =
-  | SetBtnDisabledAction
   | SetErrorAction
   | SetUserAction
   | SetLoadingAction
-  | SetCheckedinAction
   | SetTokenAction;
 
 // User interface to define the shape of the user object.
 interface User {
   email: string;
-  password: string;
   username: string;
   token?: string;
 }
@@ -67,15 +50,8 @@ interface ApiRequstContext {
   success: boolean; // Indicates whether the request was successful.
 }
 
-// Interface for the tools context, which holds UI-related states like button disabling and check-in status.
-interface ToolsContext {
-  buttonDisabled: boolean; // `true` if the button is disabled, `false` otherwise.
-  isCheckedIn: boolean; // `true` if the user is checked in, `false` otherwise.
-}
-
 // The overall state of the application, which combines all contexts and the user.
 export interface State {
-  toolsContext: ToolsContext;
   apiRequstContext: ApiRequstContext;
   user: User;
 }
@@ -84,7 +60,6 @@ export interface State {
 export const INITIAL_STATE: State = {
   user: {
     email: "",
-    password: "",
     username: "",
     token: "",
   },
@@ -93,30 +68,11 @@ export const INITIAL_STATE: State = {
     isLoading: false,
     success: false,
   },
-  toolsContext: {
-    buttonDisabled: true,
-    isCheckedIn: false,
-  },
 };
 
 // Reducer function that updates the state based on the action type.
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
-    // Case to handle enabling or disabling a button.
-    case ActionType.SET_BTN_DISABLED:
-      return {
-        ...state,
-        toolsContext: {
-          ...state.toolsContext,
-          buttonDisabled: action.payload, // Update buttonDisabled in toolsContext.
-        },
-        apiRequstContext: {
-          ...state.apiRequstContext,
-          success: false, // Reset success status.
-          error: null, // Clear any errors.
-        },
-      };
-
     // Case to handle setting an error message.
     case ActionType.SET_ERROR:
       return {
@@ -138,10 +94,6 @@ export default function reducer(state: State, action: Action): State {
           success: true, // Mark request as successful.
           error: null, // Clear any errors.
         },
-        toolsContext: {
-          ...state.toolsContext,
-          isCheckedIn: true, // Mark the user as checked-in.
-        },
       };
 
     case ActionType.SET_TOKEN:
@@ -162,17 +114,6 @@ export default function reducer(state: State, action: Action): State {
           isLoading: action.payload, // Update loading status.
         },
       };
-
-    // Case to handle whether the user is checked-in or not.
-    case ActionType.SET_IS_CHECKEDIN:
-      return {
-        ...state,
-        toolsContext: {
-          ...state.toolsContext,
-          isCheckedIn: action.payload, // Update checked-in status.
-        },
-      };
-
     // Default case when no valid action is provided.
     default:
       return state;

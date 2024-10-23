@@ -24,12 +24,16 @@ export default function LoginPage() {
         email,
         password,
       });
+
       console.log("Login success", response.data);
 
       const { token } = response.data;
+
+      const userDate = response.data;
+
       console.log("Dispatched Token:", token);
       dispatch({ type: ActionType.SET_TOKEN, payload: token });
-
+      dispatch({ type: ActionType.SET_USER, payload: userDate });
       router.push("/profile");
     } catch (error: unknown) {
       dispatch({

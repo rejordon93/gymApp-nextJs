@@ -5,7 +5,7 @@ import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
 import WorkoutWeekly from "./weekleyWorkouts/page";
 import { WorkoutDataProps } from "../types/page";
 import BarChart from "@/components/BarChart";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function GymVisitsPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
@@ -40,7 +40,7 @@ export default function GymVisitsPage() {
       setData((prevData) => [...prevData, workout]);
       toast("Have a good Workout!", {
         icon: "💪",
-        duration: 3000,
+        duration: 5000,
         style: { background: "#363636", color: "#fff" },
       });
     } catch (error) {
@@ -92,18 +92,18 @@ export default function GymVisitsPage() {
     }
   };
 
-  // Render loading and error messages directly
-  if (state.apiRequstContext.isLoading) {
-    return <div className="text-blue-500">Loading...</div>;
-  }
+  // // Render loading and error messages directly
+  // if (state.apiRequstContext.isLoading) {
+  //   return <div className="text-blue-500">Loading...</div>;
+  // }
 
-  if (state.apiRequstContext.error) {
-    return (
-      <div className="text-red-500 font-bold">
-        Error: {state.apiRequstContext.error}
-      </div>
-    );
-  }
+  // if (state.apiRequstContext.error) {
+  //   return (
+  //     <div className="text-red-500 font-bold">
+  //       Error: {state.apiRequstContext.error}
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -116,6 +116,7 @@ export default function GymVisitsPage() {
             onClick={updateProfile}
           >
             Check in
+            <Toaster />
           </button>
         ) : null}
       </div>

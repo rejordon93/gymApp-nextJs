@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       id: user.id,
       username: user.username,
       email: user.email,
+      createdAt: user.createdAt,
     };
 
     //create token
@@ -41,7 +42,6 @@ export async function POST(request: NextRequest) {
       message: "Login successful",
       token: token,
       user: tokenData,
-      createdAt: user.createdAt,
       success: true,
     });
 
