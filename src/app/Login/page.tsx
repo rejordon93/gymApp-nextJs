@@ -27,12 +27,10 @@ export default function LoginPage() {
 
       console.log("Login success", response.data);
 
-      const { token } = response.data;
+      const userData = response.data;
 
-      const userDate = response.data;
-
-      dispatch({ type: ActionType.SET_TOKEN, payload: token });
-      dispatch({ type: ActionType.SET_USER, payload: userDate });
+      // dispatch({ type: ActionType.SET_TOKEN, payload: token });
+      dispatch({ type: ActionType.SET_USER, payload: userData });
       router.push("/profile");
     } catch (error: unknown) {
       dispatch({

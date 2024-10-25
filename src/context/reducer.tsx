@@ -3,7 +3,6 @@ export enum ActionType {
   SET_USER = "SET_USER",
   SET_ERROR = "SET_ERROR",
   SET_LOADING = "SET_LOADING",
-  SET_TOKEN = "SET_TOKEN",
 }
 
 // Action interface for setting the user.
@@ -24,17 +23,8 @@ interface SetLoadingAction {
   readonly payload: boolean; // Payload is a boolean (loading state)
 }
 
-interface SetTokenAction {
-  readonly type: ActionType.SET_TOKEN;
-  readonly payload: string;
-}
-
 // Union of all possible action types. This allows the reducer to handle multiple action types.
-export type Action =
-  | SetErrorAction
-  | SetUserAction
-  | SetLoadingAction
-  | SetTokenAction;
+export type Action = SetErrorAction | SetUserAction | SetLoadingAction;
 
 // User interface to define the shape of the user object.
 interface User {
@@ -93,15 +83,6 @@ export default function reducer(state: State, action: Action): State {
           ...state.apiRequstContext,
           success: true, // Mark request as successful.
           error: null, // Clear any errors.
-        },
-      };
-
-    case ActionType.SET_TOKEN:
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          token: action.payload,
         },
       };
 

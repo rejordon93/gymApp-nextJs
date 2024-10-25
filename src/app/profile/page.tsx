@@ -16,20 +16,21 @@ export default function GymVisitsPage() {
     setToggleCheckIn(false);
 
     dispatch({ type: ActionType.SET_LOADING, payload: true });
-    const newWorkout = {
+    const userCheckIn = {
       checkin: new Date().toISOString(),
-      equipment: "",
       duration: 0,
+      equipment: "",
       calories: 0,
       weightLifted: 0,
       distance: 0,
       repetitions: 0,
     };
-
+    console.log(userCheckIn);
     try {
-      const response = await axios.post("/api/workouts/create", newWorkout, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        "/api/workouts/createWorkouts",
+        userCheckIn
+      );
 
       console.log("API Response:", response.data);
       const { workout } = response.data as {
@@ -55,42 +56,42 @@ export default function GymVisitsPage() {
     }
   };
 
-  const handleCheckOutBtn = async (workoutId: number) => {
-    dispatch({ type: ActionType.SET_LOADING, payload: true });
-    dispatch({ type: ActionType.SET_ERROR, payload: null });
+  // const handleCheckOutBtn = async (workoutId: number) => {
+  //   dispatch({ type: ActionType.SET_LOADING, payload: true });
+  //   dispatch({ type: ActionType.SET_ERROR, payload: null });
 
-    try {
-      const checkoutTime = new Date(); // Checkout time as a Date object
-      const workout = data.find((w) => w.id === workoutId);
-      if (!workout) throw new Error("Workout not found");
+  //   try {
+  //     const checkoutTime = new Date(); // Checkout time as a Date object
+  //     const workout = data.find((w) => w.id === workoutId);
+  //     if (!workout) throw new Error("Workout not found");
 
-      // Calculate the duration in seconds
-      const duration =
-        (checkoutTime.getTime() - new Date(workout.checkin).getTime()) / 1000;
+  //     // Calculate the duration in seconds
+  //     const duration =
+  //       (checkoutTime.getTime() - new Date(workout.checkin).getTime()) / 1000;
 
-      // Send a PATCH request to update the workout's duration and checkout time
-      const response = await axios.patch("/api/workouts/create", {
-        id: workout.id,
-        duration: duration,
-        checkin: workout.checkin,
-        checkout: checkoutTime.toISOString(),
-      });
+  //     // Send a PATCH request to update the workout's duration and checkout time
+  //     const response = await axios.patch("/api/workouts/create", {
+  //       id: workout.id,
+  //       duration: duration,
+  //       checkin: workout.checkin,
+  //       checkout: checkoutTime.toISOString(),
+  //     });
 
-      // Update the correct workout's duration in the state
-      setData((prevState) =>
-        prevState.map((w) => (w.id === workout.id ? { ...w, duration } : w))
-      );
+  //     // Update the correct workout's duration in the state
+  //     setData((prevState) =>
+  //       prevState.map((w) => (w.id === workout.id ? { ...w, duration } : w))
+  //     );
 
-      console.log("API Response:", response.data);
-    } catch (error) {
-      dispatch({
-        type: ActionType.SET_ERROR,
-        payload: "Error checking out workout",
-      });
-    } finally {
-      dispatch({ type: ActionType.SET_LOADING, payload: false });
-    }
-  };
+  //     console.log("API Response:", response.data);
+  //   } catch (error) {
+  //     dispatch({
+  //       type: ActionType.SET_ERROR,
+  //       payload: "Error checking out workout",
+  //     });
+  //   } finally {
+  //     dispatch({ type: ActionType.SET_LOADING, payload: false });
+  //   }
+  // };
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -107,7 +108,7 @@ export default function GymVisitsPage() {
           </button>
         ) : null}
       </div>
-
+      {/* 
       <div className="mt-6 space-y-6">
         {data.map((workout) => (
           <div
@@ -151,8 +152,8 @@ export default function GymVisitsPage() {
                 <span className="font-medium">Repetitions:</span>
                 <span>{workout.repetitions}</span>
               </p>
-            </div>
-            <button
+            </div> */}
+      {/* <button
               className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-200"
               onClick={() => handleCheckOutBtn(workout.id)}
             >
@@ -160,7 +161,7 @@ export default function GymVisitsPage() {
             </button>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
