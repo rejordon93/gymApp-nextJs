@@ -11,48 +11,43 @@ interface Workout {
   duration: number; // Duration in minutes
 }
 
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const daysOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const DayTrackerComponent = () => {
-  const [uData, setUData] = useState<number[]>([1, 2, 3, 4, 5, 6, 0]); // Initialize with zeros for 7 days
+  const [uData, setUData] = useState<number[]>(Array(7).fill(0)); // Initialize with zeros for 7 days
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
         const response = await axios.get("/api/workouts/getWorkouts");
 
-        const today = new Date();
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(today.getDate() - 6);
+        const updatedDate = [...uData];
 
         response.data.forEach((item: Workout) => {
           const checkinDate = new Date(item.checkin);
           const checkoutDate = new Date(item.checkout);
+          const todayIndex = checkoutDate.getDay();
 
-          // Calculate the duration in hours directly
-          const durationTime = checkoutDate.getTime() - checkinDate.getTime();
-          const durationInHours =
-            durationTime / Math.round(Math.floor(1000 * 60 * 60)); // Convert to hours
+          const diff =
+            new Date(checkoutDate).getMinutes() -
+            new Date(checkinDate).getMinutes();
 
-          // Check if checkinDate is within the last week
-          if (checkinDate >= sevenDaysAgo && checkinDate <= today) {
-            console.log(`Check-in Date: ${item.checkin}`);
-            console.log(`Duration: ${durationInHours}`);
-          }
+          updatedDate[todayIndex] += diff;
         });
+        setUData(updatedDate);
       } catch (error) {
         console.error("Error fetching workouts:", error);
       }
     };
 
     fetchWorkouts();
-  }, []); // Dependency array ensures effect runs once
+  }, []);
 
   return (
-    <Paper elevation={3}>
+    <Paper>
       <BarChart
-        xAxis={[{ scaleType: "band", data: days }]}
-        series={[{ data: uData, label: "Hours", type: "bar" }]}
+        xAxis={[{ scaleType: "band", data: daysOfTheWeek }]}
+        series={[{ data: uData, label: "Duration (min)", type: "bar" }]}
         width={500}
         height={300}
       />

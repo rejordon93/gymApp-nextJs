@@ -1,36 +1,29 @@
+// src/app/api/workouts/route.ts
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-export async function GET() {
-  // Check if the environment variables are defined
-  const rapidApiKey = process.env.NEXT_PUBLIC_RAPIDAPI_KEY;
-  const rapidApiHost = process.env.NEXT_PUBLIC_RAPIDAPI_HOST;
-
-  if (!rapidApiKey || !rapidApiHost) {
-    return NextResponse.json(
-      { error: "API keys are not defined." },
-      { status: 500 }
-    );
-  }
+export const GET = async () => {
+  const options = {
+    method: "GET",
+    url: "https://exercisedb.p.rapidapi.com/exercises/bodyPart/back",
+    params: {
+      limit: "6",
+      offset: "0",
+    },
+    headers: {
+      "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+      "x-rapidapi-host": "exercisedb.p.rapidapi.com",
+    },
+  };
 
   try {
-    const response = await axios.get(
-      "https://exercise-db-fitness-workout-gym.p.rapidapi.com/exercises/mechanic/isolation",
-      {
-        headers: {
-          "x-rapidapi-key": rapidApiKey, // Use the defined variables
-          "x-rapidapi-host": rapidApiHost,
-        },
-        withCredentials: true, // Include credentials if needed
-      }
-    );
-
-    return NextResponse.json(response.data); // Return the fetched data as JSON
+    const response = await axios.request(options);
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching exercises:", error);
     return NextResponse.json(
-      { error: "Failed to fetch workout equipment" },
+      { error: "Failed to fetch exercises" },
       { status: 500 }
     );
   }
-}
+};

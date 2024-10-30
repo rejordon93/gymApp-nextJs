@@ -8,22 +8,22 @@ import { AppContext } from "@/context/context";
 
 const publicNavLinks = [
   {
-    href: "/signup",
+    href: "/client/signup",
     label: "Signup",
   },
   {
-    href: "/login",
+    href: "/client/login",
     label: "Login",
   },
   {
-    href: "/logout",
+    href: "/client/logout",
     label: "Logout",
   },
 ];
 
 const privateNavLinks = [
   {
-    href: "/profile",
+    href: "/client/profile",
     label: "Profile",
   },
   {
@@ -35,7 +35,7 @@ const privateNavLinks = [
     label: "Planner",
   },
   {
-    href: "/logout",
+    href: "/client/logout",
     label: "Logout",
   },
 ];
