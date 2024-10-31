@@ -1,10 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
+  console.log("From FavoriteWorkouts");
+  console.log(req.url);
+  const { searchParams } = new URL(req.url);
+  const searchValue = searchParams.get("searchValue");
   const options = {
     method: "GET",
-    url: `https://exercisedb.p.rapidapi.com/exercises/bodyPart/back`,
+    url: `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${searchValue}`,
     params: {
       limit: "10",
       offset: "0",
@@ -18,7 +22,6 @@ export const GET = async () => {
   try {
     const response = await axios.request(options);
     return NextResponse.json(response.data);
-    console.log(response.data);
   } catch (error) {
     console.error(error);
   }
