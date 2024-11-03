@@ -1,4 +1,8 @@
 "use client";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ExercisesInterfaces } from "@/app/types/page";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Autocomplete,
   TextField,
@@ -14,10 +18,8 @@ import {
   IconButton,
   Collapse,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ExercisesInterfaces } from "@/app/types/page";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function WorkoutFavorite() {
   const [exercises, setExercises] = useState<string[]>([]);
@@ -80,6 +82,13 @@ export default function WorkoutFavorite() {
     setExpandedId((prevId) => (prevId === id ? null : id));
   };
 
+  const toggleRemoveBtn = (id: string) => {
+    setSelectFavoriteExercises((prevExercises) =>
+      prevExercises.filter((exercises) => exercises.id !== id)
+    );
+    console.log(`Remove exercise with id ${id}`);
+  };
+
   return (
     <Box
       sx={{
@@ -116,6 +125,7 @@ export default function WorkoutFavorite() {
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
+                    position: "relative",
                   }}
                 >
                   <CardMedia
@@ -179,6 +189,25 @@ export default function WorkoutFavorite() {
                         {val.instructions}
                       </Typography>
                     </Collapse>
+                    <Tooltip title="Remove from Favorites">
+                      <IconButton
+                        onClick={() => toggleRemoveBtn(val.id)}
+                        aria-label="delete"
+                        color="error"
+                        sx={{
+                          backgroundColor: "rgba(255, 0, 0, 0.1)", // Light red background
+                          transition: "background-color 0.3s",
+                          "&:hover": {
+                            backgroundColor: "rgba(255, 0, 0, 0.2)", // Darker red on hover
+                          },
+                          position: "absolute", // Position it on the card
+                          top: 8,
+                          left: 8,
+                        }}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
                   </CardContent>
                 </Card>
               </Grid>

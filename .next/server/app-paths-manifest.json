@@ -1,6 +1,4 @@
 {
   "/client/login/page": "app/client/login/page.js",
-  "/client/profile/page": "app/client/profile/page.js",
-  "/api/workouts/searchBarApi/route": "app/api/workouts/searchBarApi/route.js",
-  "/api/workouts/favoriteWorkouts/route": "app/api/workouts/favoriteWorkouts/route.js"
+  "/client/profile/page": "app/client/profile/page.js"
 }
