@@ -1,4 +1,5 @@
 {
-  "/client/login/page": "app/client/login/page.js",
-  "/client/profile/page": "app/client/profile/page.js"
+  "/client/profile/page": "app/client/profile/page.js",
+  "/api/workouts/getWorkouts/route": "app/api/workouts/getWorkouts/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }
