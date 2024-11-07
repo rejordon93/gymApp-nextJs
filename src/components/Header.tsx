@@ -27,7 +27,7 @@ const privateNavLinks = [
     label: "Profile",
   },
   {
-    href: "/workouts",
+    href: "/client/workouts",
     label: "Workouts",
   },
   {
