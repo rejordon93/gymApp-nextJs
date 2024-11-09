@@ -1,72 +1,89 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { Box, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import {
-  FormControl,
-  MenuItem,
-  Select,
-  CircularProgress,
-  InputLabel,
-  Button,
-  SelectChangeEvent,
-} from "@mui/material";
+import React, { useState } from "react";
+import { useWorkoutContext } from "@/context/context";
+import { useRouter } from "next/navigation";
 
-export default function Workouts() {
-  const [exercises, setExercises] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // State for loading indicator
-  const [selectedExercise, setSelectedExercise] = useState<string>("");
+export default function WorkoutsPage() {
+  const [inputVal, setInputVal] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [inputError, setInputError] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/workouts/searchBarApi");
-        setExercises(response.data); // Set the exercises data
-      } catch (error) {
-        console.error("Error fetching workouts:", error);
-      } finally {
-        setLoading(false); // Set loading to false once data is fetched
-      }
-    };
-    fetchData(); // Call the fetchData function
-  }, []); // Empty dependency array ensures this only runs once
+  const { setWorkoutData } = useWorkoutContext();
+  const router = useRouter();
 
-  // Log exercises whenever it updates
-  useEffect(() => {
-    console.log("Exercises:", exercises);
-  }, [exercises]); // This runs every time 'exercises' state updates
-
-  // Update the selected exercise when the user selects a new one
-  const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setSelectedExercise(event.target.value); // Update the selected exercise
-    console.log("Selected Exercise:", event.target.value); // Log selected value
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputVal(e.target.value);
+    if (e.target.value.trim() !== "") {
+      setInputError(false);
+    }
   };
 
-  const handleClick = () => {
-    console.log("Button Clicked - Selected Exercise:", selectedExercise);
-    // Perform additional actions on button click
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!inputVal.trim()) {
+      setInputError(true);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const options = {
+        method: "GET",
+        url: `https://exercisedb.p.rapidapi.com/exercises/name/${inputVal}`,
+        params: { offset: "0", limit: "10" },
+        headers: {
+          "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+          "x-rapidapi-host": "exercisedb.p.rapidapi.com",
+        },
+      };
+
+      const response = await axios.request(options);
+      const data = response.data;
+      setWorkoutData(data); // Set data in the context
+      console.log("Fetched workout data:", data);
+      router.push("/client/workouts/exercises_result");
+    } catch (error) {
+      console.error("Error fetching workout data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <FormControl fullWidth>
-      <InputLabel id="demo-simple-select-label">Exercise</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={selectedExercise || ""} // Set value to the selected exercise
-        label="Exercise"
-        onChange={handleSelectChange} // Use updated handler
-        sx={{
-          width: "100%",
-          "& .MuiOutlinedInput-root": { borderRadius: 2 },
-        }}
-      >
-        {exercises.map((exercise, index) => (
-          <MenuItem key={index} value={exercise}>
-            {exercise}
-          </MenuItem>
-        ))}
-      </Select>
-      <Button onClick={handleClick}>Click</Button>
-    </FormControl>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box sx={{ width: "100%", maxWidth: 500 }}>
+        <Typography variant="h2" gutterBottom textAlign="center">
+          Search Exercises
+        </Typography>
+      </Box>
+      <Box sx={{ width: "100%", maxWidth: 500 }}>
+        <TextField
+          fullWidth
+          label="exercise name"
+          id="exercise name"
+          placeholder="push up"
+          value={inputVal}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          error={inputError}
+          helperText={inputError ? "Please enter an exercise name" : ""}
+        />
+      </Box>
+    </Box>
   );
 }

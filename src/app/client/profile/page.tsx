@@ -4,7 +4,6 @@ import { useState } from "react";
 import { WorkoutDataProps } from "../../types/page";
 import BarChart from "@/components/BarChart";
 import toast, { Toaster } from "react-hot-toast";
-// import WorkoutFavorite from "../workouts/page";
 import WorkoutFavorite from "@/components/FavoriteWorkouts";
 import {
   Box,
