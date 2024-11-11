@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/client/workouts/page": [
+    "/client/workouts/exercises_result/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/page.js"
+      "static/chunks/app/client/workouts/exercises_result/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,25 +11,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/client/workouts/exercises_result/page": [
+    "/client/workouts/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/exercises_result/page.js"
+      "static/chunks/app/client/workouts/page.js"
     ],
-    "/client/profile/page": [
+    "/client/workouts/exercises_result/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/profile/page.js"
-    ],
-    "/client/logout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/logout/page.js"
-    ],
-    "/client/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/login/page.js"
+      "static/chunks/app/client/workouts/exercises_result/[id]/page.js"
     ]
   }
 }

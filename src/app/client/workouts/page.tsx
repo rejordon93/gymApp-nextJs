@@ -1,5 +1,11 @@
 "use client";
-import { Box, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { useWorkoutContext } from "@/context/context";
@@ -37,7 +43,7 @@ export default function WorkoutsPage() {
       const options = {
         method: "GET",
         url: `https://exercisedb.p.rapidapi.com/exercises/name/${inputVal}`,
-        params: { offset: "0", limit: "10" },
+        params: { offset: "0", limit: "9" },
         headers: {
           "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
           "x-rapidapi-host": "exercisedb.p.rapidapi.com",
@@ -64,6 +70,7 @@ export default function WorkoutsPage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        padding: 2,
       }}
     >
       <Box sx={{ width: "100%", maxWidth: 500 }}>
@@ -71,18 +78,61 @@ export default function WorkoutsPage() {
           Search Exercises
         </Typography>
       </Box>
-      <Box sx={{ width: "100%", maxWidth: 500 }}>
+      <Box sx={{ width: "100%", maxWidth: 500, mt: 2 }}>
         <TextField
           fullWidth
-          label="exercise name"
-          id="exercise name"
-          placeholder="push up"
+          label="Exercise Name"
+          placeholder="e.g., push up"
           value={inputVal}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           error={inputError}
           helperText={inputError ? "Please enter an exercise name" : ""}
         />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+          maxWidth: 500,
+          mt: 3,
+        }}
+      >
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+          sx={{
+            width: "100%",
+            maxWidth: "200px",
+            py: 1.5,
+            fontSize: "1.1rem",
+            fontWeight: "bold",
+            color: "#ffffff",
+            backgroundColor: "#4A90E2",
+            borderRadius: "0.5rem",
+            boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.3)",
+            transition: "transform 0.2s, background-color 0.2s",
+            "&:hover": {
+              backgroundColor: "#357ABD",
+              transform: "scale(1.05)",
+            },
+            "&:active": {
+              backgroundColor: "#2E5E8C",
+            },
+            "&:disabled": {
+              backgroundColor: "#A3C9E2",
+            },
+          }}
+        >
+          {isLoading ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "Search"
+          )}
+        </Button>
       </Box>
     </Box>
   );

@@ -2,7 +2,7 @@
 import React from "react";
 import ExercisesResults from "@/components/ExercisesResults";
 
-export default function Test() {
+export default function Workouts() {
   return (
     <div>
       <ExercisesResults />
