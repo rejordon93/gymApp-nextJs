@@ -11,6 +11,14 @@ import reducer from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
 import { Action, UserState } from "@/context/reducer";
 import { ExercisesInterfaces } from "@/app/types/page";
+import { Workout } from "@prisma/client";
+
+// interface ExerciseState {   use this later !!!!!!!!!!!!!!!!!!!!!!!!!!!
+//   offset: 0;
+//   currentExercise: ExercisesInterfaces
+//   queriedExercises: ExercisesInterfaces[]
+//   favorites: ExercisesInterfaces[]
+// }
 
 interface WorkoutContextType {
   workoutData: ExercisesInterfaces[]; // Corrected type here
