@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import reducer from "@/context/reducer";
 import { INITIAL_STATE } from "@/context/reducer";
-import { Action, State } from "@/context/reducer";
+import { Action, UserState } from "@/context/reducer";
 import { ExercisesInterfaces } from "@/app/types/page";
 
 interface WorkoutContextType {
@@ -19,7 +19,7 @@ interface WorkoutContextType {
 
 // Define the shape of the main app context
 interface AppContextType {
-  state: State;
+  userState: UserState;
   dispatch: React.Dispatch<Action>;
 }
 
@@ -35,11 +35,11 @@ type AppProviderProps = {
 
 // Combined provider that supplies both contexts
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [userState, dispatch] = useReducer(reducer, INITIAL_STATE);
   const [workoutData, setWorkoutData] = useState<ExercisesInterfaces[]>([]);
 
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ userState, dispatch }}>
       <WorkoutContext.Provider value={{ workoutData, setWorkoutData }}>
         {children}
       </WorkoutContext.Provider>

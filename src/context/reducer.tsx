@@ -41,13 +41,13 @@ interface ApiRequstContext {
 }
 
 // The overall state of the application, which combines all contexts and the user.
-export interface State {
+export interface UserState {
   apiRequstContext: ApiRequstContext;
   user: User;
 }
 
 // Initial state for the reducer.
-export const INITIAL_STATE: State = {
+export const INITIAL_STATE: UserState = {
   user: {
     email: "",
     username: "",
@@ -61,7 +61,7 @@ export const INITIAL_STATE: State = {
 };
 
 // Reducer function that updates the state based on the action type.
-export default function reducer(state: State, action: Action): State {
+export default function reducer(state: UserState, action: Action): UserState {
   switch (action.type) {
     // Case to handle setting an error message.
     case ActionType.SET_ERROR:
