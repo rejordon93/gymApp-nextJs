@@ -593,8 +593,8 @@ video {
 .grid {
   display: grid;
 }
-.hidden {
-  display: none;
+.contents {
+  display: contents;
 }
 .h-\[35px\] {
   height: 35px;
@@ -808,8 +808,8 @@ video {
 .font-semibold {
   font-weight: 600;
 }
-.capitalize {
-  text-transform: capitalize;
+.uppercase {
+  text-transform: uppercase;
 }
 .text-gray-600 {
   --tw-text-opacity: 1;

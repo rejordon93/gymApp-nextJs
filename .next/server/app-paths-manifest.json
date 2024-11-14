@@ -1,5 +1,5 @@
 {
+  "/page": "app/page.js",
   "/client/workouts/page": "app/client/workouts/page.js",
-  "/client/workouts/exercises_result/page": "app/client/workouts/exercises_result/page.js",
-  "/client/workouts/exercises_result/[id]/page": "app/client/workouts/exercises_result/[id]/page.js"
+  "/client/workouts/exercises_result/page": "app/client/workouts/exercises_result/page.js"
 }

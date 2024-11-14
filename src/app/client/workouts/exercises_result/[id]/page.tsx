@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useWorkoutContext } from "@/context/context";
-import { ExercisesInterfaces } from "@/app/types/page";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { ActionType } from "@/context/exerciseReducer";
 import {
   Button,
   Box,
@@ -10,188 +10,34 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Grid,
 } from "@mui/material";
 
 export default function WorkoutsById() {
-  const { workoutData: initialWorkoutData } = useWorkoutContext();
-  const [workoutData] = useState<ExercisesInterfaces[]>(initialWorkoutData);
+  const { workoutState, workoutDispatch } = useWorkoutContext();
+  const [allWorkouts] = useState(workoutState.workout);
+  const [curentWorkout] = useState(workoutState.workoutStore);
   const router = useRouter();
-  const { id } = useParams();
 
-  // Find the selected workout by ID
-  const selectedWorkout = workoutData.find((exercise) => exercise.id === id);
-
-  if (!selectedWorkout) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "100vh",
-          padding: 3,
-          backgroundColor: "#f5f5f5",
-        }}
-      >
-        <Typography variant="h6" color="error" gutterBottom>
-          Workout not found.
-        </Typography>
-        <Button
-          onClick={() => router.push("/client/workouts/exercises_result")}
-          variant="contained"
-          color="primary"
-          sx={{
-            mt: 4,
-            px: 4,
-            py: 1.5,
-            fontSize: "1.1rem",
-            borderRadius: "20px",
-            backgroundColor: "#4A90E2",
-            "&:hover": {
-              backgroundColor: "#357ABD",
-            },
-            textTransform: "none",
-          }}
-        >
-          Go Back
-        </Button>
-      </Box>
-    );
-  }
+  const handleBackBtn = () => {
+    workoutDispatch({
+      type: ActionType.GET_ALL_EXERCISES,
+      payload: allWorkouts,
+    });
+    router.push("/client/workouts/exercises_result");
+  };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 3,
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
-        Workout Details
-      </Typography>
-
-      {/* Container for details and image side by side */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          gap: 4,
-          maxWidth: 1200,
-          width: "100%",
-          flexWrap: "wrap", // Allow wrapping on smaller screens
-        }}
-      >
-        {/* Left - Workout Details */}
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            maxWidth: "600px", // Restrict width for better readability
-            padding: 2,
-          }}
-        >
-          <Card sx={{ boxShadow: 3, padding: 2 }}>
-            <CardContent>
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ fontWeight: "bold", color: "#333" }}
-              >
-                {selectedWorkout.name}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ textTransform: "capitalize", marginBottom: 1 }}
-              >
-                Body Part: {selectedWorkout.bodyPart}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ textTransform: "capitalize", marginBottom: 1 }}
-              >
-                Equipment: {selectedWorkout.equipment}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ textTransform: "capitalize", marginBottom: 1 }}
-              >
-                Secondary Muscles: {selectedWorkout.secondaryMuscles}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ textTransform: "capitalize", marginBottom: 2 }}
-              >
-                Target: {selectedWorkout.target}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                {selectedWorkout.instructions ||
-                  "No additional description available."}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
-
-        {/* Right - Image Section */}
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            maxWidth: "500px", // Set a max width for the image section
-            padding: 2,
-            height: "auto",
-          }}
-        >
-          <Card
-            sx={{
-              maxWidth: 500,
-              boxShadow: 3,
-              transition: "transform 0.3s",
-              "&:hover": {
-                transform: "scale(1.05)",
-              },
-              overflow: "hidden",
-            }}
-          >
-            <CardMedia
-              component="img"
-              image={selectedWorkout.gifUrl}
-              alt={selectedWorkout.name}
-              sx={{
-                objectFit: "contain",
-                width: "100%",
-                height: "auto",
-              }}
-            />
-          </Card>
-        </Box>
-      </Box>
-
-      {/* Back Button */}
+    <Box sx={{ padding: 4 }}>
       <Button
-        onClick={() => router.push("/client/workouts/exercises_result")}
+        onClick={handleBackBtn}
         variant="contained"
         color="primary"
         sx={{
           mt: 4,
           px: 4,
           py: 1.5,
-          fontSize: "1.1rem",
+          fontSize: "1.2rem",
           borderRadius: "20px",
           backgroundColor: "#4A90E2",
           "&:hover": {
@@ -202,6 +48,67 @@ export default function WorkoutsById() {
       >
         Back
       </Button>
+
+      <Grid container spacing={4} sx={{ mt: 4 }}>
+        {curentWorkout.map((workout) => (
+          <React.Fragment key={workout.id}>
+            <Grid item xs={12} md={8}>
+              <Card sx={{ padding: 3 }}>
+                <CardContent>
+                  <Typography variant="h4" component="div" sx={{ mb: 2 }}>
+                    {workout.name}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    Target: {workout.target}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    Equipment: {workout.equipment}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    Body Part: {workout.bodyPart}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    Secondary Muscles: {workout.secondaryMuscles}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="text.secondary"
+                    sx={{ mt: 2 }}
+                  >
+                    Instructions: {workout.instructions}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  sx={{ width: "100%", height: "auto" }}
+                  image={workout.gifUrl}
+                  alt={workout.name}
+                />
+              </Card>
+            </Grid>
+          </React.Fragment>
+        ))}
+      </Grid>
     </Box>
   );
 }

@@ -44,7 +44,9 @@ export default function Header() {
   const pathname = usePathname();
   const context = useContext(AppContext);
 
-  const navLinks = context?.state.user.token ? privateNavLinks : publicNavLinks;
+  const navLinks = context?.userState.user.token
+    ? privateNavLinks
+    : publicNavLinks;
 
   return (
     <header className="flex justify-between items-center py-4 px-7 border-b">

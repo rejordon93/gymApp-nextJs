@@ -10,14 +10,16 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useWorkoutContext } from "@/context/context";
 import { useRouter } from "next/navigation";
+import { ActionType } from "@/context/exerciseReducer";
 
 export default function WorkoutsPage() {
   const [inputVal, setInputVal] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
 
-  const { setWorkoutData } = useWorkoutContext();
+  const { workoutState, workoutDispatch } = useWorkoutContext();
   const router = useRouter();
+  console.log(workoutState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputVal(e.target.value);
@@ -46,13 +48,13 @@ export default function WorkoutsPage() {
         params: { offset: "0", limit: "9" },
         headers: {
           "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
-          "x-rapidapi-host": "exercisedb.p.rapidapi.com",
+          "x-rapidapi-host": "exercisedb.p.rapidapi.com", // Fixed header value
         },
       };
 
       const response = await axios.request(options);
       const data = response.data;
-      setWorkoutData(data); // Set data in the context
+      workoutDispatch({ type: ActionType.SET_WORKOUTS, payload: data }); // Set data in the context
       console.log("Fetched workout data:", data);
       router.push("/client/workouts/exercises_result");
     } catch (error) {

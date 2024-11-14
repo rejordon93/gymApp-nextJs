@@ -1,34 +1,24 @@
-// src/context/context.ts
 "use client";
-import React, {
-  createContext,
-  useContext,
-  ReactNode,
-  useReducer,
-  useState,
-} from "react";
+import React, { createContext, useContext, ReactNode, useReducer } from "react";
 import reducer from "@/context/reducer";
-import { INITIAL_STATE } from "@/context/reducer";
-import { Action, UserState } from "@/context/reducer";
-import { ExercisesInterfaces } from "@/app/types/page";
-import { Workout } from "@prisma/client";
+import exercisesReducer from "@/context/exerciseReducer";
+import { Action, UserState, INITIAL_STATE } from "@/context/reducer";
+import {
+  WorkoutAction,
+  WorkoutState,
+  INITIAL_STATE2,
+} from "@/context/exerciseReducer";
 
-// interface ExerciseState {   use this later !!!!!!!!!!!!!!!!!!!!!!!!!!!
-//   offset: 0;
-//   currentExercise: ExercisesInterfaces
-//   queriedExercises: ExercisesInterfaces[]
-//   favorites: ExercisesInterfaces[]
-// }
-
+// Define the shape of the workout context
 interface WorkoutContextType {
-  workoutData: ExercisesInterfaces[]; // Corrected type here
-  setWorkoutData: (data: ExercisesInterfaces[]) => void;
+  workoutState: WorkoutState;
+  workoutDispatch: React.Dispatch<WorkoutAction>;
 }
 
 // Define the shape of the main app context
 interface AppContextType {
   userState: UserState;
-  dispatch: React.Dispatch<Action>;
+  userDispatch: React.Dispatch<Action>;
 }
 
 // Create contexts for the app state and workout data
@@ -43,12 +33,15 @@ type AppProviderProps = {
 
 // Combined provider that supplies both contexts
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [userState, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const [workoutData, setWorkoutData] = useState<ExercisesInterfaces[]>([]);
+  const [userState, userDispatch] = useReducer(reducer, INITIAL_STATE);
+  const [workoutState, workoutDispatch] = useReducer(
+    exercisesReducer,
+    INITIAL_STATE2
+  );
 
   return (
-    <AppContext.Provider value={{ userState, dispatch }}>
-      <WorkoutContext.Provider value={{ workoutData, setWorkoutData }}>
+    <AppContext.Provider value={{ userState, userDispatch }}>
+      <WorkoutContext.Provider value={{ workoutState, workoutDispatch }}>
         {children}
       </WorkoutContext.Provider>
     </AppContext.Provider>
