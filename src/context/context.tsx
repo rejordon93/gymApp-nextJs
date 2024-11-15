@@ -6,7 +6,7 @@ import { Action, UserState, INITIAL_STATE } from "@/context/reducer";
 import {
   WorkoutAction,
   WorkoutState,
-  INITIAL_STATE2,
+  EXERCISE_INITIAL_STATE,
 } from "@/context/exerciseReducer";
 
 // Define the shape of the workout context
@@ -36,7 +36,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [userState, userDispatch] = useReducer(reducer, INITIAL_STATE);
   const [workoutState, workoutDispatch] = useReducer(
     exercisesReducer,
-    INITIAL_STATE2
+    EXERCISE_INITIAL_STATE
   );
 
   return (

@@ -17,9 +17,8 @@ export default function WorkoutsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
 
-  const { workoutState, workoutDispatch } = useWorkoutContext();
+  const { workoutDispatch } = useWorkoutContext();
   const router = useRouter();
-  console.log(workoutState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputVal(e.target.value);
@@ -48,14 +47,13 @@ export default function WorkoutsPage() {
         params: { offset: "0", limit: "9" },
         headers: {
           "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
-          "x-rapidapi-host": "exercisedb.p.rapidapi.com", // Fixed header value
+          "x-rapidapi-host": "exercisedb.p.rapidapi.com",
         },
       };
 
       const response = await axios.request(options);
       const data = response.data;
-      workoutDispatch({ type: ActionType.SET_WORKOUTS, payload: data }); // Set data in the context
-      console.log("Fetched workout data:", data);
+      workoutDispatch({ type: ActionType.SET_WORKOUTS, payload: data });
       router.push("/client/workouts/exercises_result");
     } catch (error) {
       console.error("Error fetching workout data:", error);
@@ -75,6 +73,24 @@ export default function WorkoutsPage() {
         padding: 2,
       }}
     >
+      {isLoading && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+          }}
+        >
+          <CircularProgress size={60} sx={{ color: "#4A90E2" }} />
+        </Box>
+      )}
       <Box sx={{ width: "100%", maxWidth: 500 }}>
         <Typography variant="h2" gutterBottom textAlign="center">
           Search Exercises

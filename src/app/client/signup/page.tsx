@@ -4,6 +4,14 @@ import { useEffect, useReducer, useState } from "react";
 import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -13,7 +21,6 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [username, setUserName] = useState("");
 
-  // Handle signup logic
   const onSignup = async () => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
@@ -35,100 +42,107 @@ export default function SignupPage() {
   };
 
   useEffect(() => {
-    // Enable the button if all fields have values, disable otherwise
-    if (email.length > 0 && password.length > 0 && username.length > 0) {
-      setButtonDisabled(false); // Enable button
-    } else {
-      setButtonDisabled(true); // Disable button
-    }
+    setButtonDisabled(!(email && password && username));
   }, [email, password, username]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        py: 4,
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          padding: 4,
+          borderRadius: 2,
+          boxShadow: 3,
+          bgcolor: "background.paper",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom>
           {state.apiRequstContext.isLoading ? "Processing" : "Signup"}
-        </h1>
-        <hr className="mb-6 border-gray-300" />
-        <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Username
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
-              placeholder="Enter your username"
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Email
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Password
-            </label>
-            <input
-              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-            />
-          </div>
+        </Typography>
+        <Box component="hr" sx={{ mb: 4, borderColor: "divider" }} />
 
-          {state.apiRequstContext.error && (
-            <p className="text-red-500 text-sm text-center">
-              {state.apiRequstContext.error}
-            </p>
+        <TextField
+          fullWidth
+          label="Username"
+          value={username}
+          onChange={(e) => setUserName(e.target.value)}
+          margin="normal"
+          required
+        />
+        <TextField
+          fullWidth
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          margin="normal"
+          required
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          margin="normal"
+          required
+        />
+
+        {state.apiRequstContext.error && (
+          <Typography color="error" sx={{ mt: 1 }}>
+            {state.apiRequstContext.error}
+          </Typography>
+        )}
+
+        <Button
+          onClick={onSignup}
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={buttonDisabled || state.apiRequstContext.isLoading}
+          sx={{
+            mt: 3,
+            py: 1.5,
+            fontSize: "1rem",
+            fontWeight: "bold",
+            transition: "transform 0.2s",
+            "&:hover": { transform: "scale(1.02)" },
+          }}
+        >
+          {state.apiRequstContext.isLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Signup"
           )}
+        </Button>
 
-          <button
-            onClick={onSignup}
-            className={`w-full p-3 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-              buttonDisabled
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 text-white"
-            }`}
-            disabled={buttonDisabled}
-          >
-            {state.apiRequstContext.isLoading ? "Signing up..." : "Signup"}
-          </button>
-        </div>
-
-        <p className="mt-4 text-center text-gray-600">
+        <Typography sx={{ mt: 2, color: "text.secondary" }}>
           Already have an account?{" "}
-          <Link href="/login" className="text-indigo-600 hover:underline">
-            Login
+          <Link href="/login" passHref>
+            <Typography
+              component="span"
+              sx={{
+                color: "primary.main",
+                cursor: "pointer",
+                "&:hover": { textDecoration: "underline" },
+              }}
+            >
+              Login
+            </Typography>
           </Link>
-        </p>
-      </div>
-    </div>
+        </Typography>
+      </Box>
+    </Container>
   );
 }

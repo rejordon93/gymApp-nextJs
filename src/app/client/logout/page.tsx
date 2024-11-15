@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
+import { Box, Button, Container, Typography } from "@mui/material";
 
 export default function LogoutPage() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function LogoutPage() {
       await axios.get("/api/users/logout");
       toast.success("Logout successful", { duration: 5000 });
       router.push("/client/login");
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
       }
@@ -22,28 +23,57 @@ export default function LogoutPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <Container component="main" maxWidth="xs">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: 4,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: "white",
+        }}
+      >
+        <Typography
+          component="h1"
+          variant="h5"
+          color="text.primary"
+          sx={{ mb: 2 }}
+        >
           Logout
-        </h1>
-        <p className="text-gray-600 text-center mb-6">
+        </Typography>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          align="center"
+          sx={{ mb: 4 }}
+        >
           Are you sure you want to log out?
-        </p>
-        <button
+        </Typography>
+
+        <Button
           onClick={logout}
-          className="w-full bg-red-600 text-white py-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          variant="contained"
+          color="error"
+          fullWidth
+          sx={{ mb: 2 }}
         >
           Logout
-        </button>
-        <Link
-          href="/client/profile"
-          className="block text-center text-indigo-600 hover:underline mt-4"
-        >
-          Cancel
+        </Button>
+
+        <Link href="/client/profile" passHref>
+          <Typography
+            variant="body2"
+            color="primary"
+            sx={{ cursor: "pointer", textAlign: "center" }}
+          >
+            Cancel
+          </Typography>
         </Link>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 }
