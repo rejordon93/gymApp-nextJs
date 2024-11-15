@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/context";
-import { ActionType } from "@/context/reducer";
+import { ActionType } from "@/context/authReducer";
 import axios from "axios";
 
 import {

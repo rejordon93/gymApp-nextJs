@@ -1,8 +1,8 @@
 "use client";
 import React, { createContext, useContext, ReactNode, useReducer } from "react";
-import reducer from "@/context/reducer";
+import reducer from "@/context/authReducer";
 import exercisesReducer from "@/context/exerciseReducer";
-import { Action, UserState, INITIAL_STATE } from "@/context/reducer";
+import { Action, UserState, AUTH_INITIAL_STATE } from "@/context/authReducer";
 import {
   WorkoutAction,
   WorkoutState,
@@ -33,7 +33,7 @@ type AppProviderProps = {
 
 // Combined provider that supplies both contexts
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [userState, userDispatch] = useReducer(reducer, INITIAL_STATE);
+  const [userState, userDispatch] = useReducer(reducer, AUTH_INITIAL_STATE);
   const [workoutState, workoutDispatch] = useReducer(
     exercisesReducer,
     EXERCISE_INITIAL_STATE

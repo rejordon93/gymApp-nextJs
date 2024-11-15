@@ -18,12 +18,11 @@ export default function ExercisesResults() {
   const [workoutData, setWorkoutData] = useState<ExercisesInterfaces[]>([]);
   const router = useRouter();
 
-  console.log(workoutState);
   const handleBtn = () => {
     router.push("/client/workouts");
   };
   const handleDetailsBtn = (id: string) => {
-    const selectedWorkout = workoutState.workoutsArr.filter(
+    const selectedWorkout = workoutState.workoutsArr.find(
       (exercise) => exercise.id === id
     );
 
@@ -32,13 +31,32 @@ export default function ExercisesResults() {
         type: ActionType.SET_CURRENT,
         payload: selectedWorkout,
       });
+
       router.push(`/client/workouts/exercises_result/${id}`);
     }
   };
-  const handleLikeBtn = () => {
-    console.log("You liked");
+  const handleLikeBtn = (id: string) => {
+    const addToFav = workoutState.workoutsArr.find(
+      (exercise) => exercise.id === id
+    );
+
+    // Check if the exercise is already in the favorites list
+    if (
+      addToFav &&
+      !workoutState.favExercises.some((ex) => ex.id === addToFav.id)
+    ) {
+      // Add the exercise to the favorites list (favExercises)
+      const updatedFavExercises = [...workoutState.favExercises, addToFav];
+
+      // Dispatch the action to update the state
+      workoutDispatch({
+        type: ActionType.ADD_TO_FAVORITES,
+        payload: updatedFavExercises,
+      });
+    }
   };
 
+  console.log(workoutState);
   const handleRemoveBtn = (id: string) => {
     const removeBtn = workoutState.workoutsArr.filter(
       (exercise) => exercise.id !== id
@@ -126,7 +144,7 @@ export default function ExercisesResults() {
               }}
             >
               <Button
-                onClick={handleLikeBtn}
+                onClick={() => handleLikeBtn(exercise.id)}
                 variant="outlined"
                 color="primary"
                 sx={{ fontSize: "0.9rem" }}

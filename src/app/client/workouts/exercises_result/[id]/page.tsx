@@ -18,8 +18,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function WorkoutsById() {
   const { workoutState, workoutDispatch } = useWorkoutContext();
-  // const [allWorkouts] = useState(workoutState.workout);
-  // const [curentWorkout] = useState(workoutState.workoutStore);
   workoutState.currentWorkout;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -31,8 +29,8 @@ export default function WorkoutsById() {
 
   const handleBackBtn = () => {
     workoutDispatch({
-      type: ActionType.GET_ALL_EXERCISES,
-      payload: workoutState.workoutsArr,
+      type: ActionType.SET_CURRENT,
+      payload: {},
     });
     router.push("/client/workouts/exercises_result");
   };
@@ -60,69 +58,71 @@ export default function WorkoutsById() {
       }}
     >
       <Grid container spacing={4} sx={{ mt: 4, flexGrow: 1 }}>
-        {workoutState.currentWorkout.map((workout) => (
-          <React.Fragment key={workout.id}>
-            <Grid item xs={12} md={8}>
-              <Paper elevation={3}>
-                <Card sx={{ padding: 3 }}>
-                  <CardContent>
-                    <Typography variant="h4" component="div" sx={{ mb: 2 }}>
-                      {workout.name}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      <strong>Target:</strong> {workout.target}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      <strong>Equipment:</strong> {workout.equipment}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      <strong>Body Part:</strong> {workout.bodyPart}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      <strong>Secondary Muscles:</strong>{" "}
-                      {workout.secondaryMuscles}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      sx={{ mt: 2 }}
-                    >
-                      <strong>Instructions:</strong> {workout.instructions}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper elevation={3}>
-                <Card>
-                  <CardMedia
-                    component="img"
-                    sx={{ width: "100%", height: "auto" }}
-                    image={workout.gifUrl}
-                    alt={workout.name}
-                  />
-                </Card>
-              </Paper>
-            </Grid>
-          </React.Fragment>
-        ))}
+        <React.Fragment key={workoutState.currentWorkout.id}>
+          <Grid item xs={12} md={8}>
+            <Paper elevation={3}>
+              <Card sx={{ padding: 3 }}>
+                <CardContent>
+                  <Typography variant="h4" component="div" sx={{ mb: 2 }}>
+                    {workoutState.currentWorkout.name}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    <strong>Target:</strong>{" "}
+                    {workoutState.currentWorkout.target}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    <strong>Equipment:</strong>{" "}
+                    {workoutState.currentWorkout.equipment}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    <strong>Body Part:</strong>{" "}
+                    {workoutState.currentWorkout.bodyPart}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    sx={{ mb: 1 }}
+                  >
+                    <strong>Secondary Muscles:</strong>{" "}
+                    {workoutState.currentWorkout.secondaryMuscles}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    sx={{ mt: 2 }}
+                  >
+                    <strong>Instructions:</strong>{" "}
+                    {workoutState.currentWorkout.instructions}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper elevation={3}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  sx={{ width: "100%", height: "auto" }}
+                  image={workoutState.currentWorkout.gifUrl}
+                  alt={workoutState.currentWorkout.name}
+                />
+              </Card>
+            </Paper>
+          </Grid>
+        </React.Fragment>
       </Grid>
 
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>

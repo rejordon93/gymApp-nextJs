@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useReducer, useState } from "react";
-import reducer, { INITIAL_STATE, ActionType } from "@/context/reducer";
+import reducer, { INITIAL_STATE, ActionType } from "@/context/authReducer";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import {

@@ -47,7 +47,7 @@ export interface UserState {
 }
 
 // Initial state for the reducer.
-export const INITIAL_STATE: UserState = {
+export const AUTH_INITIAL_STATE: UserState = {
   user: {
     email: "",
     username: "",

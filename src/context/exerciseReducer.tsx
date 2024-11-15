@@ -3,15 +3,14 @@ export enum ActionType {
   SET_CURRENT = "SET_CURRENT",
   SET_WORKOUTS = "SET_WORKOUTS",
   REMOVE_WORKOUT = "REMOVE_WORKOUT",
-  // ADD_TO_DETAILS = "ADD_TO_DETAILS",
   // NEXT_RESULTS = "NEXT_RESULTS",
   // PREV_RESULTS = "PREV_RESULTS",
-  // ADD_TO_FAVORITES = "ADD_TO_FAVORITES",
+  ADD_TO_FAVORITES = "ADD_TO_FAVORITES",
 }
 
 interface SetCurrent {
   readonly type: ActionType.SET_CURRENT;
-  readonly payload: Workout[]; // Single workout payload
+  readonly payload: Workout; // Single workout payload
 }
 
 interface SetAddWorkouts {
@@ -28,11 +27,10 @@ interface SetRemoveWorkout {
   readonly payload: Workout[];
 }
 
-// Action types definitions
-// interface SetGetAllAction {
-//   readonly type: ActionType.ADD_TO_DETAILS;
-//   readonly payload: Workouts; // A single workout
-// }
+interface SetAddToFavorites {
+  readonly type: ActionType.ADD_TO_FAVORITES;
+  readonly payload: Workout[]; // Single workout payload
+}
 
 // interface SetNextResultsAction {
 //   readonly type: ActionType.NEXT_RESULTS;
@@ -44,17 +42,15 @@ interface SetRemoveWorkout {
 //   readonly payload: Workouts[]; // Array of workouts
 // }
 
-// interface SetAddToFavorites {
-//   readonly type: ActionType.ADD_TO_FAVORITES;
-//   readonly payload: Workouts; // Single workout payload
-// }
-
 export type WorkoutAction =
-  // | SetAddToFavorites
   // | SetGetAllAction
   // | SetNextResultsAction
   // | SetPrevResultsAction
-  SetAddWorkouts | SetGetAllExercises | SetCurrent | SetRemoveWorkout;
+  | SetAddWorkouts
+  | SetGetAllExercises
+  | SetCurrent
+  | SetRemoveWorkout
+  | SetAddToFavorites;
 
 // Workout interface for a single workout
 interface Workout {
@@ -80,13 +76,15 @@ interface ExerciseApiRequest {
 export interface WorkoutState {
   ExerciseApiRequest: ExerciseApiRequest;
   workoutsArr: Workout[];
-  currentWorkout: Workout[];
+  currentWorkout: Workout;
+  favExercises: Workout[];
 }
 
 // Initial state for the workout
 export const EXERCISE_INITIAL_STATE: WorkoutState = {
   workoutsArr: [],
-  currentWorkout: [],
+  currentWorkout: {},
+  favExercises: [],
   ExerciseApiRequest: {
     error: null,
     isLoading: false,
@@ -149,17 +147,17 @@ export default function exercisesReducer(
           isLoading: true,
         },
       };
-    // case ActionType.ADD_TO_FAVORITES:
-    //   return {
-    //     ...state,
-    //     workouts: [...state.workouts, action.payload], // Add single workout to favorites
-    //     ExerciseApiRequest: {
-    //       success: true,
-    //       error: null,
-    //       message: "Added to Favorites",
-    //       isLoading: false,
-    //     },
-    //   };
+    case ActionType.ADD_TO_FAVORITES:
+      return {
+        ...state,
+        favExercises: action.payload, // Add single workout to favorites
+        ExerciseApiRequest: {
+          success: true,
+          error: null,
+          message: "Added to Favorites",
+          isLoading: false,
+        },
+      };
     // case ActionType.NEXT_RESULTS:
     //   return {
     //     ...state,
