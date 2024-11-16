@@ -3,8 +3,8 @@ export enum ActionType {
   SET_CURRENT = "SET_CURRENT",
   SET_WORKOUTS = "SET_WORKOUTS",
   REMOVE_WORKOUT = "REMOVE_WORKOUT",
-  // NEXT_RESULTS = "NEXT_RESULTS",
-  // PREV_RESULTS = "PREV_RESULTS",
+  NEXT_RESULTS = "NEXT_RESULTS",
+  PREV_RESULTS = "PREV_RESULTS",
   ADD_TO_FAVORITES = "ADD_TO_FAVORITES",
 }
 
@@ -15,7 +15,10 @@ interface SetCurrent {
 
 interface SetAddWorkouts {
   readonly type: ActionType.SET_WORKOUTS;
-  readonly payload: Workout[]; // Array of workouts
+  readonly payload: {
+    workouts: Workout[];
+    option: Options;
+  };
 }
 
 interface SetGetAllExercises {
@@ -32,20 +35,19 @@ interface SetAddToFavorites {
   readonly payload: Workout[]; // Single workout payload
 }
 
-// interface SetNextResultsAction {
-//   readonly type: ActionType.NEXT_RESULTS;
-//   readonly payload: Workouts[]; // Array of workouts
-// }
+interface SetNextResultsAction {
+  readonly type: ActionType.NEXT_RESULTS;
+  readonly payload: Workout[]; // Array of workouts
+}
 
-// interface SetPrevResultsAction {
-//   readonly type: ActionType.PREV_RESULTS;
-//   readonly payload: Workouts[]; // Array of workouts
-// }
+interface SetPrevResultsAction {
+  readonly type: ActionType.PREV_RESULTS;
+  readonly payload: Workout[]; // Array of workouts
+}
 
 export type WorkoutAction =
-  // | SetGetAllAction
-  // | SetNextResultsAction
-  // | SetPrevResultsAction
+  | SetNextResultsAction
+  | SetPrevResultsAction
   | SetAddWorkouts
   | SetGetAllExercises
   | SetCurrent
@@ -64,6 +66,11 @@ interface Workout {
   target?: string;
 }
 
+interface Options {
+  limit?: string;
+  offset?: string;
+}
+
 // API request context interface
 interface ExerciseApiRequest {
   error: string | null;
@@ -78,12 +85,17 @@ export interface WorkoutState {
   workoutsArr: Workout[];
   currentWorkout: Workout;
   favExercises: Workout[];
+  option: Options;
 }
 
 // Initial state for the workout
 export const EXERCISE_INITIAL_STATE: WorkoutState = {
   workoutsArr: [],
   currentWorkout: {},
+  option: {
+    offset: "0",
+    limit: "9",
+  },
   favExercises: [],
   ExerciseApiRequest: {
     error: null,
@@ -102,7 +114,8 @@ export default function exercisesReducer(
     case ActionType.SET_WORKOUTS:
       return {
         ...state,
-        workoutsArr: action.payload, // Set multiple workouts
+        workoutsArr: action.payload.workouts, // Set multiple workouts
+        option: action.payload.option,
         ExerciseApiRequest: {
           ...state.ExerciseApiRequest,
           success: true,
@@ -158,30 +171,30 @@ export default function exercisesReducer(
           isLoading: false,
         },
       };
-    // case ActionType.NEXT_RESULTS:
-    //   return {
-    //     ...state,
-    //     workouts: action.payload, // Next results
-    //     ExerciseApiRequest: {
-    //       ...state.ExerciseApiRequest,
-    //       success: true,
-    //       error: null,
-    //       message: "Next Results",
-    //       isLoading: true,
-    //     },
-    //   };
-    // case ActionType.PREV_RESULTS:
-    //   return {
-    //     ...state,
-    //     workouts: action.payload, // Previous results
-    //     ExerciseApiRequest: {
-    //       ...state.ExerciseApiRequest,
-    //       success: true,
-    //       error: null,
-    //       message: "Previous Results",
-    //       isLoading: true,
-    //     },
-    //   };
+    case ActionType.NEXT_RESULTS:
+      return {
+        ...state,
+        favExercises: action.payload, // Next results
+        ExerciseApiRequest: {
+          ...state.ExerciseApiRequest,
+          success: true,
+          error: null,
+          message: "Next Results",
+          isLoading: true,
+        },
+      };
+    case ActionType.PREV_RESULTS:
+      return {
+        ...state,
+        favExercises: action.payload, // Previous results
+        ExerciseApiRequest: {
+          ...state.ExerciseApiRequest,
+          success: true,
+          error: null,
+          message: "Previous Results",
+          isLoading: true,
+        },
+      };
 
     default:
       return state;

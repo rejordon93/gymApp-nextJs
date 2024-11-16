@@ -12,10 +12,12 @@ import { useWorkoutContext } from "@/context/context";
 import { ExercisesInterfaces } from "@/app/types/page";
 import { useRouter } from "next/navigation";
 import { ActionType } from "@/context/exerciseReducer";
+import axios from "axios";
 
 export default function ExercisesResults() {
   const { workoutState, workoutDispatch } = useWorkoutContext();
   const [workoutData, setWorkoutData] = useState<ExercisesInterfaces[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleBtn = () => {
@@ -65,6 +67,57 @@ export default function ExercisesResults() {
       type: ActionType.REMOVE_WORKOUT,
       payload: removeBtn,
     });
+  };
+
+  const handleNextResults = async () => {
+    // Parse offset and limit as decimal numbers
+    const currentOffset = parseInt(workoutState.option.offset || "0", 10);
+    const currentLimit = parseInt(workoutState.option.limit || "9", 10);
+
+    // Increment offset and limit
+    const newOffset = (currentOffset + 1).toString();
+    const newLimit = (currentLimit + 8).toString();
+
+    // Make the API call to fetch additional workouts
+    try {
+      const options = {
+        method: "GET",
+        url: `https://exercisedb.p.rapidapi.com/exercises`,
+        params: {
+          offset: newOffset,
+          limit: newLimit,
+        },
+        headers: {
+          "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+          "x-rapidapi-host": "exercisedb.p.rapidapi.com",
+        },
+      };
+
+      const response = await axios.request(options);
+      const newWorkouts = response.data;
+
+      // Update the state with new workouts and pagination options
+      workoutDispatch({
+        type: ActionType.SET_WORKOUTS,
+        payload: {
+          workouts: [workoutState.workoutsArr, ...newWorkouts], // Append new workouts
+          option: {
+            ...workoutState.option,
+            offset: newOffset,
+            limit: newLimit,
+          }, // Update options
+        },
+      });
+
+      console.log("Fetched additional workouts:", newWorkouts);
+      console.log("Updated offset and limit:", newOffset, newLimit);
+    } catch (error) {
+      console.error("Error fetching more workouts:", error);
+    }
+  };
+  console.log(workoutState.workoutsArr);
+  const handlePrevResults = () => {
+    console.log("-");
   };
 
   return (
@@ -198,6 +251,8 @@ export default function ExercisesResults() {
       >
         Back
       </Button>
+      <Button onClick={handleNextResults}>+</Button>
+      <Button onClick={handlePrevResults}>-</Button>
     </Box>
   );
 }

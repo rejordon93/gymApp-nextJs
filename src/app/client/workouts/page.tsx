@@ -17,7 +17,7 @@ export default function WorkoutsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
 
-  const { workoutDispatch } = useWorkoutContext();
+  const { workoutState, workoutDispatch } = useWorkoutContext();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +44,11 @@ export default function WorkoutsPage() {
       const options = {
         method: "GET",
         url: `https://exercisedb.p.rapidapi.com/exercises/name/${inputVal}`,
-        params: { offset: "0", limit: "9" },
+        params: {
+          offset: workoutState.option.offset || "0",
+          limit: workoutState.option.limit || "9",
+        },
+
         headers: {
           "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
           "x-rapidapi-host": "exercisedb.p.rapidapi.com",
@@ -52,8 +56,18 @@ export default function WorkoutsPage() {
       };
 
       const response = await axios.request(options);
+      console.log(workoutState.workoutsArr);
+      const option = options.params;
+      console.log(option);
       const data = response.data;
-      workoutDispatch({ type: ActionType.SET_WORKOUTS, payload: data });
+      console.log(data);
+      workoutDispatch({
+        type: ActionType.SET_WORKOUTS,
+        payload: {
+          workouts: data,
+          option: workoutState.option,
+        },
+      });
       router.push("/client/workouts/exercises_result");
     } catch (error) {
       console.error("Error fetching workout data:", error);
