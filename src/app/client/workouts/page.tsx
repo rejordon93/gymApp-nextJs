@@ -46,7 +46,7 @@ export default function WorkoutsPage() {
         url: `https://exercisedb.p.rapidapi.com/exercises/name/${inputVal}`,
         params: {
           offset: workoutState.option.offset || "0",
-          limit: workoutState.option.limit || "9",
+          limit: workoutState.option.limit || "8",
         },
 
         headers: {

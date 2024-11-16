@@ -76,7 +76,7 @@ export default function ExercisesResults() {
 
     // Increment offset and limit
     const newOffset = (currentOffset + 1).toString();
-    const newLimit = (currentLimit + 8).toString();
+    const newLimit = (currentLimit + 9).toString();
 
     // Make the API call to fetch additional workouts
     try {
@@ -100,7 +100,7 @@ export default function ExercisesResults() {
       workoutDispatch({
         type: ActionType.SET_WORKOUTS,
         payload: {
-          workouts: [workoutState.workoutsArr, ...newWorkouts], // Append new workouts
+          workouts: newWorkouts,
           option: {
             ...workoutState.option,
             offset: newOffset,
