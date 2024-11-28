@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAppContext } from "@/context/context";
+import { AuthAppContext } from "@/context/context";
 import { ActionType } from "@/context/authReducer";
 import axios from "axios";
 
@@ -18,7 +18,7 @@ import {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { userState, userDispatch } = useAppContext();
+  const { userState, userDispatch } = AuthAppContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

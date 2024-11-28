@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useWorkoutContext } from "@/context/context";
+import { UserWorkoutContext } from "@/context/context";
 import { useRouter } from "next/navigation";
 import { ActionType } from "@/context/exerciseReducer";
 import {
@@ -17,7 +17,7 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function WorkoutsById() {
-  const { workoutState, workoutDispatch } = useWorkoutContext();
+  const { workoutState, workoutDispatch } = UserWorkoutContext();
   workoutState.currentWorkout;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function WorkoutsById() {
   const handleBackBtn = () => {
     workoutDispatch({
       type: ActionType.SET_CURRENT,
-      payload: {},
+      payload: workoutState.currentWorkout,
     });
     router.push("/client/workouts/exercises_result");
   };

@@ -4,15 +4,7 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      checkin,
-      equipment,
-      duration,
-      calories,
-      weightLifted,
-      distance,
-      repetitions,
-    } = await req.json();
+    const { checkin, duration, distance, repetitions } = await req.json();
 
     if (!checkin) {
       return NextResponse.json(
@@ -34,11 +26,8 @@ export async function POST(req: NextRequest) {
     // Create workout in the database
     const workout = await prisma.workout.create({
       data: {
-        equipment: equipment || null,
         duration: duration || null,
         checkin: new Date(checkin), // Ensure date format is correct
-        calories: calories || 0, // Default to 0 if not provided
-        weightLifted: weightLifted || null, // Optional field
         distance: distance || null, // Optional field
         repetitions: repetitions || null, // Optional field
         user_id: userId,

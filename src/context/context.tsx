@@ -16,13 +16,15 @@ interface WorkoutContextType {
 }
 
 // Define the shape of the main app context
-interface AppContextType {
+interface UserContextType {
   userState: UserState;
   userDispatch: React.Dispatch<Action>;
 }
 
 // Create contexts for the app state and workout data
-export const AppContext = createContext<AppContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined
+);
 export const WorkoutContext = createContext<WorkoutContextType | undefined>(
   undefined
 );
@@ -40,24 +42,24 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   );
 
   return (
-    <AppContext.Provider value={{ userState, userDispatch }}>
+    <UserContext.Provider value={{ userState, userDispatch }}>
       <WorkoutContext.Provider value={{ workoutState, workoutDispatch }}>
         {children}
       </WorkoutContext.Provider>
-    </AppContext.Provider>
+    </UserContext.Provider>
   );
 };
 
 // Custom hooks for accessing the contexts
-export function useAppContext() {
-  const context = useContext(AppContext);
+export function AuthAppContext() {
+  const context = useContext(UserContext);
   if (!context) {
     throw new Error("useAppContext must be used within an AppProvider");
   }
   return context;
 }
 
-export function useWorkoutContext() {
+export function UserWorkoutContext() {
   const context = useContext(WorkoutContext);
   if (!context) {
     throw new Error("useWorkoutContext must be used within an AppProvider");

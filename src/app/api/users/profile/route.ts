@@ -28,10 +28,7 @@ export async function GET(request: NextRequest) {
       where: { user_id: userId },
       select: {
         id: true,
-        equipment: true,
         duration: true,
-        calories: true,
-        weightLifted: true,
         distance: true,
         repetitions: true,
         checkin: true,

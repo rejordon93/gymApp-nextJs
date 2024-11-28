@@ -60,9 +60,9 @@ interface Workout {
   equipment?: string;
   gifUrl?: string;
   id?: string;
-  instructions?: string;
+  instructions?: [];
   name?: string;
-  secondaryMuscles?: string;
+  secondaryMuscles?: [];
   target?: string;
 }
 
@@ -92,6 +92,7 @@ export interface WorkoutState {
 export const EXERCISE_INITIAL_STATE: WorkoutState = {
   workoutsArr: [],
   currentWorkout: {},
+
   option: {
     offset: "0",
     limit: "9",
@@ -148,6 +149,19 @@ export default function exercisesReducer(
           isLoading: true,
         },
       };
+
+    case ActionType.ADD_TO_FAVORITES:
+      return {
+        ...state,
+        favExercises: action.payload, // Add single workout to favorites
+        ExerciseApiRequest: {
+          success: true,
+          error: null,
+          message: "Added to Favorites",
+          isLoading: false,
+        },
+      };
+
     case ActionType.REMOVE_WORKOUT:
       return {
         ...state,
@@ -160,17 +174,7 @@ export default function exercisesReducer(
           isLoading: true,
         },
       };
-    case ActionType.ADD_TO_FAVORITES:
-      return {
-        ...state,
-        favExercises: action.payload, // Add single workout to favorites
-        ExerciseApiRequest: {
-          success: true,
-          error: null,
-          message: "Added to Favorites",
-          isLoading: false,
-        },
-      };
+
     case ActionType.NEXT_RESULTS:
       return {
         ...state,

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
-import { useWorkoutContext } from "@/context/context";
+import { UserWorkoutContext } from "@/context/context";
 import { useRouter } from "next/navigation";
 import { ActionType } from "@/context/exerciseReducer";
 
@@ -17,7 +17,7 @@ export default function WorkoutsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
 
-  const { workoutState, workoutDispatch } = useWorkoutContext();
+  const { workoutState, workoutDispatch } = UserWorkoutContext();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

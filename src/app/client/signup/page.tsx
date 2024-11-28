@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useReducer, useState } from "react";
-import reducer, { INITIAL_STATE, ActionType } from "@/context/authReducer";
+import reducer, { AUTH_INITIAL_STATE, ActionType } from "@/context/authReducer";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import {
@@ -15,7 +15,7 @@ import {
 
 export default function SignupPage() {
   const router = useRouter();
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [state, dispatch] = useReducer(reducer, AUTH_INITIAL_STATE);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

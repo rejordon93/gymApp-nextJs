@@ -1,8 +1,8 @@
 {
-  "/client/workouts/exercises_result/[id]/page": "app/client/workouts/exercises_result/[id]/page.js",
-  "/client/logout/page": "app/client/logout/page.js",
   "/client/profile/page": "app/client/profile/page.js",
-  "/client/workouts/exercises_result/page": "app/client/workouts/exercises_result/page.js",
+  "/client/login/page": "app/client/login/page.js",
   "/client/workouts/page": "app/client/workouts/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/client/workouts/exercises_result/page": "app/client/workouts/exercises_result/page.js",
+  "/api/workouts/favWorkouts/route": "app/api/workouts/favWorkouts/route.js",
+  "/api/workouts/getWorkouts/route": "app/api/workouts/getWorkouts/route.js"
 }

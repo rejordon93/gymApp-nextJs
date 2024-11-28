@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { useContext } from "react";
 
-import { AppContext } from "@/context/context";
+import { UserContext } from "@/context/context";
 
 const publicNavLinks = [
   {
@@ -42,7 +42,7 @@ const privateNavLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const context = useContext(AppContext);
+  const context = useContext(UserContext);
 
   const navLinks = context?.userState.user.token
     ? privateNavLinks

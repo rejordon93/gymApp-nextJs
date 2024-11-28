@@ -17,6 +17,7 @@ model User {
 
   // Define the relation to Workout
   workouts  Workout[]
+  favoriteWorkout FavoriteWorkout[]
 }
 
 model Workout {
@@ -36,5 +37,22 @@ model Workout {
 
   user         User     @relation(fields: [user_id], references: [id])
 
+
   @@index([user_id])
+}
+
+model FavoriteWorkout {
+  id             Int      @id @default(autoincrement()) // Primary key
+  bodyPart       String?  // Optional field
+  equipment      String?  // Optional field
+  gifUrl         String?  // Optional field
+  instructions   String[]   // Required field
+  name           String   // Required field
+  secondaryMuscles String[] // Optional field
+  target         String?  // Optional field
+  user_id        Int     // Foreign key reference
+ 
+  user User @relation(fields: [user_id], references: [id]) // Relation to User
+
+  @@map("favorite_workouts") // Optional: If the database table name differs
 }

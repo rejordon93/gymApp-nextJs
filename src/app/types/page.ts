@@ -11,12 +11,12 @@ export type WorkoutDataProps = {
 };
 
 export type ExercisesInterfaces = {
-  bodyPart: string;
-  equipment: string;
-  gifUrl: string;
-  id: string;
-  instructions: string;
+  id: number;
   name: string;
-  secondaryMuscles: string;
+  bodyPart: string;
+  equipment: string | null;
+  gifUrl: string;
+  instructions: string[];
+  secondaryMuscles: string[];
   target: string;
 };
