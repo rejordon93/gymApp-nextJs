@@ -4,8 +4,15 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function POST(req: NextRequest) {
   try {
-    const { checkin, duration, distance, repetitions } = await req.json();
-
+    const { checkin, weight, updateWeighIn, workoutReview, checkout } =
+      await req.json();
+    console.log("Received data:", {
+      checkin,
+      weight,
+      updateWeighIn,
+      workoutReview,
+      checkout,
+    });
     if (!checkin) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -24,15 +31,19 @@ export async function POST(req: NextRequest) {
     }
 
     // Create workout in the database
-    const workout = await prisma.workout.create({
+    const workout = await prisma.workoutPlan.create({
       data: {
-        duration: duration || null,
-        checkin: new Date(checkin), // Ensure date format is correct
-        distance: distance || null, // Optional field
-        repetitions: repetitions || null, // Optional field
-        user_id: userId,
+        checkin: new Date(checkin),
+        weight: weight || 0,
+        updateWeighIn: updateWeighIn || 0,
+        workoutReview: workoutReview || "", // Ensure this is optional and handled
+        checkout: checkout || false,
+        user: {
+          connect: { id: userId },
+        },
       },
     });
+
     // Send success response
     return NextResponse.json({
       message: `User ID ${userId} successfully CheckedIn`,

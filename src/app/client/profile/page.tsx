@@ -1,12 +1,10 @@
 "use client";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { WorkoutDataProps } from "../../types/page";
 import BarChart from "@/components/BarChart";
 import toast, { Toaster } from "react-hot-toast";
-import WorkoutFavorite from "@/components/FavoriteWorkouts";
-import { ExercisesInterfaces } from "../../types/page";
-import { UserWorkoutContext } from "@/context/context";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
@@ -14,48 +12,29 @@ import {
   Typography,
   CircularProgress,
   Container,
-  Card,
+  Input,
   Grid,
+  TextField,
 } from "@mui/material";
-import { ActionType } from "@/context/exerciseReducer";
+import EditIcon from "@mui/icons-material/Edit";
 
-export default function GymVisitsPage() {
+export default function GymProgressPage() {
   const [data, setData] = useState<WorkoutDataProps[]>([]);
-  const [toggleCheckIn, setToggleCheckIn] = useState<boolean>(true);
-  const [favData, setFavData] = useState<ExercisesInterfaces[]>([]);
-  const { workoutState, workoutDispatch } = UserWorkoutContext();
+  const [userWeight, setUserWeight] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchFavoriteWorkouts = async () => {
-      try {
-        const response = await axios.get("/api/workouts/favWorkouts");
-        console.log("API Response:", response.data);
-        const { date } = response.data;
-        setFavData(date || []);
-      } catch (error) {
-        console.error("Failed to fetch workouts:", error);
-        setFavData([]);
-      }
-    };
-
-    fetchFavoriteWorkouts();
-  }, []);
+  const router = useRouter();
 
   const updateProfile = async () => {
     setLoading(true);
 
     const userCheckIn = {
       checkin: new Date().toISOString(),
-      duration: 0,
-      equipment: "",
-      calories: 0,
-      weightLifted: 0,
-      distance: 0,
-      repetitions: 0,
+      weight: userWeight,
+      updateWeighIn: 0,
+      workoutReview: "",
+      checkout: new Date().toISOString(),
     };
-    console.log(userCheckIn);
 
     try {
       const response = await axios.post(
@@ -63,166 +42,192 @@ export default function GymVisitsPage() {
         userCheckIn
       );
 
-      console.log("API Response:", response.data);
       const { workout } = response.data as {
         message: string;
         workout: WorkoutDataProps;
       };
 
       setData((prevData) => [...prevData, workout]);
-      toast.success("Have a good Workout!", {
+      toast.success("Keep up the great work!", {
         icon: "💪",
         duration: 5000,
       });
-
-      setToggleCheckIn(false);
+      setUserWeight(0);
     } catch (error) {
-      console.error("Error adding workout:", error);
       setError(error instanceof Error ? error.message : String(error));
-      toast.error("Failed to add workout.");
+      toast.error("Failed to log workout.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ mt: 5 }}>
       <Paper
         elevation={6}
-        sx={{ p: 4, borderRadius: 2, mt: 4, backgroundColor: "#f5f5f5" }}
+        sx={{
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "#f9f9f9",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
       >
-        <Typography variant="h4" align="center" gutterBottom fontWeight="bold">
-          Gym Visits
+        <Typography
+          variant="h4"
+          align="center"
+          fontWeight="bold"
+          sx={{ mb: 4, color: "primary.main" }}
+        >
+          Welcome to Your 365 Fitness! 💪
         </Typography>
 
-        <Box sx={{ my: 4 }}>
+        <Box sx={{ mb: 4 }}>
           <BarChart data={data} />
         </Box>
 
-        <Box display="flex" justifyContent="center" mt={3}>
-          {toggleCheckIn ? (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={updateProfile}
-              disabled={loading}
-              startIcon={
-                loading && <CircularProgress size={20} color="inherit" />
-              }
-              sx={{
-                px: 4,
-                py: 1.5,
-                backgroundColor: "primary.main",
-                "&:hover": {
-                  backgroundColor: "primary.dark",
-                },
-                fontWeight: "bold",
-                letterSpacing: "1px",
-                transition: "all 0.3s ease-in-out",
-              }}
-            >
-              {loading ? "Checking in..." : "Check In"}
-            </Button>
-          ) : (
-            <WorkoutFavorite />
-          )}
+        <Box
+          sx={{
+            p: 3,
+            backgroundColor: "#e3f2fd",
+            borderRadius: 2,
+            mb: 4,
+            textAlign: "center",
+          }}
+        >
+          <Box
+            sx={{
+              backgroundImage: "url('/path/to/hero-image.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              borderRadius: 3,
+              p: 4,
+              mb: 4,
+              textAlign: "center",
+              color: "#fff",
+            }}
+          >
+            <Typography variant="h3" fontWeight="bold">
+              Push Your Limits & Achieve Your Goals!
+            </Typography>
+            <Typography variant="subtitle1">
+              Track your progress and stay motivated every step of the way.
+            </Typography>
+          </Box>
+
+          <Typography variant="h5" fontWeight="bold" gutterBottom>
+            Gym Member Profile
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "#555" }}>
+            Total Visits: {data.length}
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "#555", mb: 1 }}>
+            Last Weigh-In:{" "}
+            {userWeight > 0 ? `${userWeight} lbs` : "No weigh-in yet"}
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "#555" }}>
+            Location: Seattle
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "#555" }}>
+            Gym Name: Union Gym
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "#555" }}>
+            Average Workout Duration: 1 hour/session
+          </Typography>
+          <Button
+            startIcon={<EditIcon />}
+            variant="outlined"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Update Profile
+          </Button>
         </Box>
 
-        <Typography variant="h6" align="center" sx={{ mt: 4 }}>
-          Favorite Workouts
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 2,
+          }}
+        >
+          <TextField
+            multiline
+            rows={4}
+            placeholder="Enter your workout review or notes here..."
+            fullWidth
+            variant="outlined"
+            sx={{ flex: 1 }}
+          />
+          <Paper
+            elevation={3}
+            sx={{
+              p: 2,
+              flex: 1,
+              textAlign: "center",
+              backgroundColor: "#f1f1f1",
+            }}
+          >
+            <Typography variant="subtitle1" color="textSecondary">
+              Your workout notes will appear here
+            </Typography>
+          </Paper>
+        </Box>
 
-        {favData.length > 0 ? (
-          <Grid container spacing={3} sx={{ mt: 4 }}>
-            {favData.map((e) => (
-              <Grid item xs={12} sm={6} md={4} key={e.id}>
-                <Card
-                  sx={{
-                    margin: 2,
-                    padding: 3,
-                    textAlign: "center",
-                    height: "100%",
-                    boxShadow: 3,
-                    borderRadius: 3,
-                    display: "flex",
-                    flexDirection: "column",
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      boxShadow: 6,
-                    },
-                  }}
-                >
-                  {e.gifUrl && (
-                    <img
-                      src={e.gifUrl}
-                      alt={e.name || "Exercise"}
-                      style={{
-                        maxWidth: "100%",
-                        borderRadius: "8px",
-                        marginTop: "1rem",
-                      }}
-                    />
-                  )}
-                  <Typography variant="h6" gutterBottom fontWeight="bold">
-                    {e.name || "N/A"}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Body Part: {e.bodyPart || "N/A"}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Equipment: {e.equipment || "N/A"}
-                  </Typography>
-
-                  {Array.isArray(e.secondaryMuscles) &&
-                    e.secondaryMuscles.length > 0 && (
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        sx={{ mt: 1 }}
-                      >
-                        Secondary Muscles: {e.secondaryMuscles.join(", ")}
-                      </Typography>
-                    )}
-
-                  {Array.isArray(e.instructions) &&
-                    e.instructions.length > 0 && (
-                      <Box
-                        sx={{
-                          mt: 2,
-                          maxHeight: "150px",
-                          overflowY: "auto",
-                          padding: "8px",
-                          border: "1px solid #ddd",
-                          borderRadius: "4px",
-                          textAlign: "left",
-                        }}
-                      >
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          fontWeight="bold"
-                        >
-                          Instructions:
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          {e.instructions.join(", ")}
-                        </Typography>
-                      </Box>
-                    )}
-                  <Button>Remove Favorite</Button>
-                </Card>
-              </Grid>
-            ))}
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6}>
+            <Box
+              sx={{
+                p: 3,
+                backgroundColor: "#fff",
+                borderRadius: 2,
+                boxShadow: 1,
+                textAlign: "center",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: "bold", mb: 2, color: "#333" }}
+              >
+                Weigh-In
+              </Typography>
+              <Input
+                placeholder="Enter your weight (lbs)"
+                value={userWeight}
+                onChange={(e) => setUserWeight(Number(e.target.value) || 0)}
+                sx={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: 1,
+                  border: "1px solid #ddd",
+                  mb: 2,
+                  fontSize: "1rem",
+                  "&:focus": {
+                    borderColor: "primary.main",
+                    boxShadow: "0 0 5px rgba(33, 150, 243, 0.5)",
+                  },
+                }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={updateProfile}
+                disabled={loading}
+                sx={{ borderRadius: 1, fontWeight: "bold" }}
+              >
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Log Workout"
+                )}
+              </Button>
+            </Box>
           </Grid>
-        ) : (
-          <Typography variant="h6" align="center" mt={2}>
-            No favorite workouts available.
-          </Typography>
-        )}
+        </Grid>
 
         {error && (
-          <Typography color="error" align="center" mt={2}>
+          <Typography color="error" align="center" sx={{ mt: 3 }}>
             {error}
           </Typography>
         )}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { Paper } from "@mui/material";
+import { Paper, Box } from "@mui/material";
 import axios from "axios";
 
 // Define the structure of a workout object
@@ -41,16 +41,30 @@ const DayTrackerComponent = () => {
     };
 
     fetchWorkouts();
-  }, []);
+  }, [uData]);
 
   return (
     <Paper>
-      <BarChart
-        xAxis={[{ scaleType: "band", data: daysOfTheWeek }]}
-        series={[{ data: uData, label: "Duration (min)", type: "bar" }]}
-        width={500}
-        height={300}
-      />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        padding={2}
+        flexWrap="wrap" // Ensures proper alignment on smaller screens
+      >
+        <BarChart
+          xAxis={[{ scaleType: "band", data: daysOfTheWeek }]}
+          series={[{ data: uData, label: "Duration (hr)", type: "bar" }]}
+          width={500}
+          height={300}
+        />
+        <BarChart
+          xAxis={[{ scaleType: "band", data: daysOfTheWeek }]}
+          series={[{ data: uData, label: "Duration (day)", type: "bar" }]}
+          width={500}
+          height={300}
+        />
+      </Box>
     </Paper>
   );
 };

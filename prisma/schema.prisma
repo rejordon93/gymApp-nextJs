@@ -8,51 +8,47 @@ generator client {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  email     String    @unique
-  password  String    // Ensure this is encrypted in your app logic
-  createdAt DateTime  @default(now())
-  editedAt  DateTime  @default(now()) @updatedAt
-
-  // Define the relation to Workout
-  workouts  Workout[]
-  favoriteWorkout FavoriteWorkout[]
+  id             Int             @id @default(autoincrement())
+  username       String          @unique
+  email          String          @unique
+  password       String          // Ensure encryption in app logic
+  createdAt      DateTime        @default(now())
+  userWorkouts   UserWorkout[]   // One-to-many relationship
+  workoutPlans   WorkoutPlan[]   // One-to-many relationship
 }
 
-model Workout {
-  id           Int      @id @default(autoincrement())
-  equipment    String?
-  duration     Int?
-  checkin      DateTime
-  checkout     DateTime?
-  calories     Int?      @default(0)
-  weightLifted Int?     // Optional field
-  distance     Float?   // Optional field
-  repetitions  Int?     // Optional field
-  user_id      Int
+model WorkoutPlan {
+  id             Int     @id @default(autoincrement())
+  userPlanId     Int
+  checkin        DateTime  @default(now())
+  weight         Int
+  updateWeighIn  Int
+  workoutReview  String? // Ensure this is defined as optional (nullable) if you allow empty reviews
+  checkout      DateTime  @default(now())
 
-  createdAt    DateTime @default(now())
-  editedAt     DateTime @default(now()) @updatedAt
-
-  user         User     @relation(fields: [user_id], references: [id])
-
-
-  @@index([user_id])
+  user User @relation(fields: [userPlanId], references: [id])
 }
 
-model FavoriteWorkout {
-  id             Int      @id @default(autoincrement()) // Primary key
-  bodyPart       String?  // Optional field
-  equipment      String?  // Optional field
-  gifUrl         String?  // Optional field
-  instructions   String[]   // Required field
-  name           String   // Required field
-  secondaryMuscles String[] // Optional field
-  target         String?  // Optional field
-  user_id        Int     // Foreign key reference
- 
-  user User @relation(fields: [user_id], references: [id]) // Relation to User
 
-  @@map("favorite_workouts") // Optional: If the database table name differs
+model UserWorkout {
+  id                Int                  @id @default(autoincrement())
+  userId            Int
+  dayOfWeek         Int
+  createdAt         DateTime             @default(now())
+  editedAt          DateTime             @default(now())
+  completed         Boolean
+  favoritedWorkouts FavoritedExercise[]   @relation("UserWorkoutFavoritedWorkouts")
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model FavoritedExercise {
+  id               Int                  @id @default(autoincrement())
+  name             String
+  equipment        String
+  gifUrl           String
+  instructions     String
+  secondaryMuscles String
+  target           String
+  userWorkouts     UserWorkout[]        @relation("UserWorkoutFavoritedWorkouts")
 }

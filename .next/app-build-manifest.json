@@ -21,15 +21,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/client/login/page.js"
     ],
-    "/client/workouts/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/page.js"
-    ],
-    "/client/workouts/exercises_result/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/exercises_result/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
