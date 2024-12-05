@@ -37,7 +37,7 @@ model UserWorkout {
   createdAt         DateTime             @default(now())
   editedAt          DateTime             @default(now())
   completed         Boolean
-  favoritedWorkouts FavoritedExercise[]   @relation("UserWorkoutFavoritedWorkouts")
+  favoritedExercise FavoritedExercise[]   @relation("UserWorkoutFavoritedExercuses")
 
   user User @relation(fields: [userId], references: [id])
 }
@@ -50,5 +50,5 @@ model FavoritedExercise {
   instructions     String
   secondaryMuscles String
   target           String
-  userWorkouts     UserWorkout[]        @relation("UserWorkoutFavoritedWorkouts")
+  userWorkout     UserWorkout[]        @relation("UserWorkoutFavoritedExercuses")
 }

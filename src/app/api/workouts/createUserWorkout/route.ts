@@ -5,23 +5,23 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, equipment, gifUrl, instructions, secondaryMuscles, target } =
-      body;
+    const { dayOfWeek, createdAt, editedAt, completed } = body;
 
     // Validate request body
-    if (
-      !name ||
-      !equipment ||
-      !gifUrl ||
-      !instructions ||
-      !secondaryMuscles ||
-      !target
-    ) {
+    if (!dayOfWeek || !createdAt || !editedAt || !completed) {
       return NextResponse.json(
         {
           error:
-            "Missing required fields: name, equipment, gifUrl, instructions, secondaryMuscles, or target",
+            "Missing required fields: dayOfWeek, createdAt, editedAt, completed",
         },
+        { status: 400 }
+      );
+    }
+
+    // Validate completed is a boolean
+    if (typeof completed !== "boolean") {
+      return NextResponse.json(
+        { error: "The 'completed' field must be a boolean" },
         { status: 400 }
       );
     }
@@ -35,34 +35,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if the user has any workouts (many-to-many check)
-    const userWorkouts = await prisma.userWorkout.findMany({
-      where: { userId },
-    });
-
-    if (userWorkouts.length === 0) {
-      return NextResponse.json(
-        { error: `No workout data found for User ID: ${userId}` },
-        { status: 404 }
-      );
-    }
-
-    // Create a new favorited exercise
-    const workout = await prisma.favoritedExercise.create({
+    // Create a new user workout
+    const userWorkout = await prisma.userWorkout.create({
       data: {
-        name,
-        equipment,
-        gifUrl,
-        instructions,
-        secondaryMuscles,
-        target,
+        dayOfWeek,
+        createdAt,
+        editedAt,
+        completed,
+        userId,
       },
     });
 
+    // Send success response
     return NextResponse.json(
       {
-        message: `Workout successfully added for User ID: ${userId}`,
-        workout,
+        message: `userWorkout successfully added for User ID: ${userId}`,
+        userWorkout: {
+          id: userWorkout.id,
+          dayOfWeek: userWorkout.dayOfWeek,
+          createdAt: userWorkout.createdAt,
+          editedAt: userWorkout.editedAt,
+          completed: userWorkout.completed,
+        },
       },
       { status: 201 }
     );
