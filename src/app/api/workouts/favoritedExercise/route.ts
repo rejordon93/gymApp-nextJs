@@ -5,50 +5,38 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, equipment, gifUrl, instructions, secondaryMuscles, target } =
-      body;
-
-    // Validate request body
+    const {
+      id,
+      name,
+      equipment,
+      gifUrl,
+      instructions,
+      secondaryMuscles,
+      target,
+    } = body;
+    // check for loogged in User
+    const userDate = getDataFromToken(req);
+    if (!userDate) {
+      return NextResponse.json({ error: "No user logged in" }, { status: 401 });
+    }
+    // Validate input fields
     if (
       !name ||
       !equipment ||
       !gifUrl ||
       !instructions ||
       !secondaryMuscles ||
-      !target
+      !target ||
+      !id
     ) {
       return NextResponse.json(
-        {
-          error:
-            "Missing required fields: name, equipment, gifUrl, instructions, secondaryMuscles, or target",
-        },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Extract user ID from the token
-    const userId = getDataFromToken(req);
-    if (!userId) {
-      return NextResponse.json(
-        { error: "Invalid token or no user associated with this request" },
-        { status: 401 }
-      );
-    }
-
-    // Check if the user has any workouts (many-to-many check)
-    const userWorkouts = await prisma.userWorkout.findMany({
-      where: { userId },
-    });
-
-    if (userWorkouts.length === 0) {
-      return NextResponse.json(
-        { error: `No workout data found for User ID: ${userId}` },
-        { status: 404 }
-      );
-    }
-
-    // Create a new favorited exercise
-    const workout = await prisma.favoritedExercise.create({
+    // Create favoritedExercise
+    const favoritedExerciseData = await prisma.favoritedExercise.create({
       data: {
         name,
         equipment,
@@ -59,11 +47,44 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(
-      {
-        message: `Workout successfully added for User ID: ${userId}`,
-        workout,
+    // check if favoritedExerciseDate us there
+    if (!favoritedExerciseData) {
+      return NextResponse.json(
+        { error: "Failed to create favorited exercise" },
+        { status: 500 }
+      );
+    }
+
+    // Check if userWorkout exists
+    const userWorkoutData = await prisma.userWorkout.findUnique({
+      where: { id },
+    });
+    if (!userWorkoutData) {
+      return NextResponse.json(
+        { error: "User workout not found" },
+        { status: 404 }
+      );
+    }
+
+    //else update userWorkout wiht favoritedExercise by id
+    const userWorkoutUpdate = await prisma.userWorkout.update({
+      where: { id: userWorkoutData.id },
+      data: {
+        favoritedExercise: {
+          connect: { id: favoritedExerciseData.id },
+        },
       },
+    });
+    // if not updated show error
+    if (!userWorkoutUpdate) {
+      return NextResponse.json(
+        { message: "Favorited exercise not update!" },
+        { status: 400 }
+      );
+    }
+    // return successfully message
+    return NextResponse.json(
+      { message: "Favorited exercise added successsfully" },
       { status: 201 }
     );
   } catch (error) {

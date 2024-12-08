@@ -1,6 +1,1 @@
-{
-  "/_not-found/page": "app/_not-found/page.js",
-  "/client/profile/page": "app/client/profile/page.js",
-  "/client/login/page": "app/client/login/page.js",
-  "/api/workouts/favoritedExercise/route": "app/api/workouts/favoritedExercise/route.js"
-}
+{}

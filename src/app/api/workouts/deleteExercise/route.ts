@@ -4,25 +4,48 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function DELETE(req: NextRequest) {
   try {
-    const { id } = await req.json();
-    const userId = getDataFromToken(req);
+    const body = await req.json();
+    // update to  pull is inside body
+    const { id } = body;
 
-    if (!userId) {
-      NextResponse.json({ error: "Invalid token or no user found" }),
-        { status: 401 };
+    // Validate input
+    if (!id) {
+      return NextResponse.json(
+        { error: "Exercise ID is required" },
+        { status: 400 }
+      );
     }
 
+    // get user token
+    const userId = getDataFromToken(req);
+
+    // Validate user token
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Invalid token or no user found" },
+        { status: 401 }
+      );
+    }
+
+    // Delete the exercise
     const deletedExercise = await prisma.favoritedExercise.delete({
       where: { id: id },
     });
 
-    console.log(deletedExercise);
+    // Return success response
+    return NextResponse.json(
+      {
+        message: `Exercise with ID ${id} successfully removed`,
 
-    return NextResponse.json({
-      message: `Exercise with ID ${id} successfully remove`,
-      deletedExercise,
-    });
+        deletedExercise,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error processing the request", error);
+    console.error("Error processing the request:", error);
+    return NextResponse.json(
+      { error: "An internal server error occurred. Please try again later." },
+      { status: 500 }
+    );
   }
 }
