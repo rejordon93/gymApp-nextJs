@@ -14,11 +14,13 @@ export async function POST(req: NextRequest) {
       checkout,
     } = body;
 
+    // Validate user token
     const userToken = getDataFromToken(req);
     if (!userToken) {
       return NextResponse.json({ error: "No user logged in" }, { status: 401 });
     }
 
+    // Validate required input fields
     if (
       !userPlanId ||
       !checkin ||
@@ -28,30 +30,36 @@ export async function POST(req: NextRequest) {
       !checkout
     ) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing or invalid required fields" },
         { status: 400 }
       );
     }
 
-    const planWorkout = await prisma.workoutPlan.create({
-      data: {
-        userPlanId,
-        checkin,
-        weight,
-        updateWeighIn,
-        workoutReview,
-        checkout,
-      },
-    });
-    if (!planWorkout) {
+    // Validate date fields
+    if (!new Date(checkin).getTime() || new Date(checkout).getTime()) {
       return NextResponse.json(
-        { message: "Missing planWorkout data" },
-        { status: 500 }
+        { error: "Invalid date format for checkin or checkout" },
+        { status: 400 }
       );
     }
 
+    // Create workout plan in the database
+    const planWorkout = await prisma.workoutPlan.create({
+      data: {
+        userPlanId,
+        checkin: new Date(checkin),
+        weight,
+        updateWeighIn,
+        workoutReview,
+        checkout: new Date(checkout),
+      },
+    });
+
     return NextResponse.json(
-      { message: "planWorkout added successsfully" },
+      {
+        message: "Workout plan created successfully",
+        planWorkout,
+      },
       { status: 201 }
     );
   } catch (error) {
