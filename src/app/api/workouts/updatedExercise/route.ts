@@ -5,9 +5,9 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { exerciseId, updateBody } = body;
+    const { id, updateBody } = body;
 
-    if (!exerciseId || !updateBody) {
+    if (!id || !updateBody) {
       return NextResponse.json(
         { message: "Exercise ID and update data are required" },
         { status: 401 }
@@ -27,7 +27,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const updateExercise = await prisma.favoritedExercise.update({
-      where: { id: exerciseId },
+      where: { id: id },
       data: {
         name: name || "",
         equipment: equipment || "",

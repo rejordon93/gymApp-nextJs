@@ -33,7 +33,7 @@ model WorkoutPlan {
 model UserWorkout {
   id                Int                  @id @default(autoincrement())
   userId            Int
-  dayOfWeek         Int
+  dayOfWeek         String
   createdAt         DateTime             @default(now())
   editedAt          DateTime             @default(now())
   completed         Boolean
