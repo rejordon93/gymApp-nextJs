@@ -1,4 +1,3 @@
 {
-  "/client/login/page": "app/client/login/page.js",
-  "/client/signup/page": "app/client/signup/page.js"
+  "/api/workouts/workoutPlan/route": "app/api/workouts/workoutPlan/route.js"
 }

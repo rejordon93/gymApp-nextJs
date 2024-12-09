@@ -35,7 +35,10 @@ export async function DELETE(req: NextRequest) {
     const deletedExercises = await prisma.favoritedExercise.deleteMany({});
 
     if (deletedExercises) {
-      return NextResponse.json({ message: "all Exercises deleted" });
+      return NextResponse.json(
+        { message: "all Exercises deleted" },
+        { status: 404 }
+      );
     }
 
     // Return success response
