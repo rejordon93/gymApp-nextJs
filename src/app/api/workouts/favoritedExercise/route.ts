@@ -2,9 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
+interface FavoritedExerciseType {
+  id: number;
+  name: string;
+  equipment: string;
+  gifUrl: string;
+  instructions: string;
+  secondaryMuscles: string;
+  target: string;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body: FavoritedExerciseType = await req.json();
     const {
       id,
       name,
@@ -14,11 +24,13 @@ export async function POST(req: NextRequest) {
       secondaryMuscles,
       target,
     } = body;
-    // check for loogged in User
+
+    // Check for logged in user
     const userDate = getDataFromToken(req);
     if (!userDate) {
       return NextResponse.json({ error: "No user logged in" }, { status: 401 });
     }
+
     // Validate input fields
     if (
       !name ||
@@ -35,7 +47,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create favoritedExercise
+    // Check if an exercise with this name already exists
+    const existingExercise = await prisma.favoritedExercise.findFirst({
+      where: { name },
+    });
+
+    if (existingExercise) {
+      return NextResponse.json(
+        { error: "An exercise with this name already exists" },
+        { status: 409 }
+      );
+    }
+
+    // Create favoritedExercise since no matching name was found
     const favoritedExerciseData = await prisma.favoritedExercise.create({
       data: {
         name,
@@ -46,14 +70,6 @@ export async function POST(req: NextRequest) {
         target,
       },
     });
-
-    // check if favoritedExerciseDate us there
-    if (!favoritedExerciseData) {
-      return NextResponse.json(
-        { error: "Failed to create favorited exercise" },
-        { status: 500 }
-      );
-    }
 
     // Check if userWorkout exists
     const userWorkoutData = await prisma.userWorkout.findUnique({
@@ -66,7 +82,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    //else update userWorkout wiht favoritedExercise by id
+    // Update userWorkout with the new favoritedExercise
     const userWorkoutUpdate = await prisma.userWorkout.update({
       where: { id: userWorkoutData.id },
       data: {
@@ -75,16 +91,16 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-    // if not updated show error
+
     if (!userWorkoutUpdate) {
       return NextResponse.json(
-        { message: "Favorited exercise not update!" },
+        { error: "Favorited exercise not updated!" },
         { status: 400 }
       );
     }
-    // return successfully message
+
     return NextResponse.json(
-      { message: "Favorited exercise added successsfully" },
+      { message: "Favorited exercise added successfully" },
       { status: 201 }
     );
   } catch (error) {

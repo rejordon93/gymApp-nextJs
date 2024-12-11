@@ -2,6 +2,15 @@ import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
+interface updateBodyType {
+  name: string;
+  equipment: string;
+  gifUrl: string;
+  instructions: string;
+  secondaryMuscles: string;
+  target: string;
+}
+
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
@@ -10,45 +19,69 @@ export async function PATCH(req: NextRequest) {
     if (!id || !updateBody) {
       return NextResponse.json(
         { message: "Exercise ID and update data are required" },
-        { status: 401 }
+        { status: 400 }
       );
     }
 
-    const { name, equipment, gifUrl, instructions, secondaryMuscles, target } =
-      updateBody;
+    // setting updateBody
+    const {
+      name,
+      equipment,
+      gifUrl,
+      instructions,
+      secondaryMuscles,
+      target,
+    }: updateBodyType = updateBody;
 
-    const userId = getDataFromToken(req);
+    //Setting Validators for updateBody
+    if (
+      !name ||
+      !equipment ||
+      !gifUrl ||
+      !instructions ||
+      !secondaryMuscles ||
+      !target
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
+    // setting token
+    const userId = await getDataFromToken(req);
+    // error check
     if (!userId) {
       return NextResponse.json(
         { message: "No Token or invalid user" },
         { status: 401 }
       );
     }
-
+    //  updating prisma favoritedExercise.update
     const updateExercise = await prisma.favoritedExercise.update({
       where: { id: id },
       data: {
-        name: name || "",
-        equipment: equipment || "",
-        gifUrl: gifUrl || "",
-        instructions: instructions || "",
-        secondaryMuscles: secondaryMuscles || "",
-        target: target || "",
+        name,
+        equipment,
+        gifUrl,
+        instructions,
+        secondaryMuscles,
+        target,
       },
     });
     console.log(updateExercise);
-    return NextResponse.json({
-      message: "Exercise updated successfully",
-      updateExercise,
-    });
+    return NextResponse.json(
+      {
+        message: "Exercise updated successfully",
+        updateExercise,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Somthing want Wrong updateing", error);
   }
   return NextResponse.json(
-    {
-      message: "error",
-    },
-    { status: 401 }
+    { message: "An error occurred while updating the exercise" },
+    { status: 500 }
   );
 }

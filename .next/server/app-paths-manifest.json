@@ -1,4 +1,4 @@
 {
-  "/api/workouts/workoutPlan/route": "app/api/workouts/workoutPlan/route.js",
-  "/api/workouts/deleteWorkoutPlan/route": "app/api/workouts/deleteWorkoutPlan/route.js"
+  "/page": "app/page.js",
+  "/api/workouts/favoritedExercise/route": "app/api/workouts/favoritedExercise/route.js"
 }
