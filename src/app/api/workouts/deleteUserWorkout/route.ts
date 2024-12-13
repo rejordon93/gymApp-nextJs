@@ -2,19 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
-interface IdType {
-  id: number;
-}
-
 export async function DELETE(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id }: IdType = body;
+    const { id } = body;
 
     // Validate input
     if (!id) {
       return NextResponse.json(
-        { error: "Exercise ID is required" },
+        { error: "Workout ID is required" },
         { status: 400 }
       );
     }
@@ -30,7 +26,7 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    // Validate if the ID exists in userWorkout
+    // Validate if the workout exists
     const existingUserWorkout = await prisma.userWorkout.findUnique({
       where: { id },
     });
@@ -42,27 +38,18 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    // Delete user workout by ID
-    const deletedUserWorkout = await prisma.userWorkout.delete({
-      where: { id },
-    });
-
-    // Delete related exercise by ID
-    const deletedExercise = await prisma.favoritedExercise.deleteMany({
+    // Delete the user workout (cascading delete will handle related exercises)
+    await prisma.userWorkout.delete({
       where: { id },
     });
 
     // Response
     return NextResponse.json(
-      {
-        message: `User workout with ID ${id} and related exercises successfully removed`,
-        deletedUserWorkout,
-        deletedExercise,
-      },
+      { message: `User workout with ID ${id} successfully removed.` },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error processing the request:", error);
+    console.error("Error processing the DELETE request:", error);
     return NextResponse.json(
       { error: "An internal server error occurred. Please try again later." },
       { status: 500 }

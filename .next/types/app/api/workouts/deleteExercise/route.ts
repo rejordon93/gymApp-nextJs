@@ -1,8 +1,8 @@
-// File: C:\Users\Ejord\OneDrive\Desktop\GymApp\uniongym\src\app\api\users\login\route.ts
-import * as entry from '../../../../../../src/app/api/users/login/route.js'
+// File: C:\Users\Ejord\OneDrive\Desktop\GymApp\uniongym\src\app\api\workouts\deleteExercise\route.ts
+import * as entry from '../../../../../../src/app/api/workouts/deleteExercise/route.js'
 import type { NextRequest } from 'next/server.js'
 
-type TEntry = typeof import('../../../../../../src/app/api/users/login/route.js')
+type TEntry = typeof import('../../../../../../src/app/api/workouts/deleteExercise/route.js')
 
 // Check that the entry is a valid entry
 checkFields<Diff<{
