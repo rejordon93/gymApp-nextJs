@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
+interface idType {
+  id: number;
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     const body = await req.json();
     // update to  pull is inside body
-    const { id } = body;
+    const { id }: idType = body;
 
     // Validate input
     if (!id) {
@@ -27,7 +31,7 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    // Delete the exercise
+    // Delete the exercise where id
     const deletedExercise = await prisma.favoritedExercise.delete({
       where: { id: id },
     });

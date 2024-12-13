@@ -1,4 +1,3 @@
 {
-  "/page": "app/page.js",
   "/api/workouts/favoritedExercise/route": "app/api/workouts/favoritedExercise/route.js"
 }

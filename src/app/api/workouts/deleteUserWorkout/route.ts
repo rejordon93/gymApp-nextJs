@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
+interface IdType {
+  id: number;
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id } = body;
+    const { id }: IdType = body;
 
     // Validate input
     if (!id) {
@@ -15,7 +19,7 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    // get user token
+    // Get user token
     const userId = getDataFromToken(req);
 
     // Validate user token
@@ -26,27 +30,34 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    // Delete the user workout by its ID
-    const deletedUserWorkout = await prisma.userWorkout.delete({
-      where: { id: id },
+    // Validate if the ID exists in userWorkout
+    const existingUserWorkout = await prisma.userWorkout.findUnique({
+      where: { id },
     });
 
-    // Delete all favorited exercises
-    const deletedExercises = await prisma.favoritedExercise.deleteMany({});
-
-    if (deletedExercises) {
+    if (!existingUserWorkout) {
       return NextResponse.json(
-        { message: "all Exercises deleted" },
+        { error: `User workout with ID ${id} does not exist` },
         { status: 404 }
       );
     }
 
-    // Return success response
+    // Delete user workout by ID
+    const deletedUserWorkout = await prisma.userWorkout.delete({
+      where: { id },
+    });
+
+    // Delete related exercise by ID
+    const deletedExercise = await prisma.favoritedExercise.deleteMany({
+      where: { id },
+    });
+
+    // Response
     return NextResponse.json(
       {
-        message: `User workout with ID ${id} successfully removed`,
+        message: `User workout with ID ${id} and related exercises successfully removed`,
         deletedUserWorkout,
-        deletedExercises,
+        deletedExercise,
       },
       { status: 200 }
     );

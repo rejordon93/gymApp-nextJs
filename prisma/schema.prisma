@@ -44,8 +44,8 @@ model UserWorkout {
 
 model FavoritedExercise {
   id               Int                  @id @default(autoincrement())
-  name             String
-  equipment        String
+  name             String               @unique
+  equipment        String  
   gifUrl           String
   instructions     String
   secondaryMuscles String

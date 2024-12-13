@@ -47,60 +47,61 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if an exercise with this name already exists
-    const existingExercise = await prisma.favoritedExercise.findFirst({
-      where: { name },
-    });
-
-    if (existingExercise) {
-      return NextResponse.json(
-        { error: "An exercise with this name already exists" },
-        { status: 409 }
-      );
-    }
-
-    // Create favoritedExercise since no matching name was found
-    const favoritedExerciseData = await prisma.favoritedExercise.create({
-      data: {
-        name,
-        equipment,
-        gifUrl,
-        instructions,
-        secondaryMuscles,
-        target,
-      },
-    });
-
     // Check if userWorkout exists
-    const userWorkoutData = await prisma.userWorkout.findUnique({
+    const userWorkout = await prisma.userWorkout.findUnique({
       where: { id },
     });
-    if (!userWorkoutData) {
+
+    if (!userWorkout) {
       return NextResponse.json(
         { error: "User workout not found" },
         { status: 404 }
       );
     }
 
-    // Update userWorkout with the new favoritedExercise
-    const userWorkoutUpdate = await prisma.userWorkout.update({
-      where: { id: userWorkoutData.id },
-      data: {
-        favoritedExercise: {
-          connect: { id: favoritedExerciseData.id },
-        },
-      },
+    // Check if an exercise with this name already exists
+    let favoritedExercise = await prisma.favoritedExercise.findUnique({
+      where: { name },
     });
-
-    if (!userWorkoutUpdate) {
+    if (favoritedExercise) {
       return NextResponse.json(
-        { error: "Favorited exercise not updated!" },
+        {
+          message: "this Exercise is already in databace",
+        },
         { status: 400 }
       );
     }
 
+    // Create favoritedExercise if it doesn't exist
+    if (!favoritedExercise) {
+      favoritedExercise = await prisma.favoritedExercise.create({
+        data: {
+          name,
+          equipment,
+          gifUrl,
+          instructions,
+          secondaryMuscles,
+          target,
+        },
+      });
+    }
+
+    // Update userWorkout with the new favoritedExercise
+    const updatedUserWorkout = await prisma.userWorkout.update({
+      where: { id: userWorkout.id },
+      data: {
+        favoritedExercise: {
+          connect: { id: favoritedExercise.id },
+        },
+      },
+    });
+
     return NextResponse.json(
-      { message: "Favorited exercise added successfully" },
+      {
+        message: "Favorited exercise added successfully",
+        favoritedExercise,
+        updatedUserWorkout,
+      },
       { status: 201 }
     );
   } catch (error) {
