@@ -64,19 +64,28 @@ export async function POST(req: NextRequest) {
       where: { name },
     });
 
-    // If the exercise doesn't exist, create it
-    if (!favoritedExercise) {
-      favoritedExercise = await prisma.favoritedExercise.create({
-        data: {
-          name,
-          equipment,
-          gifUrl,
-          instructions,
-          secondaryMuscles,
-          target,
+    // If the exercise exists, return a message
+    if (favoritedExercise) {
+      return NextResponse.json(
+        {
+          message: "This exercise is already in the database.",
+          favoritedExercise,
         },
-      });
+        { status: 400 }
+      );
     }
+
+    // If the exercise doesn't exist, create it
+    favoritedExercise = await prisma.favoritedExercise.create({
+      data: {
+        name,
+        equipment,
+        gifUrl,
+        instructions,
+        secondaryMuscles,
+        target,
+      },
+    });
 
     // Update userWorkout with the new favoritedExercise
     const updatedUserWorkout = await prisma.userWorkout.update({
