@@ -63,16 +63,8 @@ export async function POST(req: NextRequest) {
     let favoritedExercise = await prisma.favoritedExercise.findUnique({
       where: { name },
     });
-    if (favoritedExercise) {
-      return NextResponse.json(
-        {
-          message: "this Exercise is already in databace",
-        },
-        { status: 400 }
-      );
-    }
 
-    // Create favoritedExercise if it doesn't exist
+    // If the exercise doesn't exist, create it
     if (!favoritedExercise) {
       favoritedExercise = await prisma.favoritedExercise.create({
         data: {

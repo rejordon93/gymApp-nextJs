@@ -1,3 +1,6 @@
 {
-  "/api/workouts/deleteExercise/route": "app/api/workouts/deleteExercise/route.js"
+  "/api/workouts/deleteUserWorkout/route": "app/api/workouts/deleteUserWorkout/route.js",
+  "/api/workouts/deleteExercise/route": "app/api/workouts/deleteExercise/route.js",
+  "/api/workouts/favoritedExercise/route": "app/api/workouts/favoritedExercise/route.js",
+  "/api/workouts/userWorkout/route": "app/api/workouts/userWorkout/route.js"
 }
