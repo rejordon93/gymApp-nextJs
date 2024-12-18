@@ -50,7 +50,7 @@ export default function ProfileAddInfo() {
           }}
         >
           <EmojiEmotions />
-          <Typography>What's your motivation?</Typography>
+          <Typography>Whats your motivation?</Typography>
         </Box>
         <Typography
           sx={{

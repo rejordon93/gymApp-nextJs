@@ -1,8 +1,6 @@
-"use client";
 import { Paper, Container } from "@mui/material";
-import { ProfileBarChart } from "./components/profileBarChart";
+import { DayTrackerComponent } from "./components/BarChart";
 import ProfileUsersInfoPage from "./components/profileUsersInfoPage";
-import ProfileAddInfo from "./components/profileAddInfo";
 
 export default function GymProgressPage() {
   return (
@@ -16,9 +14,8 @@ export default function GymProgressPage() {
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <ProfileBarChart />
+        <DayTrackerComponent />
         <ProfileUsersInfoPage />
-        <ProfileAddInfo />
       </Paper>
     </Container>
   );

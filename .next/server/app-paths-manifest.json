@@ -1,5 +1,10 @@
 {
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/client/profile/page": "app/client/profile/page.js"
+  "/api/workouts/workoutPlan/route": "app/api/workouts/workoutPlan/route.js",
+  "/client/login/page": "app/client/login/page.js",
+  "/client/profile/[id]/page": "app/client/profile/[id]/page.js",
+  "/client/profile/page": "app/client/profile/page.js",
+  "/client/workouts/page": "app/client/workouts/page.js",
+  "/client/workouts/exercises_result/page": "app/client/workouts/exercises_result/page.js"
 }
