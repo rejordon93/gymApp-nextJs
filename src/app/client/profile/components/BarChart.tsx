@@ -20,14 +20,14 @@ export const DayTrackerComponent = () => {
         // Here you would map checkouts to uData, e.g., counting workouts per day
         const newUData = Array(7).fill(0);
         checkouts.forEach((checkout) => {
-          const checkIn = new Date(checkout.checkin); // Parsing the date string
-          const checkOut = new Date(checkout.checkout); // Parsing the date string
-          const dayIndex = new Date(checkout.date).getDay();
-          newUData[dayIndex] += 1; // Assuming each checkout represents one hour of workout
-          console.log(checkout);
-          console.log(checkIn);
-          console.log(checkOut);
+          const checkIn = new Date(checkout.checkin.replace(" at ", ", "));
+          const checkOut = new Date(checkout.checkout.replace(" at ", ", "));
+          const dayIndex = checkIn.getDay();
+
+          const duration = (checkOut - checkIn) / (1000 * 60 * 60); // Convert milliseconds to hours
+          newUData[dayIndex] += duration; // Accumulate workout hours for the corresponding day
         });
+
         setUData(newUData);
       } catch (error) {
         console.error("Failed to fetch data", error);
