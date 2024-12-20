@@ -1,6 +1,5 @@
 "use client";
-// import { useState } from "react";
-// import { WorkoutDataProps } from "@/app/types/page";
+import { useEffect } from "react";
 import {
   Box,
   Button,
@@ -19,20 +18,50 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { useRouter } from "next/navigation";
+import { AuthAppContext } from "@/context/context";
+import { ActionType } from "@/context/authReducer";
 
 export default function ProfileUsersInfoPage() {
-  // const [data] = useState<WorkoutDataProps[]>([]);
+  const { userState, userDispatch } = AuthAppContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log(userState.user.username, userState.user.email);
+  }, [userState.user.username, userState.user.email]);
+
+  const updateProfile = () => {
+    if (!userState || !userState.user) {
+      throw new Error("User not found");
+    } else {
+      const updatedUser = {
+        username: userState.user.username,
+        email: userState.user.email,
+        firstName: userState.user.firstName,
+        lastName: userState.user.lastName,
+        homeClub: userState.user.homeClub,
+        memberSince: userState.user.memberSince,
+        currentStatus: userState.user.currentStatus,
+        cellPhone: userState.user.cellPhone,
+        city: userState.user.city,
+        state: userState.user.state,
+        postalCode: userState.user.postalCode,
+      };
+      userDispatch({ type: ActionType.SET_USER, payload: updatedUser });
+    }
+  };
+  updateProfile();
 
   return (
     <Box
       sx={{
         p: 4,
-        backgroundColor: "#f4f6f8",
+        backgroundColor: "#ffffff",
         borderRadius: 2,
-        mb: 4,
         boxShadow: 3,
         maxWidth: "900px",
         mx: "auto",
+        mt: 6,
       }}
     >
       {/* Hero Section */}
@@ -42,7 +71,7 @@ export default function ProfileUsersInfoPage() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           borderRadius: 3,
-          p: 4,
+          p: 6,
           mb: 4,
           textAlign: "center",
           color: "#fff",
@@ -61,16 +90,25 @@ export default function ProfileUsersInfoPage() {
               "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%)",
           }}
         />
-        <Typography variant="h4" fontWeight="bold" sx={{ zIndex: 1 }}>
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          sx={{ zIndex: 1, position: "relative" }}
+        >
           Welcome to Gold Gym
         </Typography>
       </Box>
 
       {/* Main Profile Section */}
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
+      <Typography
+        variant="h5"
+        fontWeight="bold"
+        gutterBottom
+        sx={{ color: "#333" }}
+      >
         Gym Member Profile
       </Typography>
-      <Divider sx={{ mb: 2 }} />
+      <Divider sx={{ mb: 3 }} />
 
       <Grid container spacing={4}>
         {/* Left Column */}
@@ -78,9 +116,8 @@ export default function ProfileUsersInfoPage() {
           <List
             sx={{
               "& .MuiListItem-root": {
-                py: 1,
+                py: 1.5,
                 color: "#555",
-                fontSize: "1rem",
               },
             }}
           >
@@ -88,31 +125,55 @@ export default function ProfileUsersInfoPage() {
               <ListItemIcon>
                 <PersonIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="First Name" secondary="Ethan" />
+              <ListItemText
+                primary="User Name"
+                secondary={userState.user.username}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <PersonIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Last Name" secondary="Jordon" />
+              <ListItemText
+                primary="First Name"
+                secondary={userState.user.firstName}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <PersonIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Last Name"
+                secondary={userState.user.lastName}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <HomeIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Home Club" secondary="Seattle" />
+              <ListItemText
+                primary="Home Club"
+                secondary={userState.user.homeClub}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <CalendarTodayIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Member Since" secondary="09/7/23" />
+              <ListItemText
+                primary="Member Since"
+                secondary={userState.user.memberSince}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <PersonIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Current Status" secondary="Active" />
+              <ListItemText
+                primary="Current Status"
+                secondary={userState.user.currentStatus}
+              />
             </ListItem>
           </List>
         </Grid>
@@ -122,9 +183,8 @@ export default function ProfileUsersInfoPage() {
           <List
             sx={{
               "& .MuiListItem-root": {
-                py: 1,
+                py: 1.5,
                 color: "#555",
-                fontSize: "1rem",
               },
             }}
           >
@@ -132,48 +192,57 @@ export default function ProfileUsersInfoPage() {
               <ListItemIcon>
                 <EmailIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="E-mail" secondary="react1@gmail.com" />
+              <ListItemText primary="E-mail" secondary={userState.user.email} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <PhoneIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Cell Phone" secondary="222-222-222" />
+              <ListItemText
+                primary="Cell Phone"
+                secondary={userState.user.cellPhone}
+              />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <LocationCityIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="City" secondary="Bellevue" />
+              <ListItemText primary="City" secondary={userState.user.city} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <LocationCityIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="State" secondary="WA" />
+              <ListItemText primary="State" secondary={userState.user.state} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <LocationCityIcon color="primary" />
               </ListItemIcon>
-              <ListItemText primary="Zip/Postal" secondary="98003" />
+              <ListItemText
+                primary="Zip/Postals"
+                secondary={userState.user.postalCode}
+              />
             </ListItem>
           </List>
         </Grid>
       </Grid>
 
       <Button
+        onClick={() => router.push("/client/updateProfile")}
         startIcon={<EditIcon />}
         variant="contained"
         color="primary"
         sx={{
-          mt: 3,
+          mt: 4,
           fontWeight: "bold",
           fontSize: "1rem",
           textTransform: "uppercase",
+          px: 4,
+          py: 1.5,
         }}
       >
-        Update Profile
+        Add Info
       </Button>
     </Box>
   );

@@ -3,7 +3,7 @@ import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 interface ProfileType {
-  id: number;
+  id?: number;
   firstName: string;
   lastName: string;
   email: string;

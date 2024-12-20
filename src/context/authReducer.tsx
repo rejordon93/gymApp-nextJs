@@ -31,6 +31,15 @@ interface User {
   email: string;
   username: string;
   token?: string;
+  firstName?: string;
+  lastName?: string;
+  homeClub?: string;
+  memberSince?: string;
+  currentStatus?: string;
+  cellPhone?: number;
+  city?: string;
+  state?: string;
+  postalCode?: number;
 }
 
 // Interface for the API request context, which includes the error message, loading status, and success flag.

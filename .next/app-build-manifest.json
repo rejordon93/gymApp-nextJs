@@ -6,15 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/client/profile/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/profile/page.js"
-    ],
-    "/api/workouts/workoutPlan/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/workoutPlan/route.js"
+      "static/chunks/app/page.js"
     ],
     "/client/login/page": [
       "static/chunks/webpack.js",
@@ -26,40 +21,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/users/login/route.js"
     ],
-    "/api/workouts/deleteWorkoutPlan/route": [
+    "/client/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/deleteWorkoutPlan/route.js"
+      "static/chunks/app/client/profile/page.js"
     ],
-    "/client/profile/[id]/page": [
+    "/api/workouts/workoutPlan/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/profile/[id]/page.js"
+      "static/chunks/app/api/workouts/workoutPlan/route.js"
     ],
-    "/client/workouts/page": [
+    "/client/updateProfile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/page.js"
-    ],
-    "/client/workouts/exercises_result/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/exercises_result/page.js"
-    ],
-    "/api/workouts/profilePlan/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/profilePlan/route.js"
-    ],
-    "/api/workouts/userWorkout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/userWorkout/route.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/client/updateProfile/page.js"
     ]
   }
 }

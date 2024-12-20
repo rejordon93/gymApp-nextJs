@@ -18,6 +18,7 @@ export default function WorkoutsPage() {
   const [inputError, setInputError] = useState(false);
 
   const { workoutState, workoutDispatch } = UserWorkoutContext();
+  console.log(workoutState);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

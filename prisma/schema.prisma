@@ -8,60 +8,61 @@ generator client {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  username       String          @unique
-  email          String          @unique
-  password       String          // Ensure encryption in app logic
-  createdAt      DateTime        @default(now())
-  userWorkouts   UserWorkout[]   // One-to-many relationship
-  workoutPlans   WorkoutPlan[]   // One-to-many relationship
-}
-
-model WorkoutPlan {
-  id             Int     @id @default(autoincrement())
-  checkin        DateTime  @default(now())
-  weight         Int
-  updateWeighIn  Int
-  workoutReview  String? 
-  checkout      DateTime  @default(now())
-  userPlanId     Int @unique
-  profilePlan ProfilePlan[] 
-  user User @relation(fields: [userPlanId], references: [id])
+  id            Int             @id @default(autoincrement())
+  username      String          @unique
+  email         String          @unique
+  password      String          // Ensure encryption in app logic
+  createdAt     DateTime        @default(now())
+  userWorkouts  UserWorkout[]   // One-to-many relationship
+  workoutPlans  WorkoutPlan[]   // One-to-many relationship
+  profilePlan   ProfilePlan?    // One-to-one relationship
 }
 
 model ProfilePlan {
-  id Int @id @default(autoincrement())
-  firstName String 
-  lastName String 
-  email String
-  homeClub String?
+  id         Int      @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  email      String
+  homeClub   String?
   memberSince DateTime?
-  cellPhone String?
-  city String?
-  zipPostal String?
-  workoutPlan WorkoutPlan @relation(fields: [workoutPlanId], references: [id]) 
-  workoutPlanId Int @unique
+  cellPhone  String?
+  city       String?
+  zipPostal  String?
+  userId     Int      @unique // Ensure one-to-one
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model WorkoutPlan {
+  id            Int              @id @default(autoincrement())
+  checkin       DateTime         @default(now())
+  weight        Int
+  updateWeighIn Int
+  workoutReview String? 
+  checkout      DateTime         @default(now())
+  userPlanId    Int              @unique
+  user          User             @relation(fields: [userPlanId], references: [id])
+  userWorkouts  UserWorkout[]    @relation("WorkoutToUserWorkout")
 }
 
 model UserWorkout {
-  id                Int                  @id @default(autoincrement())
+  id                Int                 @id @default(autoincrement())
   userId            Int
   dayOfWeek         String
-  createdAt         DateTime             @default(now())
-  editedAt          DateTime             @default(now())
+  createdAt         DateTime            @default(now())
+  editedAt          DateTime            @default(now())
   completed         Boolean
-  favoritedExercise FavoritedExercise[]   @relation("UserWorkoutFavoritedExercuses")
-
-  user User @relation(fields: [userId], references: [id])
+  user              User                @relation(fields: [userId], references: [id])
+  workoutPlans      WorkoutPlan[]       @relation("WorkoutToUserWorkout") // Many-to-many relationship
+  favoritedExercise FavoritedExercise[] @relation("UserWorkoutFavoritedExercises")
 }
 
 model FavoritedExercise {
   id               Int                  @id @default(autoincrement())
   name             String               @unique
-  equipment        String  
+  equipment        String
   gifUrl           String
   instructions     String
   secondaryMuscles String
   target           String
-  userWorkout     UserWorkout[]        @relation("UserWorkoutFavoritedExercuses")
+  userWorkouts     UserWorkout[]        @relation("UserWorkoutFavoritedExercises")
 }
