@@ -28,6 +28,7 @@ export type Action = SetErrorAction | SetUserAction | SetLoadingAction;
 
 // User interface to define the shape of the user object.
 interface User {
+  id?: number;
   email: string;
   username: string;
   token?: string;
@@ -36,10 +37,10 @@ interface User {
   homeClub?: string;
   memberSince?: string;
   currentStatus?: string;
-  cellPhone?: number;
+  cellPhone?: string;
   city?: string;
   state?: string;
-  postalCode?: number;
+  zipCode?: string;
 }
 
 // Interface for the API request context, which includes the error message, loading status, and success flag.
@@ -61,6 +62,15 @@ export const AUTH_INITIAL_STATE: UserState = {
     email: "",
     username: "",
     token: "",
+    firstName: "",
+    lastName: "",
+    homeClub: "",
+    memberSince: "",
+    currentStatus: "",
+    cellPhone: "",
+    city: "",
+    state: "",
+    zipCode: "",
   },
   apiRequstContext: {
     error: null,

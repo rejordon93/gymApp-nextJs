@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -21,36 +21,23 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useRouter } from "next/navigation";
 import { AuthAppContext } from "@/context/context";
 import { ActionType } from "@/context/authReducer";
+import axios from "axios";
 
 export default function ProfileUsersInfoPage() {
   const { userState, userDispatch } = AuthAppContext();
   const router = useRouter();
 
   useEffect(() => {
-    console.log(userState.user.username, userState.user.email);
-  }, [userState.user.username, userState.user.email]);
-
-  const updateProfile = () => {
-    if (!userState || !userState.user) {
-      throw new Error("User not found");
-    } else {
-      const updatedUser = {
-        username: userState.user.username,
-        email: userState.user.email,
-        firstName: userState.user.firstName,
-        lastName: userState.user.lastName,
-        homeClub: userState.user.homeClub,
-        memberSince: userState.user.memberSince,
-        currentStatus: userState.user.currentStatus,
-        cellPhone: userState.user.cellPhone,
-        city: userState.user.city,
-        state: userState.user.state,
-        postalCode: userState.user.postalCode,
-      };
-      userDispatch({ type: ActionType.SET_USER, payload: updatedUser });
-    }
-  };
-  updateProfile();
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("/api/workouts/profilePlan");
+        console.log("Response", res.data);
+      } catch (error) {
+        console.error("Error", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <Box
@@ -221,7 +208,7 @@ export default function ProfileUsersInfoPage() {
               </ListItemIcon>
               <ListItemText
                 primary="Zip/Postals"
-                secondary={userState.user.postalCode}
+                secondary={userState.user.zipCode}
               />
             </ListItem>
           </List>

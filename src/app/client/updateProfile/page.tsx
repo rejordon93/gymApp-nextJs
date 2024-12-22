@@ -2,39 +2,37 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TextField, Button, Grid, Typography, Container } from "@mui/material";
+import axios from "axios";
 import { AuthAppContext } from "@/context/context";
 import { ActionType } from "@/context/authReducer";
 
 export default function UpdateProfileInfo() {
-  const { userState, userDispatch } = AuthAppContext();
   const router = useRouter();
+  const { userState, userDispatch } = AuthAppContext();
   const [formData, setFormData] = useState({
-    username: userState.user.username,
-    email: userState.user.email,
-    firstName: userState.user.firstName,
-    lastName: userState.user.lastName,
-    homeClub: userState.user.homeClub,
-    memberSince: userState.user.memberSince,
-    currentStatus: userState.user.currentStatus,
-    cellPhone: userState.user.cellPhone,
-    city: userState.user.city,
-    state: userState.user.state,
-    postalCode: userState.user.postalCode,
+    firstName: "",
+    lastName: "",
+    homeClub: "",
+    memberSince: "",
+    currentStatus: "",
+    cellPhone: "",
+    city: "",
+    state: "",
+    zipCode: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    userDispatch({
-      type: ActionType.SET_USER,
-      payload: { ...userState.user, [name]: value },
-    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+    console.log("Form Data:", formData); // Log form data for debugging
     try {
+      const res = await axios.post("/api/workouts/profilePlan", formData);
+      console.log("Response", res.data);
+      userDispatch({ type: ActionType.SET_USER, payload: res.data });
       router.push("/client/profile");
     } catch (error) {
       console.error("Error", error);
@@ -81,7 +79,7 @@ export default function UpdateProfileInfo() {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Member Since"
@@ -92,7 +90,7 @@ export default function UpdateProfileInfo() {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Current Status"
@@ -103,30 +101,18 @@ export default function UpdateProfileInfo() {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              placeholder="Enter Email"
-              value={formData.email}
-              onChange={handleChange}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Cell Phone"
               name="cellPhone"
-              type="tel"
               placeholder="Enter Cell Phone"
               value={formData.cellPhone}
               onChange={handleChange}
               variant="outlined"
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
@@ -149,17 +135,18 @@ export default function UpdateProfileInfo() {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Zip Postal"
-              name="postalCode"
-              placeholder="Enter Zip Postal"
-              value={formData.postalCode}
+              label="Zip Code"
+              name="zipCode"
+              placeholder="Enter Zip Code"
+              value={formData.zipCode}
               onChange={handleChange}
               variant="outlined"
             />
           </Grid>
+
           <Grid item xs={12}>
             <Button fullWidth type="submit" variant="contained" color="primary">
               Update Profile

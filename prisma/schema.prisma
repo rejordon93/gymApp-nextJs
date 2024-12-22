@@ -19,18 +19,20 @@ model User {
 }
 
 model ProfilePlan {
-  id         Int      @id @default(autoincrement())
-  firstName  String
-  lastName   String
-  email      String
-  homeClub   String?
-  memberSince DateTime?
-  cellPhone  String?
-  city       String?
-  zipPostal  String?
-  userId     Int      @unique // Ensure one-to-one
-  user       User     @relation(fields: [userId], references: [id])
+  id        Int     @id @default(autoincrement())
+  firstName String
+  lastName  String
+  homeClub String?
+  memberSince String?
+  currentStatus String?
+  cellPhone String?
+  city String?
+  state String?
+  zipCode String?
+  userId    Int?    @unique
+  user      User?   @relation(fields: [userId], references: [id])
 }
+
 
 model WorkoutPlan {
   id            Int              @id @default(autoincrement())

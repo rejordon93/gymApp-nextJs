@@ -1,6 +1,7 @@
 {
+  "/api/workouts/workoutPlan/route": "app/api/workouts/workoutPlan/route.js",
+  "/api/workouts/profilePlan/route": "app/api/workouts/profilePlan/route.js",
   "/client/login/page": "app/client/login/page.js",
   "/client/updateProfile/page": "app/client/updateProfile/page.js",
-  "/page": "app/page.js",
   "/client/profile/page": "app/client/profile/page.js"
 }
