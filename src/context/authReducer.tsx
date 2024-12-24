@@ -52,7 +52,7 @@ interface ApiRequstContext {
 
 // The overall state of the application, which combines all contexts and the user.
 export interface UserState {
-  apiRequstContext: ApiRequstContext;
+  apiRequestContext: ApiRequstContext;
   user: User;
 }
 
@@ -72,7 +72,7 @@ export const AUTH_INITIAL_STATE: UserState = {
     state: "",
     zipCode: "",
   },
-  apiRequstContext: {
+  apiRequestContext: {
     error: null,
     isLoading: false,
     success: false,
@@ -86,8 +86,8 @@ export default function reducer(state: UserState, action: Action): UserState {
     case ActionType.SET_ERROR:
       return {
         ...state,
-        apiRequstContext: {
-          ...state.apiRequstContext,
+        apiRequestContext: {
+          ...state.apiRequestContext,
           error: action.payload, // Set error message.
           success: false, // Mark request as unsuccessful.
         },
@@ -97,9 +97,9 @@ export default function reducer(state: UserState, action: Action): UserState {
     case ActionType.SET_USER:
       return {
         ...state,
-        user: action.payload, // Update the user object.
-        apiRequstContext: {
-          ...state.apiRequstContext,
+        user: { ...state.user, ...action.payload }, // Update the user object.
+        apiRequestContext: {
+          ...state.apiRequestContext,
           success: true, // Mark request as successful.
           error: null, // Clear any errors.
         },
@@ -109,8 +109,8 @@ export default function reducer(state: UserState, action: Action): UserState {
     case ActionType.SET_LOADING:
       return {
         ...state,
-        apiRequstContext: {
-          ...state.apiRequstContext,
+        apiRequestContext: {
+          ...state.apiRequestContext,
           isLoading: action.payload, // Update loading status.
         },
       };

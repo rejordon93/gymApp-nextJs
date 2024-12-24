@@ -6,6 +6,21 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/client/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/profile/page.js"
+    ],
+    "/api/profile/get/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/profile/get/route.js"
+    ],
+    "/api/workouts/getWorkoutPlan/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/workouts/getWorkoutPlan/route.js"
+    ],
     "/client/logout/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -26,30 +41,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/users/login/route.js"
     ],
-    "/client/profile/page": [
+    "/client/workouts/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/profile/page.js"
+      "static/chunks/app/client/workouts/page.js"
+    ],
+    "/client/profileUpdateForm/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/profileUpdateForm/page.js"
+    ],
+    "/api/profile/patch/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/profile/patch/route.js"
     ],
     "/api/workouts/workoutPlan/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/workouts/workoutPlan/route.js"
-    ],
-    "/client/updateProfile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/updateProfile/page.js"
-    ],
-    "/api/workouts/profilePlan/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/profilePlan/route.js"
-    ],
-    "/client/workouts/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/page.js"
     ]
   }
 }

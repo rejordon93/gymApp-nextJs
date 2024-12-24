@@ -74,7 +74,7 @@ export default function LoginPage() {
           color="text.primary"
           sx={{ mb: 2 }}
         >
-          {userState.apiRequstContext.isLoading ? "Processing..." : "Login"}
+          {userState.apiRequestContext.isLoading ? "Processing..." : "Login"}
         </Typography>
         <Divider sx={{ width: "100%", mb: 2 }} />
 
@@ -104,9 +104,9 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          {userState.apiRequstContext.error && (
+          {userState.apiRequestContext.error && (
             <Alert severity="error" sx={{ mt: 2, textAlign: "center" }}>
-              {userState.apiRequstContext.error}
+              {userState.apiRequestContext.error}
             </Alert>
           )}
 
@@ -119,7 +119,7 @@ export default function LoginPage() {
             onClick={onLogin}
             disabled={isButtonDisabled}
           >
-            {userState.apiRequstContext.isLoading ? "Processing..." : "Login"}
+            {userState.apiRequestContext.isLoading ? "Processing..." : "Login"}
           </Button>
 
           <Typography variant="body2" align="center" color="text.secondary">

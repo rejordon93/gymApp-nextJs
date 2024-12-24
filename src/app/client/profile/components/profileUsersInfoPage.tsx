@@ -20,24 +20,59 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useRouter } from "next/navigation";
 import { AuthAppContext } from "@/context/context";
-import { ActionType } from "@/context/authReducer";
+// import { ActionType } from "@/context/authReducer";
 import axios from "axios";
 
+interface ProfileType {
+  firstName: string;
+  lastName: string;
+  homeClub?: string;
+  memberSince?: string;
+  currentStatus?: string;
+  cellPhone?: string;
+  city?: string;
+  state: string;
+  zipCode: string;
+}
+
 export default function ProfileUsersInfoPage() {
-  const { userState, userDispatch } = AuthAppContext();
+  const { userState } = AuthAppContext();
+  const [profileData, setProfileData] = useState<ProfileType | null>(null);
+
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("/api/workouts/profilePlan");
-        console.log("Response", res.data);
+        const res = await axios.get("/api/profile/get");
+        const data = Array.isArray(res.data) ? res.data[0] : res.data;
+        setProfileData(data);
       } catch (error) {
-        console.error("Error", error);
+        console.error("Error fetching profile data:", error);
       }
     };
     fetchData();
   }, []);
+
+  console.log("User State", profileData);
+
+  // Update button click send checkIn into workoutPlan
+  const handleCheckInBtn = async () => {
+    try {
+      const data = {
+        checkIn: new Date(),
+        checkOut: new Date(),
+        weight: 222,
+        updateWeighIn: 200,
+        workoutReview: "Test",
+        userPlanId: 1,
+      };
+      const response = await axios.post("/api/workouts/workoutPlan", data);
+      console.log("Check-in successful", response.data);
+    } catch (error) {
+      console.error("Not working ", error);
+    }
+  };
 
   return (
     <Box
@@ -78,159 +113,176 @@ export default function ProfileUsersInfoPage() {
           }}
         />
         <Typography
-          variant="h4"
+          variant="h3"
           fontWeight="bold"
-          sx={{ zIndex: 1, position: "relative" }}
+          sx={{ zIndex: 1, position: "relative", mb: 2 }}
         >
           Welcome to Gold Gym
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          sx={{ zIndex: 1, position: "relative", opacity: 0.9 }}
+        >
+          Your fitness journey starts here. Let’s get stronger together.
         </Typography>
       </Box>
 
       {/* Main Profile Section */}
-      <Typography
-        variant="h5"
-        fontWeight="bold"
-        gutterBottom
-        sx={{ color: "#333" }}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 2 }}
       >
-        Gym Member Profile
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
+        <Typography variant="h5" fontWeight="bold" sx={{ color: "#333" }}>
+          Gym Member Profile
+        </Typography>
+        <Button onClick={handleCheckInBtn} variant="contained" color="primary">
+          Check In
+        </Button>
+      </Box>
+
+      <Divider sx={{ mb: 3, borderColor: "#ddd" }} />
 
       <Grid container spacing={4}>
         {/* Left Column */}
         <Grid item xs={12} md={6}>
-          <List
-            sx={{
-              "& .MuiListItem-root": {
-                py: 1.5,
-                color: "#555",
-              },
-            }}
-          >
-            <ListItem>
-              <ListItemIcon>
-                <PersonIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="User Name"
-                secondary={userState.user.username}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <PersonIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="First Name"
-                secondary={userState.user.firstName}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <PersonIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Last Name"
-                secondary={userState.user.lastName}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <HomeIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Home Club"
-                secondary={userState.user.homeClub}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <CalendarTodayIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Member Since"
-                secondary={userState.user.memberSince}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <PersonIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Current Status"
-                secondary={userState.user.currentStatus}
-              />
-            </ListItem>
+          <List>
+            {profileData ? (
+              [
+                {
+                  icon: <PersonIcon color="primary" />,
+                  label: "User Name",
+                  value: userState.user.username,
+                },
+                {
+                  icon: <PersonIcon color="primary" />,
+                  label: "First Name",
+                  value: profileData.firstName,
+                },
+                {
+                  icon: <PersonIcon color="primary" />,
+                  label: "Last Name",
+                  value: profileData?.lastName,
+                },
+                {
+                  icon: <HomeIcon color="primary" />,
+                  label: "Home Club",
+                  value: profileData?.homeClub,
+                },
+                {
+                  icon: <CalendarTodayIcon color="primary" />,
+                  label: "Member Since",
+                  value: profileData?.memberSince,
+                },
+                {
+                  icon: <PersonIcon color="primary" />,
+                  label: "Current Status",
+                  value: profileData?.currentStatus,
+                },
+              ].map(({ icon, label, value }, index) => (
+                <ListItem key={index} sx={{ py: 1.5 }}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText
+                    primary={label}
+                    secondary={value || "Not available"}
+                    primaryTypographyProps={{ fontWeight: "bold" }}
+                    secondaryTypographyProps={{ color: "textSecondary" }}
+                  />
+                </ListItem>
+              ))
+            ) : (
+              <Typography variant="body2" color="textSecondary">
+                Loading profile data...
+              </Typography>
+            )}
           </List>
         </Grid>
 
         {/* Right Column */}
         <Grid item xs={12} md={6}>
-          <List
-            sx={{
-              "& .MuiListItem-root": {
-                py: 1.5,
-                color: "#555",
+          <List>
+            {[
+              {
+                icon: <EmailIcon color="primary" />,
+                label: "E-mail",
+                value: userState.user.email,
               },
-            }}
-          >
-            <ListItem>
-              <ListItemIcon>
-                <EmailIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="E-mail" secondary={userState.user.email} />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <PhoneIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Cell Phone"
-                secondary={userState.user.cellPhone}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <LocationCityIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="City" secondary={userState.user.city} />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <LocationCityIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="State" secondary={userState.user.state} />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <LocationCityIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Zip/Postals"
-                secondary={userState.user.zipCode}
-              />
-            </ListItem>
+              {
+                icon: <PhoneIcon color="primary" />,
+                label: "Cell Phone",
+                value: profileData?.cellPhone,
+              },
+              {
+                icon: <LocationCityIcon color="primary" />,
+                label: "City",
+                value: profileData?.city,
+              },
+              {
+                icon: <LocationCityIcon color="primary" />,
+                label: "State",
+                value: profileData?.state,
+              },
+              {
+                icon: <LocationCityIcon color="primary" />,
+                label: "Zip/Postals",
+                value: profileData?.zipCode,
+              },
+            ].map(({ icon, label, value }, index) => (
+              <ListItem key={index} sx={{ py: 1.5 }}>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText
+                  primary={label}
+                  secondary={value || "Not available"}
+                  primaryTypographyProps={{ fontWeight: "bold" }}
+                  secondaryTypographyProps={{ color: "textSecondary" }}
+                />
+              </ListItem>
+            ))}
           </List>
         </Grid>
       </Grid>
 
-      <Button
-        onClick={() => router.push("/client/updateProfile")}
-        startIcon={<EditIcon />}
-        variant="contained"
-        color="primary"
+      {/* Action Buttons */}
+      <Box
         sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           mt: 4,
-          fontWeight: "bold",
-          fontSize: "1rem",
-          textTransform: "uppercase",
-          px: 4,
-          py: 1.5,
         }}
       >
-        Add Info
-      </Button>
+        <Button
+          onClick={() => router.push("/client/profileUpdateForm")}
+          startIcon={<EditIcon />}
+          variant="contained"
+          color="primary"
+          sx={{
+            fontWeight: "bold",
+            fontSize: "1rem",
+            textTransform: "uppercase",
+            px: 4,
+            py: 1.5,
+          }}
+        >
+          Update Profile
+        </Button>
+        <Button
+          onClick={() => router.push("/client/workouts")}
+          startIcon={<EditIcon />}
+          variant="contained"
+          color="primary"
+          sx={{
+            fontWeight: "bold",
+            fontSize: "1rem",
+            textTransform: "uppercase",
+            px: 4,
+            py: 1.5,
+          }}
+        >
+          Workouts
+        </Button>
+      </Box>
     </Box>
   );
 }

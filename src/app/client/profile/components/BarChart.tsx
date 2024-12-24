@@ -13,7 +13,7 @@ export const DayTrackerComponent = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get("/api/workouts/workoutPlan");
+        const response = await axios.get("/api/workouts/getWorkoutPlan");
         const checkouts = response.data.checkouts;
         setCheckOut(checkouts);
 
