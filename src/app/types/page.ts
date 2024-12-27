@@ -20,3 +20,24 @@ export type ExercisesInterfaces = {
   secondaryMuscles: string[];
   target: string;
 };
+
+export type ProfileType = {
+  firstName: string;
+  lastName: string;
+  homeClub?: string;
+  memberSince?: string;
+  currentStatus?: string;
+  cellPhone?: string;
+  city?: string;
+  state: string;
+  zipCode: string;
+  userId: number;
+};
+export type WorkoutPlanInput = {
+  userPlanId?: number;
+  checkin?: Date | string;
+  weight?: number;
+  updateWeighIn?: number;
+  workoutReview?: string;
+  checkout?: Date | string | null;
+};

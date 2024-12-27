@@ -1,7 +1,11 @@
 {
+  "/api/workouts/deleteWorkoutPlan/route": "app/api/workouts/deleteWorkoutPlan/route.js",
+  "/api/users/logout/route": "app/api/users/logout/route.js",
+  "/api/users/login/route": "app/api/users/login/route.js",
+  "/api/profile/get/route": "app/api/profile/get/route.js",
+  "/api/workouts/getWorkoutPlan/route": "app/api/workouts/getWorkoutPlan/route.js",
   "/api/workouts/workoutPlan/route": "app/api/workouts/workoutPlan/route.js",
   "/client/profile/page": "app/client/profile/page.js",
-  "/client/profileUpdateForm/page": "app/client/profileUpdateForm/page.js",
-  "/client/workouts/page": "app/client/workouts/page.js",
+  "/client/logout/page": "app/client/logout/page.js",
   "/client/login/page": "app/client/login/page.js"
 }

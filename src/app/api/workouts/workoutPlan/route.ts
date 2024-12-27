@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
-
-interface WorkoutPlanInput {
-  userPlanId: number;
-  checkin: Date | string;
-  weight: number;
-  updateWeighIn: number;
-  workoutReview: string;
-  checkout: Date | string;
-}
+import { WorkoutPlanInput } from "@/app/types/page";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,7 +12,7 @@ export async function POST(req: NextRequest) {
       weight,
       updateWeighIn,
       workoutReview,
-      checkout,
+      // checkout,
     } = body;
 
     // Validate user token
@@ -29,15 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No user logged in" }, { status: 401 });
     }
 
-    // Validate required input fields
-    if (
-      !userPlanId ||
-      !checkin ||
-      !weight ||
-      !updateWeighIn ||
-      !workoutReview ||
-      !checkout
-    ) {
+    if (!userPlanId || !checkin) {
       return NextResponse.json(
         { error: "Missing or invalid required fields" },
         { status: 400 }
@@ -45,31 +29,15 @@ export async function POST(req: NextRequest) {
     }
 
     const checkinDate = new Date(checkin);
-    const checkoutDate = new Date(checkout);
-
-    if (isNaN(checkinDate.getTime()) || isNaN(checkoutDate.getTime())) {
-      return NextResponse.json(
-        { error: "Invalid date format for checkin or checkout" },
-        { status: 400 }
-      );
-    }
-
-    if (checkinDate >= checkoutDate) {
-      return NextResponse.json(
-        { error: "Checkout time must be after checkin time" },
-        { status: 400 }
-      );
-    }
-
     // Create workout plan in the database
     const planWorkout = await prisma.workoutPlan.create({
       data: {
         userPlanId,
         checkin: checkinDate,
-        weight,
-        updateWeighIn,
+        weight: weight || 0,
+        updateWeighIn: updateWeighIn || 0,
         workoutReview,
-        checkout: checkoutDate,
+        // checkout
       },
     });
 
@@ -81,9 +49,24 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    // Check if error is null or undefined
+    if (!error) {
+      return NextResponse.json(
+        { error: "An unexpected error occurred. Please try again later." },
+        { status: 500 }
+      );
+    }
+
+    // If error is an object, log it
+    if (error instanceof Error) {
+      console.error("Error processing the request:", error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // Fallback for unknown errors
     console.error("Error processing the request:", error);
     return NextResponse.json(
-      { error: "An internal server error occurred. Please try again later." },
+      { error: "An unexpected error occurred. Please try again later." },
       { status: 500 }
     );
   }

@@ -20,24 +20,13 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useRouter } from "next/navigation";
 import { AuthAppContext } from "@/context/context";
-// import { ActionType } from "@/context/authReducer";
+import { ProfileType } from "@/app/types/page";
 import axios from "axios";
-
-interface ProfileType {
-  firstName: string;
-  lastName: string;
-  homeClub?: string;
-  memberSince?: string;
-  currentStatus?: string;
-  cellPhone?: string;
-  city?: string;
-  state: string;
-  zipCode: string;
-}
 
 export default function ProfileUsersInfoPage() {
   const { userState } = AuthAppContext();
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
+  const [btn, setBtn] = useState(true);
 
   const router = useRouter();
 
@@ -54,21 +43,38 @@ export default function ProfileUsersInfoPage() {
     fetchData();
   }, []);
 
-  console.log("User State", profileData);
-
-  // Update button click send checkIn into workoutPlan
   const handleCheckInBtn = async () => {
+    const data = {
+      userPlanId: profileData?.userId,
+      checkin: new Date().toISOString(),
+      weight: 0,
+      updateWeighIn: 0,
+      workoutReview: "",
+      checkout: new Date().toISOString(),
+    };
+    console.log("Check-in button clicked", data);
     try {
-      const data = {
-        checkIn: new Date(),
-        checkOut: new Date(),
-        weight: 222,
-        updateWeighIn: 200,
-        workoutReview: "Test",
-        userPlanId: 1,
-      };
-      const response = await axios.post("/api/workouts/workoutPlan", data);
-      console.log("Check-in successful", response.data);
+      const res = await axios.post("/api/workouts/workoutPlan", data);
+      setBtn(false);
+      console.log("Response", profileData);
+      console.log("Check-in successful", res.data);
+    } catch (error) {
+      console.error("Not working ", error);
+    }
+  };
+
+  const handleCheckOutBtn = async () => {
+    console.log("Check-out button clicked");
+
+    const data = {
+      userPlanId: profileData?.userId,
+      checkout: new Date().toISOString(),
+    };
+    console.log("Check-out button clicked", data);
+    try {
+      const res = await axios.patch("/api/workouts/updateWorkoutPlan", data);
+      console.log("Check-out successful", res.data);
+      setBtn(true);
     } catch (error) {
       console.error("Not working ", error);
     }
@@ -137,9 +143,23 @@ export default function ProfileUsersInfoPage() {
         <Typography variant="h5" fontWeight="bold" sx={{ color: "#333" }}>
           Gym Member Profile
         </Typography>
-        <Button onClick={handleCheckInBtn} variant="contained" color="primary">
-          Check In
-        </Button>
+        {btn ? (
+          <Button
+            onClick={handleCheckInBtn}
+            variant="contained"
+            color="primary"
+          >
+            Check In
+          </Button>
+        ) : (
+          <Button
+            onClick={handleCheckOutBtn}
+            variant="contained"
+            color="warning"
+          >
+            Check Out
+          </Button>
+        )}
       </Box>
 
       <Divider sx={{ mb: 3, borderColor: "#ddd" }} />
