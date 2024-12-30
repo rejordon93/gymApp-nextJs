@@ -5,51 +5,41 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/profile/patch/route.js"
     ],
-    "/layout": [
+    "/api/workouts/getWorkoutPlan/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
-    ],
-    "/client/logout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/logout/page.js"
-    ],
-    "/api/users/logout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/logout/route.js"
-    ],
-    "/client/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/login/page.js"
-    ],
-    "/api/users/login/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/login/route.js"
-    ],
-    "/client/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/profile/page.js"
+      "static/chunks/app/api/workouts/getWorkoutPlan/route.js"
     ],
     "/api/profile/get/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/profile/get/route.js"
     ],
-    "/api/workouts/getWorkoutPlan/route": [
+    "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/getWorkoutPlan/route.js"
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
     "/client/profileUpdateForm/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/client/profileUpdateForm/page.js"
+    ],
+    "/client/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/profile/page.js"
+    ],
+    "/api/visits/usersVisits/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/visits/usersVisits/route.js"
+    ],
+    "/api/visits/updateUsersVisits/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/visits/updateUsersVisits/route.js"
     ]
   }
 }

@@ -13,6 +13,7 @@ interface ProfileType {
   state: string;
   zipCode: string;
 }
+
 export async function PATCH(req: NextRequest) {
   try {
     const body: ProfileType = await req.json();
@@ -64,7 +65,24 @@ export async function PATCH(req: NextRequest) {
           zipCode,
         },
       });
+    } else {
+      // No profile exists, create a new profile
+      profileResponse = await prisma.profilePlan.create({
+        data: {
+          userId,
+          firstName,
+          lastName,
+          homeClub,
+          memberSince,
+          currentStatus,
+          cellPhone,
+          city,
+          state,
+          zipCode,
+        },
+      });
     }
+
     console.log(profileResponse);
 
     return NextResponse.json(profileResponse, { status: 200 });
