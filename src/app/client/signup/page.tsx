@@ -15,7 +15,7 @@ import {
 
 export default function SignupPage() {
   const router = useRouter();
-  const [state, dispatch] = useReducer(reducer, AUTH_INITIAL_STATE);
+  const [userState, userdispatch] = useReducer(reducer, AUTH_INITIAL_STATE);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +23,7 @@ export default function SignupPage() {
 
   const onSignup = async () => {
     try {
-      dispatch({ type: ActionType.SET_LOADING, payload: true });
+      userdispatch({ type: ActionType.SET_LOADING, payload: true });
       const response = await axios.post("/api/users/signup", {
         username,
         password,
@@ -32,12 +32,12 @@ export default function SignupPage() {
       console.log("Signup success", response.data);
       router.push("/client/login");
     } catch (error) {
-      dispatch({
+      userdispatch({
         type: ActionType.SET_ERROR,
         payload: error instanceof Error ? error.message : String(error),
       });
     } finally {
-      dispatch({ type: ActionType.SET_LOADING, payload: false });
+      userdispatch({ type: ActionType.SET_LOADING, payload: false });
     }
   };
 
@@ -68,7 +68,7 @@ export default function SignupPage() {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          {state.apiRequstContext.isLoading ? "Processing" : "Signup"}
+          {userState.apiRequestContext.isLoading ? "Processing" : "Signup"}
         </Typography>
         <Box component="hr" sx={{ mb: 4, borderColor: "divider" }} />
 
@@ -99,9 +99,9 @@ export default function SignupPage() {
           required
         />
 
-        {state.apiRequstContext.error && (
+        {userState.apiRequestContext.error && (
           <Typography color="error" sx={{ mt: 1 }}>
-            {state.apiRequstContext.error}
+            {userState.apiRequestContext.error}
           </Typography>
         )}
 
@@ -110,7 +110,7 @@ export default function SignupPage() {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={buttonDisabled || state.apiRequstContext.isLoading}
+          disabled={buttonDisabled || userState.apiRequestContext.isLoading}
           sx={{
             mt: 3,
             py: 1.5,
@@ -120,7 +120,7 @@ export default function SignupPage() {
             "&:hover": { transform: "scale(1.02)" },
           }}
         >
-          {state.apiRequstContext.isLoading ? (
+          {userState.apiRequestContext.isLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (
             "Signup"

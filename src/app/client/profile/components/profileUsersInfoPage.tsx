@@ -1,5 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ProfileType } from "@/app/types/page";
+import { useContext } from "react";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -11,20 +15,26 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import PersonIcon from "@mui/icons-material/Person";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
-import HomeIcon from "@mui/icons-material/Home";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { useRouter } from "next/navigation";
+import {
+  Edit,
+  Person,
+  Email,
+  Phone,
+  Home,
+  LocationCity,
+  CalendarToday,
+} from "@mui/icons-material";
+
 import { AuthAppContext } from "@/context/context";
-import { ProfileType } from "@/app/types/page";
-import axios from "axios";
+import { VisitsContext } from "@/context/context";
+import { ActionType } from "@/context/visitsReducer";
 
 export default function ProfileUsersInfoPage() {
+  const context = useContext(VisitsContext)!;
+
   const { userState } = AuthAppContext();
+  const { visitState, visitDispatch } = context;
+
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
   const [btn, setBtn] = useState(true);
 
@@ -45,38 +55,33 @@ export default function ProfileUsersInfoPage() {
 
   const handleCheckInBtn = async () => {
     const data = {
-      userPlanId: profileData?.userId,
+      userId: profileData?.userId,
       checkin: new Date().toISOString(),
       weight: 0,
       updateWeighIn: 0,
       workoutReview: "",
-      checkout: new Date().toISOString(),
     };
-    console.log("Check-in button clicked", data);
     try {
-      const res = await axios.post("/api/workouts/workoutPlan", data);
+      const res = await axios.post("/api/visits/usersVisits", data);
+      visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
+      console.log("Visit updated successfully:", res.data);
       setBtn(false);
-      console.log("Response", profileData);
-      console.log("Check-in successful", res.data);
     } catch (error) {
-      console.error("Not working ", error);
+      console.error("Error during check-in:", error);
     }
   };
-
   const handleCheckOutBtn = async () => {
-    console.log("Check-out button clicked");
-
     const data = {
-      userPlanId: profileData?.userId,
-      checkout: new Date().toISOString(),
+      userId: profileData?.userId,
+      workoutReview: "Test!",
     };
-    console.log("Check-out button clicked", data);
     try {
-      const res = await axios.patch("/api/workouts/updateWorkoutPlan", data);
-      console.log("Check-out successful", res.data);
+      const res = await axios.patch("/api/visits/updateUsersVisits", data);
+      visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
+      console.log("Visit updated successfully:", res.data);
       setBtn(true);
     } catch (error) {
-      console.error("Not working ", error);
+      console.error("Error during check-out:", error);
     }
   };
 
@@ -171,32 +176,32 @@ export default function ProfileUsersInfoPage() {
             {profileData ? (
               [
                 {
-                  icon: <PersonIcon color="primary" />,
+                  icon: <Person color="primary" />,
                   label: "User Name",
                   value: userState.user.username,
                 },
                 {
-                  icon: <PersonIcon color="primary" />,
+                  icon: <Person color="primary" />,
                   label: "First Name",
                   value: profileData.firstName,
                 },
                 {
-                  icon: <PersonIcon color="primary" />,
+                  icon: <Person color="primary" />,
                   label: "Last Name",
                   value: profileData?.lastName,
                 },
                 {
-                  icon: <HomeIcon color="primary" />,
+                  icon: <Home color="primary" />,
                   label: "Home Club",
                   value: profileData?.homeClub,
                 },
                 {
-                  icon: <CalendarTodayIcon color="primary" />,
+                  icon: <CalendarToday color="primary" />,
                   label: "Member Since",
                   value: profileData?.memberSince,
                 },
                 {
-                  icon: <PersonIcon color="primary" />,
+                  icon: <Person color="primary" />,
                   label: "Current Status",
                   value: profileData?.currentStatus,
                 },
@@ -224,27 +229,27 @@ export default function ProfileUsersInfoPage() {
           <List>
             {[
               {
-                icon: <EmailIcon color="primary" />,
+                icon: <Email color="primary" />,
                 label: "E-mail",
                 value: userState.user.email,
               },
               {
-                icon: <PhoneIcon color="primary" />,
+                icon: <Phone color="primary" />,
                 label: "Cell Phone",
                 value: profileData?.cellPhone,
               },
               {
-                icon: <LocationCityIcon color="primary" />,
+                icon: <LocationCity color="primary" />,
                 label: "City",
                 value: profileData?.city,
               },
               {
-                icon: <LocationCityIcon color="primary" />,
+                icon: <LocationCity color="primary" />,
                 label: "State",
                 value: profileData?.state,
               },
               {
-                icon: <LocationCityIcon color="primary" />,
+                icon: <LocationCity color="primary" />,
                 label: "Zip/Postals",
                 value: profileData?.zipCode,
               },
@@ -274,7 +279,7 @@ export default function ProfileUsersInfoPage() {
       >
         <Button
           onClick={() => router.push("/client/profileUpdateForm")}
-          startIcon={<EditIcon />}
+          startIcon={<Edit />}
           variant="contained"
           color="primary"
           sx={{
@@ -289,7 +294,7 @@ export default function ProfileUsersInfoPage() {
         </Button>
         <Button
           onClick={() => router.push("/client/workouts")}
-          startIcon={<EditIcon />}
+          startIcon={<Edit />}
           variant="contained"
           color="primary"
           sx={{

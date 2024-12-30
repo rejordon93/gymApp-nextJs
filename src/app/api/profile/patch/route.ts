@@ -65,6 +65,7 @@ export async function PATCH(req: NextRequest) {
         },
       });
     }
+    console.log(profileResponse);
 
     return NextResponse.json(profileResponse, { status: 200 });
   } catch (error) {

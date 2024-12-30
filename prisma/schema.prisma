@@ -14,12 +14,13 @@ model User {
   password      String          // Ensure encryption in app logic
   createdAt     DateTime        @default(now())
   userWorkouts  UserWorkout[]   // One-to-many relationship
-  workoutPlans  WorkoutPlan[]   // One-to-many relationship
+  visits  Visits[]   // One-to-many relationship
   profilePlan   ProfilePlan?    // One-to-one relationship
 }
 
 model ProfilePlan {
   id        Int     @id @default(autoincrement())
+  userId    Int?    @unique
   firstName String
   lastName  String
   homeClub String?
@@ -29,20 +30,19 @@ model ProfilePlan {
   city String?
   state String?
   zipCode String?
-  userId    Int?    @unique
   user      User?   @relation(fields: [userId], references: [id])
 }
 
 
-model WorkoutPlan {
+model Visits {
   id            Int              @id @default(autoincrement())
-  checkin       DateTime         @default(now())
+  userId    Int                  @unique
+  checkin       DateTime
   weight        Int
   updateWeighIn Int
   workoutReview String? 
-  checkout      DateTime         @default(now())
-  userPlanId    Int              @unique
-  user          User             @relation(fields: [userPlanId], references: [id])
+  checkout      DateTime?
+  user          User             @relation(fields: [userId], references: [id])
   userWorkouts  UserWorkout[]    @relation("WorkoutToUserWorkout")
 }
 
@@ -54,7 +54,7 @@ model UserWorkout {
   editedAt          DateTime            @default(now())
   completed         Boolean
   user              User                @relation(fields: [userId], references: [id])
-  workoutPlans      WorkoutPlan[]       @relation("WorkoutToUserWorkout") // Many-to-many relationship
+  visits      Visits[]       @relation("WorkoutToUserWorkout") // Many-to-many relationship
   favoritedExercise FavoritedExercise[] @relation("UserWorkoutFavoritedExercises")
 }
 

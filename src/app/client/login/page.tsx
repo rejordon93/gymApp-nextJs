@@ -74,7 +74,7 @@ export default function LoginPage() {
           color="text.primary"
           sx={{ mb: 2 }}
         >
-          {userState.apiRequestContext.isLoading ? "Processing..." : "Login"}
+          {userState.apiRequestContext?.isLoading ? "Processing..." : "Login"}
         </Typography>
         <Divider sx={{ width: "100%", mb: 2 }} />
 
@@ -124,7 +124,7 @@ export default function LoginPage() {
 
           <Typography variant="body2" align="center" color="text.secondary">
             Dont have an account?{" "}
-            <Link href="/client/Signup" passHref>
+            <Link href="/client/signup" passHref>
               <Typography
                 component="span"
                 color="primary"

@@ -21,6 +21,16 @@ export type ExercisesInterfaces = {
   target: string;
 };
 
+export type FavoritedExerciseType = {
+  id: number;
+  name: string;
+  equipment: string;
+  gifUrl: string;
+  instructions: string;
+  secondaryMuscles: string;
+  target: string;
+};
+
 export type ProfileType = {
   firstName: string;
   lastName: string;
@@ -34,10 +44,19 @@ export type ProfileType = {
   userId: number;
 };
 export type WorkoutPlanInput = {
-  userPlanId?: number;
+  userId?: number;
   checkin?: Date | string;
-  weight?: number;
-  updateWeighIn?: number;
-  workoutReview?: string;
-  checkout?: Date | string | null;
+  weight?: number | null;
+  updateWeighIn?: number | null;
+  workoutReview?: string | null;
+  checkout: Date | string;
+};
+
+export type updateBodyType = {
+  name: string;
+  equipment: string;
+  gifUrl: string;
+  instructions: string;
+  secondaryMuscles: string;
+  target: string;
 };

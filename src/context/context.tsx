@@ -2,18 +2,18 @@
 import React, { createContext, useContext, ReactNode, useReducer } from "react";
 import reducer from "@/context/authReducer";
 import exercisesReducer from "@/context/exerciseReducer";
+import visitsReducer from "@/context/visitsReducer";
 import { Action, UserState, AUTH_INITIAL_STATE } from "@/context/authReducer";
 import {
   WorkoutAction,
   WorkoutState,
   EXERCISE_INITIAL_STATE,
 } from "@/context/exerciseReducer";
-
-// Define the shape of the workout context
-interface WorkoutContextType {
-  workoutState: WorkoutState;
-  workoutDispatch: React.Dispatch<WorkoutAction>;
-}
+import {
+  VisitAction,
+  VisitState,
+  VISIT_INITIAL_STATE,
+} from "@/context/visitsReducer";
 
 // Define the shape of the main app context
 interface UserContextType {
@@ -21,11 +21,26 @@ interface UserContextType {
   userDispatch: React.Dispatch<Action>;
 }
 
+// Define the shape of the workout context
+interface WorkoutContextType {
+  workoutState: WorkoutState;
+  workoutDispatch: React.Dispatch<WorkoutAction>;
+}
+
+interface VisitContextType {
+  visitState: VisitState;
+  visitDispatch: React.Dispatch<VisitAction>;
+}
+
 // Create contexts for the app state and workout data
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 export const WorkoutContext = createContext<WorkoutContextType | undefined>(
+  undefined
+);
+
+export const VisitsContext = createContext<VisitContextType | undefined>(
   undefined
 );
 
@@ -40,11 +55,17 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     exercisesReducer,
     EXERCISE_INITIAL_STATE
   );
+  const [visitState, visitDispatch] = useReducer(
+    visitsReducer,
+    VISIT_INITIAL_STATE
+  );
 
   return (
     <UserContext.Provider value={{ userState, userDispatch }}>
       <WorkoutContext.Provider value={{ workoutState, workoutDispatch }}>
-        {children}
+        <VisitsContext.Provider value={{ visitState, visitDispatch }}>
+          {children}
+        </VisitsContext.Provider>
       </WorkoutContext.Provider>
     </UserContext.Provider>
   );
@@ -54,7 +75,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 export function AuthAppContext() {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
+    throw new Error("AuthAppContext must be used within an AppProvider");
   }
   return context;
 }
@@ -62,7 +83,15 @@ export function AuthAppContext() {
 export function UserWorkoutContext() {
   const context = useContext(WorkoutContext);
   if (!context) {
-    throw new Error("useWorkoutContext must be used within an AppProvider");
+    throw new Error("UserWorkoutContext must be used within an AppProvider");
+  }
+  return context;
+}
+
+export function UserVisitContext() {
+  const context = useContext(VisitsContext);
+  if (!context) {
+    throw new Error("UserVisitContext must be used within an AppProvider");
   }
   return context;
 }

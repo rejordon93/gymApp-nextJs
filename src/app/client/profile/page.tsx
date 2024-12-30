@@ -1,6 +1,6 @@
 import { Paper, Container } from "@mui/material";
 import { DayTrackerComponent } from "./components/BarChart";
-import ProfileUsersInfoPage from "./components/profileUsersInfoPage";
+import ProfileUsersInfoPage from "./components/ProfileUsersInfoPage";
 
 export default function GymProgressPage() {
   return (

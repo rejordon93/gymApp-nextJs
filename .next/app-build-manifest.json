@@ -1,15 +1,25 @@
 {
   "pages": {
+    "/api/profile/patch/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/profile/patch/route.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
+    "/client/logout/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/client/logout/page.js"
+    ],
+    "/api/users/logout/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/users/logout/route.js"
     ],
     "/client/login/page": [
       "static/chunks/webpack.js",
@@ -26,45 +36,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/client/profile/page.js"
     ],
-    "/api/workouts/getWorkoutPlan/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/getWorkoutPlan/route.js"
-    ],
     "/api/profile/get/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/profile/get/route.js"
     ],
-    "/api/workouts/workoutPlan/route": [
+    "/api/workouts/getWorkoutPlan/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/workoutPlan/route.js"
+      "static/chunks/app/api/workouts/getWorkoutPlan/route.js"
     ],
-    "/client/logout/page": [
+    "/client/profileUpdateForm/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/logout/page.js"
-    ],
-    "/api/users/logout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/logout/route.js"
-    ],
-    "/api/workouts/deleteWorkoutPlan/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/deleteWorkoutPlan/route.js"
-    ],
-    "/client/workouts/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/workouts/page.js"
-    ],
-    "/api/workouts/updateWorkoutPlan/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/updateWorkoutPlan/route.js"
+      "static/chunks/app/client/profileUpdateForm/page.js"
     ]
   }
 }

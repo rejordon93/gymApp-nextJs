@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
 
   try {
     // Retrieve and filter workout plans
-    const filteredCheckouts = await prisma.workoutPlan.findMany({
+    const filteredCheckouts = await prisma.visits.findMany({
       where: {
         OR: [
           {
