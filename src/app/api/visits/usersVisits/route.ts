@@ -20,16 +20,19 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
     const checkinDate = new Date().toISOString();
+    // const checkoutDate = new Date().toISOString();
 
     // Create workout plan in the database
     const userVisit = await prisma.visits.create({
       data: {
         userId,
         checkin: checkinDate,
+        checkout: null,
         weight: 0,
         updateWeighIn: 0,
-        workoutReview: "Test!",
+        workoutReview: "",
       },
     });
 

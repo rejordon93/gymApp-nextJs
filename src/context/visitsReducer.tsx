@@ -55,11 +55,11 @@ export interface VisitState {
 export const VISIT_INITIAL_STATE: VisitState = {
   visit: {
     userId: 0,
-    checkin: "",
+    checkin: Date.now().toString(),
     weight: 0,
     updateWeighIn: 0,
     workoutReview: "",
-    checkout: "",
+    checkout: Date.toString(),
   },
   apiRequestContext: {
     error: null,

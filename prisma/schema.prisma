@@ -36,7 +36,7 @@ model ProfilePlan {
 
 model Visits {
   id            Int              @id @default(autoincrement())
-  userId    Int                  @unique
+  userId        Int                  
   checkin       DateTime
   weight        Int
   updateWeighIn Int

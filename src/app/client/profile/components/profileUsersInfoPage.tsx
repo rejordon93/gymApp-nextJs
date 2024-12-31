@@ -28,6 +28,7 @@ import {
 import { AuthAppContext } from "@/context/context";
 import { VisitsContext } from "@/context/context";
 import { ActionType } from "@/context/visitsReducer";
+import { channel } from "diagnostics_channel";
 
 export default function ProfileUsersInfoPage() {
   const context = useContext(VisitsContext)!;
@@ -57,9 +58,10 @@ export default function ProfileUsersInfoPage() {
     const data = {
       userId: profileData?.userId,
       checkin: new Date().toISOString(),
+      checkOut: null,
       weight: 0,
       updateWeighIn: 0,
-      workoutReview: "",
+      workoutReview: "Passing Data",
     };
     try {
       const res = await axios.post("/api/visits/usersVisits", data);
@@ -70,11 +72,14 @@ export default function ProfileUsersInfoPage() {
       console.error("Error during check-in:", error);
     }
   };
+  // console.log(visitState.visit.data.checkout);
   const handleCheckOutBtn = async () => {
     const data = {
-      userId: profileData?.userId,
-      workoutReview: "Test!",
+      userId: visitState.visit.data.userId,
+      checkin: visitState.visit.data.checkin,
+      checkout: new Date().toISOString(),
     };
+    console.log(data);
     try {
       const res = await axios.patch("/api/visits/updateUsersVisits", data);
       visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });

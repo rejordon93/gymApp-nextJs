@@ -1,8 +1,4 @@
 {
-  "/api/workouts/getWorkoutPlan/route": "app/api/workouts/getWorkoutPlan/route.js",
-  "/api/profile/get/route": "app/api/profile/get/route.js",
-  "/api/visits/updateUsersVisits/route": "app/api/visits/updateUsersVisits/route.js",
   "/api/visits/usersVisits/route": "app/api/visits/usersVisits/route.js",
-  "/api/profile/patch/route": "app/api/profile/patch/route.js",
-  "/client/profile/page": "app/client/profile/page.js"
+  "/api/visits/updateUsersVisits/route": "app/api/visits/updateUsersVisits/route.js"
 }
