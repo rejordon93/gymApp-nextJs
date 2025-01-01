@@ -49,7 +49,7 @@ export const DayTrackerComponent = () => {
             const hours = parseInt(match[1]);
             const minutes = parseInt(match[2]);
             const totalMinutes = hours * 60 + minutes;
-
+            console.log("totalMinutes", totalMinutes);
             tempData[dayOfWeekNumber] += totalMinutes; // Add the total minutes for the day
             console.log(
               `Adding ${totalMinutes} minutes to ${daysOfTheWeek[dayOfWeekNumber]}:`,
