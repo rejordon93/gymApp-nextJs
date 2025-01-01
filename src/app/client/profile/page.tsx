@@ -1,6 +1,6 @@
 import { Paper, Container } from "@mui/material";
 import { DayTrackerComponent } from "./components/BarChart";
-import ProfileUsersInfoPage from "./components/ProfileUsersInfoPage";
+import ProfilePage from "./components/ProfilePage";
 
 export default function GymProgressPage() {
   return (
@@ -15,7 +15,7 @@ export default function GymProgressPage() {
         }}
       >
         <DayTrackerComponent />
-        <ProfileUsersInfoPage />
+        <ProfilePage />
       </Paper>
     </Container>
   );

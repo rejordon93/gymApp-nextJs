@@ -2,7 +2,6 @@ export enum ActionType {
   SET_VISIT = "SET_VISIT",
   SET_UPDATED_VISIT = "SET_UPDATED_VISIT",
   SET_ERROR = "SET_ERROR",
-  SET_LOADING = "SET_LOADING",
 }
 
 interface SetVisitAction {
@@ -20,16 +19,10 @@ interface SetErrorAction {
   readonly payload: string | null;
 }
 
-interface SetLoadingAction {
-  readonly type: ActionType.SET_LOADING;
-  readonly payload: boolean;
-}
-
 export type VisitAction =
   | SetVisitAction
   | SetUpdatedVisitAction
-  | SetErrorAction
-  | SetLoadingAction;
+  | SetErrorAction;
 
 interface Visit {
   id?: number;
@@ -100,15 +93,6 @@ export default function visitsReducer(
           ...state.apiRequestContext,
           error: action.payload,
           isLoading: false,
-          success: false,
-        },
-      };
-    case ActionType.SET_LOADING:
-      return {
-        ...state,
-        apiRequestContext: {
-          ...state.apiRequestContext,
-          isLoading: action.payload,
           success: false,
         },
       };
