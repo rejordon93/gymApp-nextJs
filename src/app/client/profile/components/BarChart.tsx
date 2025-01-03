@@ -22,58 +22,30 @@ export const DayTrackerComponent = () => {
 
         const tempData = Array(7).fill(0); // Temporary array to store durations
 
-        // Get the current time dynamically
-        const initialTime = new Date(); // Use current date and time
-
-        // Get the start of the current week (Sunday at midnight)
-        const startOfWeek = new Date(initialTime);
-        startOfWeek.setDate(initialTime.getDate() - initialTime.getDay()); // Set to Sunday
-        startOfWeek.setHours(0, 0, 0, 0); // Set time to midnight
-
-        // Calculate the end of the week (next Sunday at midnight)
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 7); // End of the week (next Sunday at midnight)
-
         // Loop through the visits data and accumulate the durations
         data.visits.forEach((visit) => {
           const dateStr = visit.checkin;
-
-          // Parse the date correctly
           const parsedDate = new Date(dateStr.replace(" at", ",")); // Replace ' at' with ',' to make it parseable
           const dayOfWeekNumber = parsedDate.getDay(); // Get the day of the week (0-6)
-          const visitDurationStr = visit.visitDuration; // e.g., '1h 0m'
+          const visitDurationStr = visit.visitDuration; // e.g., '1h 30m'
 
           // Extract hours and minutes from visitDuration
           const match = visitDurationStr.match(/(\d+)h (\d+)m/);
           if (match) {
             const hours = parseInt(match[1]);
             const minutes = parseInt(match[2]);
-            const totalMinutes = hours * 60 + minutes;
-            console.log("totalMinutes", totalMinutes);
-            tempData[dayOfWeekNumber] += totalMinutes; // Add the total minutes for the day
-        
-              `Adding ${totalMinutes} minutes to ${daysOfTheWeek[dayOfWeekNumber]}:`,
-              tempData
-            );
+            const totalHours = hours + minutes / 60; // Convert minutes to fractional hours
+
+            tempData[dayOfWeekNumber] += totalHours; // Accumulate the total hours for the day
           } else {
             console.log("Could not parse visitDuration:", visitDurationStr);
           }
         });
 
-        // Ensure the data does not exceed the current week boundary (Sunday midnight)
-        const maxTimeForWeek = endOfWeek.getTime(); // Get the end of the week time
-        const currentTotalTime = tempData.reduce(
-          (acc, minutes) => acc + minutes,
-          0
-        ); // Total minutes for the week
+        // Filter out durations less than 1 hour
+        const filteredData = tempData.map((val) => (val >= 1 ? val : 0));
 
-        if (currentTotalTime > maxTimeForWeek) {
-          // If total time exceeds the week's limit, cap it to the maxTimeForWeek
-          console.log("Total visit time exceeds the week, adjusting...");
-          tempData.fill(0); // Reset the data
-        }
-
-        setUData(tempData); // Update state with the accumulated data
+        setUData(filteredData); // Update state with the filtered data
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -94,7 +66,20 @@ export const DayTrackerComponent = () => {
       >
         <BarChart
           xAxis={[{ scaleType: "band", data: daysOfTheWeek }]} // Categorical x-axis for days
-          series={[{ data: uData, label: "Duration (mins)", type: "bar" }]} // Bar series with data in minutes
+          yAxis={[
+            {
+              min: 0, // Start y-axis from 0
+              max: Math.max(...uData) + 1, // Set max value to the highest duration + 1
+              label: "Duration Hours",
+            },
+          ]}
+          series={[
+            {
+              data: uData.map((val) => parseFloat(val.toFixed(2))), // Ensure values are formatted to 2 decimal places
+              label: "Duration (Hours)",
+              type: "bar",
+            },
+          ]}
           width={800} // Increase the width of the BarChart
           height={400} // Adjust height if necessary
         />

@@ -301,7 +301,7 @@ export default function ProfilePage() {
           Update Profile
         </Button>
         <Button
-          onClick={() => router.push("/client/workouts")}
+          onClick={() => router.push("/client/exercises")}
           startIcon={<Edit />}
           variant="contained"
           color="primary"

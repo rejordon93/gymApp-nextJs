@@ -62,7 +62,7 @@ interface Workout {
   id?: string;
   instructions?: [];
   name?: string;
-  secondaryMuscles?: [];
+  secondaryMuscles?: string;
   target?: string;
 }
 

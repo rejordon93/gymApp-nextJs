@@ -3,8 +3,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { useContext } from "react";
-
 import { UserContext } from "@/context/context";
+import { AppBar, Toolbar, Button, Box, IconButton } from "@mui/material";
 
 const publicNavLinks = [
   {
@@ -27,11 +27,11 @@ const privateNavLinks = [
     label: "Profile",
   },
   {
-    href: "/client/workouts",
+    href: "/client/exercises",
     label: "Workouts",
   },
   {
-    href: "/planner",
+    href: "/client/planner",
     label: "Planner",
   },
   {
@@ -49,29 +49,39 @@ export default function Header() {
     : publicNavLinks;
 
   return (
-    <header className="flex justify-between items-center py-4 px-7 border-b">
-      <h2 className="w-[35px] h-[35px] flex items-center justify-center">
-        <Link href="/">
-          <FitnessCenterIcon className="text-2xl text-gray-900" />
-        </Link>
-      </h2>
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{ backgroundColor: "transparent", color: "black", px: 3 }}
+    >
+      <Toolbar>
+        {/* Logo */}
+        <IconButton edge="start" color="inherit" component={Link} href="/">
+          <FitnessCenterIcon sx={{ fontSize: 35 }} />
+        </IconButton>
 
-      <nav>
-        <ul className="flex gap-x-5 text-[14px]">
+        {/* Spacer */}
+        <Box sx={{ flexGrow: 1 }} />
+
+        {/* Navigation Links */}
+        <Box sx={{ display: "flex", gap: 2 }}>
           {navLinks.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className={`${
-                  pathname === link.href ? "text-zinc-900" : "text-zinc-400"
-                }`}
-              >
-                {link.label}
-              </Link>
-            </li>
+            <Button
+              key={link.href}
+              href={link.href}
+              component={Link}
+              sx={{
+                color:
+                  pathname === link.href ? "text.primary" : "text.secondary",
+                fontWeight: pathname === link.href ? "bold" : "normal",
+                textTransform: "capitalize",
+              }}
+            >
+              {link.label}
+            </Button>
           ))}
-        </ul>
-      </nav>
-    </header>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

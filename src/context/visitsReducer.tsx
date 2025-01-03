@@ -27,7 +27,7 @@ export type VisitAction =
 interface Visit {
   id?: number;
   userId: number;
-  checkin: string;
+  checkin: string | null;
   weight?: number;
   updateWeighIn?: number;
   workoutReview?: string;
@@ -96,6 +96,7 @@ export default function visitsReducer(
           success: false,
         },
       };
+
     default:
       return state;
   }

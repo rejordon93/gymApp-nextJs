@@ -5,20 +5,27 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
 import { Box, Button, Container, Typography } from "@mui/material";
-
 export default function LogoutPage() {
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
 
   const logout = async () => {
+    setLoading(true); // Start loading
     try {
       await axios.get("/api/users/logout");
       toast.success("Logout successful", { duration: 5000 });
       router.push("/client/login");
     } catch (error) {
-      if (error instanceof Error) {
+      if (axios.isAxiosError(error)) {
+        toast.error("Logout failed. Please try again later.", {
+          duration: 5000,
+        });
+      } else if (error instanceof Error) {
         console.log(error.message);
+        toast.error("An unexpected error occurred.", { duration: 5000 });
       }
-      toast.error("You are already logged out", { duration: 5000 });
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -60,8 +67,9 @@ export default function LogoutPage() {
           color="error"
           fullWidth
           sx={{ mb: 2 }}
+          disabled={loading} // Disable button while logging out
         >
-          Logout
+          {loading ? "Logging out..." : "Logout"}
         </Button>
 
         <Link href="/client/profile" passHref>
