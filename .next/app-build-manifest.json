@@ -1,10 +1,5 @@
 {
   "pages": {
-    "/api/users/login/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/login/route.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -26,16 +21,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/profile/get/route.js"
     ],
-    "/client/planner/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/planner/page.js"
-    ],
-    "/client/exercises/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/exercises/page.js"
-    ],
     "/client/logout/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -50,6 +35,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/client/login/page.js"
+    ],
+    "/api/users/login/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/users/login/route.js"
+    ],
+    "/client/planner/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/planner/page.js"
     ]
   }
 }

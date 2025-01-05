@@ -131,6 +131,7 @@ export default function ProfilePage() {
               "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%)",
           }}
         />
+
         <Typography
           variant="h3"
           fontWeight="bold"

@@ -1,119 +1,155 @@
 "use client";
-import React, { useEffect } from "react";
-import { Box, Button, Typography, Card, Stack } from "@mui/material";
-import { InsertChart, FitnessCenter, Timeline } from "@mui/icons-material";
-import { useContext } from "react";
-import { VisitsContext } from "@/context/context";
+import React, { useState } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  Button,
+} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
+
+const cardData = ["Chest", "Back", "Legs", "Arms", "Cardio", "Abs"];
 
 export default function Planer() {
-  const context = useContext(VisitsContext)!;
-  const { visitState, visitDispatch } = context;
+  const [selectedValue, setSelectedValue] = useState<string>("");
+  const [selections, setSelections] = useState<
+    { title: string; value: string }[]
+  >([]);
 
-  useEffect(() => {
-    const handleCheckin = () => {
-      if (visitState.visit.checkout) {
-        console.log(1);
-      } else {
-        console.log("No checkin");
-      }
-    };
-    handleCheckin();
-  }, [visitState.visit.checkout]);
+  const handleCardClick = (title: string) => {
+    if (!selectedValue) {
+      alert("Please select a day of the week before adding a workout.");
+      return;
+    }
 
-  console.log(visitState);
+    // Avoid duplicate entries for the same day and workout
+    const alreadyExists = selections.some(
+      (item) => item.title === title && item.value === selectedValue
+    );
+
+    if (!alreadyExists) {
+      setSelections((prev) => [...prev, { title, value: selectedValue }]);
+    } else {
+      alert(`You already added "${title}" for "${selectedValue}".`);
+    }
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectedValue(event.target.value);
+  };
+  const handleBtnClick = () => {
+    console.log("Test");
+  };
+
   return (
     <Box
       sx={{
-        p: 4,
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-        borderRadius: "16px",
-        minWidth: "300px",
-        maxWidth: "1000px",
-        mx: "auto",
+        maxWidth: "1200px", // Max width for the entire content
+        margin: "0 auto", // Center the content horizontally
+        minHeight: "100vh",
+        alignContent: "center",
+        paddingTop: "3rem",
+        paddingBottom: "3rem",
       }}
     >
-      {/* Centered Activity Header */}
-      <Box textAlign="center" mb={4}>
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
-          My Activity
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Every step, every rep counts! Update your activity today.
-        </Typography>
+      <Typography variant="h4" gutterBottom>
+        make a weekly workout plan
+      </Typography>
+      <Box sx={{ minWidth: 120, marginTop: "2rem" }}>
+        <FormControl fullWidth>
+          <InputLabel id="dropdown-label">Day of the Week</InputLabel>
+          <Select
+            labelId="dropdown-label"
+            id="dropdown"
+            value={selectedValue}
+            onChange={handleChange}
+          >
+            <MenuItem value="Monday">Monday</MenuItem>
+            <MenuItem value="Tuesday">Tuesday</MenuItem>
+            <MenuItem value="Wednesday">Wednesday</MenuItem>
+            <MenuItem value="Thursday">Thursday</MenuItem>
+            <MenuItem value="Friday">Friday</MenuItem>
+            <MenuItem value="Saturday">Saturday</MenuItem>
+            <MenuItem value="Sunday">Sunday</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
-
-      <Button>Check ins</Button>
-
-      {/* About Me Section */}
-      <Box textAlign="center" mt={4}>
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
-          About Me
-        </Typography>
-        <Card
-          sx={{
-            p: 3,
-            borderRadius: "16px",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <Stack spacing={2}>
-            <Button
-              variant="contained"
-              startIcon={<FitnessCenter />}
+      <Grid container spacing={4} sx={{ marginTop: "2rem" }}>
+        {cardData.map((title, index) => (
+          <Grid item xs={12} sm={4} key={`card-${index}`}>
+            <Card
               sx={{
+                width: "100%",
+                height: 350,
                 borderRadius: "16px",
-                textTransform: "capitalize",
-                background: "linear-gradient(45deg, #6a1b9a, #8e24aa)",
-                color: "#fff",
-                px: 3,
-                py: 1.5,
+                boxShadow: 6,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                backgroundColor: "#f5f5f5",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 "&:hover": {
-                  background: "linear-gradient(45deg, #5e35b1, #6a1b9a)",
+                  transform: "translateY(-5px)",
+                  boxShadow: 12,
                 },
               }}
+              onClick={() => handleCardClick(title)}
             >
-              What's your motivation?
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<Timeline />}
-              sx={{
-                borderRadius: "16px",
-                textTransform: "capitalize",
-                background: "linear-gradient(45deg, #6a1b9a, #8e24aa)",
-                color: "#fff",
-                px: 3,
-                py: 1.5,
-                "&:hover": {
-                  background: "linear-gradient(45deg, #5e35b1, #6a1b9a)",
-                },
-              }}
-            >
-              What's your target?
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<InsertChart />}
-              sx={{
-                borderRadius: "16px",
-                textTransform: "capitalize",
-                background: "linear-gradient(45deg, #6a1b9a, #8e24aa)",
-                color: "#fff",
-                px: 3,
-                py: 1.5,
-                "&:hover": {
-                  background: "linear-gradient(45deg, #5e35b1, #6a1b9a)",
-                },
-              }}
-            >
-              What are your stats?
-            </Button>
-          </Stack>
-        </Card>
+              <CardContent>
+                <Typography
+                  sx={{
+                    fontSize: 24,
+                    fontWeight: "bold",
+                    color: "#333",
+                  }}
+                >
+                  {title}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <Box sx={{ marginTop: "3rem" }}>
+        <Typography variant="h6">Your Plan:</Typography>
+        {selections.length > 0 ? (
+          <ul>
+            {selections.map((item, index) => (
+              <li key={index}>
+                {item.value} - {item.title}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Typography>No workouts added yet.</Typography>
+        )}
       </Box>
+      <Button
+        onClick={handleBtnClick}
+        sx={{
+          backgroundColor: "#1976d2", // Blue color for the button background
+          color: "white", // White text color
+          fontWeight: "bold", // Make the text bold
+          padding: "10px 20px", // Add some padding for better size
+          borderRadius: "8px", // Rounded corners
+          textTransform: "none", // Keep the text case as it is
+          boxShadow: 3, // Subtle shadow for depth
+          "&:hover": {
+            backgroundColor: "#1565c0", // Darker blue on hover
+            boxShadow: 6, // Increase the shadow on hover for more emphasis
+          },
+        }}
+      >
+        Create Workout Plan
+      </Button>
     </Box>
   );
 }

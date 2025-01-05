@@ -1,4 +1,6 @@
 {
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/client/profile/page": "app/client/profile/page.js",
-  "/client/login/page": "app/client/login/page.js"
+  "/client/login/page": "app/client/login/page.js",
+  "/client/planner/page": "app/client/planner/page.js"
 }
