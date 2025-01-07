@@ -10,42 +10,42 @@ export enum ActionType {
 
 interface SetCurrent {
   readonly type: ActionType.SET_CURRENT;
-  readonly payload: Workout; // Single workout payload
+  readonly payload: Exercises; // Single workout payload
 }
 
 interface SetAddWorkouts {
   readonly type: ActionType.SET_WORKOUTS;
   readonly payload: {
-    workouts: Workout[];
+    workouts: Exercises[];
     option: Options;
   };
 }
 
 interface SetGetAllExercises {
   readonly type: ActionType.GET_ALL_EXERCISES;
-  readonly payload: Workout[]; // Array of workouts
+  readonly payload: Exercises[]; // Array of workouts
 }
 interface SetRemoveWorkout {
   readonly type: ActionType.REMOVE_WORKOUT;
-  readonly payload: Workout[];
+  readonly payload: Exercises[];
 }
 
 interface SetAddToFavorites {
   readonly type: ActionType.ADD_TO_FAVORITES;
-  readonly payload: Workout[]; // Single workout payload
+  readonly payload: Exercises[]; // Single workout payload
 }
 
 interface SetNextResultsAction {
   readonly type: ActionType.NEXT_RESULTS;
-  readonly payload: Workout[]; // Array of workouts
+  readonly payload: Exercises[]; // Array of workouts
 }
 
 interface SetPrevResultsAction {
   readonly type: ActionType.PREV_RESULTS;
-  readonly payload: Workout[]; // Array of workouts
+  readonly payload: Exercises[]; // Array of workouts
 }
 
-export type WorkoutAction =
+export type ExercisesAction =
   | SetNextResultsAction
   | SetPrevResultsAction
   | SetAddWorkouts
@@ -55,7 +55,7 @@ export type WorkoutAction =
   | SetAddToFavorites;
 
 // Workout interface for a single workout
-interface Workout {
+interface Exercises {
   bodyPart?: string;
   equipment?: string;
   gifUrl?: string;
@@ -80,18 +80,18 @@ interface ExerciseApiRequest {
 }
 
 // Workout state interface
-export interface WorkoutState {
+export interface ExercisesState {
   ExerciseApiRequest: ExerciseApiRequest;
-  workoutsArr: Workout[];
-  currentWorkout: Workout;
-  favExercises: Workout[];
+  exercisesArr: Exercises[];
+  currentExercises: Exercises;
+  favExercises: Exercises[];
   option: Options;
 }
 
 // Initial state for the workout
-export const EXERCISE_INITIAL_STATE: WorkoutState = {
-  workoutsArr: [],
-  currentWorkout: {},
+export const EXERCISE_INITIAL_STATE: ExercisesState = {
+  exercisesArr: [],
+  currentExercises: {},
 
   option: {
     offset: "0",
@@ -108,14 +108,14 @@ export const EXERCISE_INITIAL_STATE: WorkoutState = {
 
 // Reducer function to handle actions and update state
 export default function exercisesReducer(
-  state: WorkoutState,
-  action: WorkoutAction
-): WorkoutState {
+  state: ExercisesState,
+  action: ExercisesAction
+): ExercisesState {
   switch (action.type) {
     case ActionType.SET_WORKOUTS:
       return {
         ...state,
-        workoutsArr: action.payload.workouts, // Set multiple workouts
+        exercisesArr: action.payload.workouts, // Set multiple workouts
         option: action.payload.option,
         ExerciseApiRequest: {
           ...state.ExerciseApiRequest,
@@ -128,7 +128,7 @@ export default function exercisesReducer(
     case ActionType.SET_CURRENT:
       return {
         ...state,
-        currentWorkout: action.payload, // Store selected workout details
+        currentExercises: action.payload, // Store selected workout details
         ExerciseApiRequest: {
           ...state.ExerciseApiRequest,
           success: true,
@@ -140,7 +140,7 @@ export default function exercisesReducer(
     case ActionType.GET_ALL_EXERCISES:
       return {
         ...state,
-        workoutsArr: action.payload, // Fetch all exercises
+        exercisesArr: action.payload, // Fetch all exercises
         ExerciseApiRequest: {
           ...state.ExerciseApiRequest,
           success: true,
@@ -165,7 +165,7 @@ export default function exercisesReducer(
     case ActionType.REMOVE_WORKOUT:
       return {
         ...state,
-        workoutsArr: action.payload,
+        exercisesArr: action.payload,
         ExerciseApiRequest: {
           ...state.ExerciseApiRequest,
           success: true,

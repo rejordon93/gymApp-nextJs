@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
-import { UserWorkoutContext } from "@/context/context";
+import { UserExercisesContext } from "@/context/context";
 import { useRouter } from "next/navigation";
 import { ActionType } from "@/context/exerciseReducer";
 
@@ -17,7 +17,7 @@ export default function WorkoutsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
 
-  const { workoutState, workoutDispatch } = UserWorkoutContext();
+  const { exercisesState, exercisesDispatch } = UserExercisesContext();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +45,8 @@ export default function WorkoutsPage() {
         method: "GET",
         url: `https://exercisedb.p.rapidapi.com/exercises/name/${inputVal}`,
         params: {
-          offset: workoutState.option.offset || "0",
-          limit: workoutState.option.limit || "8",
+          offset: exercisesState.option.offset || "0",
+          limit: exercisesState.option.limit || "8",
         },
 
         headers: {
@@ -56,16 +56,16 @@ export default function WorkoutsPage() {
       };
 
       const response = await axios.request(options);
-      console.log(workoutState.workoutsArr);
+      console.log(exercisesState.exercisesArr);
       const option = options.params;
       console.log(option);
       const data = response.data;
       console.log(data);
-      workoutDispatch({
+      exercisesDispatch({
         type: ActionType.SET_WORKOUTS,
         payload: {
           workouts: data,
-          option: workoutState.option,
+          option: exercisesState.option,
         },
       });
       router.push("/client/exercises/exercises_result");

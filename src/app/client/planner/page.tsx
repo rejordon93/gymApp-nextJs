@@ -1,115 +1,145 @@
 "use client";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Card,
   CardContent,
   Typography,
   Grid,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
   Button,
+  Snackbar,
+  CircularProgress,
 } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
+import { UserWorkoutContext } from "@/context/context";
+import { ActionType } from "@/context/workoutReducer";
+import { ProfileType } from "@/app/types/page";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const cardData = ["Chest", "Back", "Legs", "Arms", "Cardio", "Abs"];
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 export default function Planer() {
-  const [selectedValue, setSelectedValue] = useState<string>("");
-  const [selections, setSelections] = useState<
-    { title: string; value: string }[]
-  >([]);
+  const router = useRouter();
+  const { workoutState, workoutDispatch } = UserWorkoutContext();
+  const [profileData, setProfileData] = useState<ProfileType | null>(null);
+  const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+
+  // out put current day
+  const today = new Date().getDay();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("/api/profile/get");
+        const data = Array.isArray(res.data) ? res.data[0] : res.data;
+        setProfileData(data);
+      } catch (error) {
+        setSnackbarMessage("Error fetching profile data.");
+        console.error("Error fetching profile data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleCardClick = (title: string) => {
-    if (!selectedValue) {
-      alert("Please select a day of the week before adding a workout.");
+    setSelectedWorkout(title);
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const dayName = days[dayOfWeek];
+    const workoutObj = {
+      userId: profileData?.userId,
+      workoutDay: dayName,
+      workout: title,
+      completed: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    workoutDispatch({ type: ActionType.SET_WORKOUT, payload: workoutObj });
+  };
+
+  const handleBtnClick = async () => {
+    if (!selectedWorkout) {
+      setSnackbarMessage("Please select a workout before adding.");
       return;
     }
 
-    // Avoid duplicate entries for the same day and workout
-    const alreadyExists = selections.some(
-      (item) => item.title === title && item.value === selectedValue
-    );
-
-    if (!alreadyExists) {
-      setSelections((prev) => [...prev, { title, value: selectedValue }]);
-    } else {
-      alert(`You already added "${title}" for "${selectedValue}".`);
+    try {
+      setLoading(true);
+      const { workout } = workoutState;
+      const res = await axios.post("/api/workouts/postWorkout", workout);
+      setSnackbarMessage("Workout added successfully!");
+      router.push("/client/exercises");
+      console.log(res);
+    } catch (error) {
+      setSnackbarMessage("Error adding workout.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedValue(event.target.value);
-  };
-  const handleBtnClick = () => {
-    console.log("Test");
-  };
+  console.log(workoutState.workout);
+  const cardStyle = (title: string) => ({
+    width: "100%",
+    height: 350,
+    borderRadius: "16px",
+    boxShadow: selectedWorkout === title ? 12 : 6,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    backgroundColor: selectedWorkout === title ? "#e3f2fd" : "#f5f5f5",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-5px)",
+      boxShadow: 12,
+    },
+    cursor: "pointer",
+  });
 
   return (
     <Box
       sx={{
-        maxWidth: "1200px", // Max width for the entire content
-        margin: "0 auto", // Center the content horizontally
+        maxWidth: "1200px",
+        margin: "0 auto",
         minHeight: "100vh",
-        alignContent: "center",
-        paddingTop: "3rem",
-        paddingBottom: "3rem",
+        padding: "3rem 1rem",
+        textAlign: "center",
       }}
     >
       <Typography variant="h4" gutterBottom>
-        make a weekly workout plan
+        {profileData?.firstName}'s Daily Workout Plan
       </Typography>
-      <Box sx={{ minWidth: 120, marginTop: "2rem" }}>
-        <FormControl fullWidth>
-          <InputLabel id="dropdown-label">Day of the Week</InputLabel>
-          <Select
-            labelId="dropdown-label"
-            id="dropdown"
-            value={selectedValue}
-            onChange={handleChange}
-          >
-            <MenuItem value="Monday">Monday</MenuItem>
-            <MenuItem value="Tuesday">Tuesday</MenuItem>
-            <MenuItem value="Wednesday">Wednesday</MenuItem>
-            <MenuItem value="Thursday">Thursday</MenuItem>
-            <MenuItem value="Friday">Friday</MenuItem>
-            <MenuItem value="Saturday">Saturday</MenuItem>
-            <MenuItem value="Sunday">Sunday</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      <Grid container spacing={4} sx={{ marginTop: "2rem" }}>
+      <Typography variant="h5" sx={{ marginBottom: "2rem" }}>
+        Choose a workout for {days[today]}
+      </Typography>
+      {loading && <CircularProgress />}
+      <Grid container spacing={4}>
         {cardData.map((title, index) => (
           <Grid item xs={12} sm={4} key={`card-${index}`}>
             <Card
-              sx={{
-                width: "100%",
-                height: 350,
-                borderRadius: "16px",
-                boxShadow: 6,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                backgroundColor: "#f5f5f5",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-5px)",
-                  boxShadow: 12,
-                },
-              }}
+              sx={cardStyle(title)}
               onClick={() => handleCardClick(title)}
+              role="button"
+              aria-pressed={selectedWorkout === title}
             >
               <CardContent>
                 <Typography
-                  sx={{
-                    fontSize: 24,
-                    fontWeight: "bold",
-                    color: "#333",
-                  }}
+                  sx={{ fontSize: 24, fontWeight: "bold", color: "#333" }}
                 >
                   {title}
                 </Typography>
@@ -118,38 +148,32 @@ export default function Planer() {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ marginTop: "3rem" }}>
-        <Typography variant="h6">Your Plan:</Typography>
-        {selections.length > 0 ? (
-          <ul>
-            {selections.map((item, index) => (
-              <li key={index}>
-                {item.value} - {item.title}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <Typography>No workouts added yet.</Typography>
-        )}
-      </Box>
       <Button
         onClick={handleBtnClick}
+        disabled={loading}
         sx={{
-          backgroundColor: "#1976d2", // Blue color for the button background
-          color: "white", // White text color
-          fontWeight: "bold", // Make the text bold
-          padding: "10px 20px", // Add some padding for better size
-          borderRadius: "8px", // Rounded corners
-          textTransform: "none", // Keep the text case as it is
-          boxShadow: 3, // Subtle shadow for depth
+          backgroundColor: "#1976d2",
+          color: "white",
+          fontWeight: "bold",
+          padding: "10px 20px",
+          marginTop: "2rem",
+          borderRadius: "8px",
+          textTransform: "none",
+          boxShadow: 3,
           "&:hover": {
-            backgroundColor: "#1565c0", // Darker blue on hover
-            boxShadow: 6, // Increase the shadow on hover for more emphasis
+            backgroundColor: "#1565c0",
+            boxShadow: 6,
           },
         }}
       >
-        Create Workout Plan
+        {loading ? "Adding..." : "Add Exercises"}
       </Button>
+      <Snackbar
+        open={Boolean(snackbarMessage)}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarMessage(null)}
+        message={snackbarMessage}
+      />
     </Box>
   );
 }

@@ -67,6 +67,7 @@ export default function ProfilePage() {
       visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
       console.log("Visit updated successfully:", res.data);
       setBtn(false);
+      router.push("/client/planner");
     } catch (error) {
       if (error instanceof Error) {
         visitDispatch({ type: ActionType.SET_ERROR, payload: error.message });
@@ -287,6 +288,21 @@ export default function ProfilePage() {
         }}
       >
         <Button
+          onClick={() => router.push("http://127.0.0.1:3000/")}
+          startIcon={<Edit />}
+          variant="contained"
+          color="primary"
+          sx={{
+            fontWeight: "bold",
+            fontSize: "1rem",
+            textTransform: "uppercase",
+            px: 4,
+            py: 1.5,
+          }}
+        >
+          Back
+        </Button>
+        <Button
           onClick={() => router.push("/client/profileUpdateForm")}
           startIcon={<Edit />}
           variant="contained"
@@ -300,21 +316,6 @@ export default function ProfilePage() {
           }}
         >
           Update Profile
-        </Button>
-        <Button
-          onClick={() => router.push("/client/exercises")}
-          startIcon={<Edit />}
-          variant="contained"
-          color="primary"
-          sx={{
-            fontWeight: "bold",
-            fontSize: "1rem",
-            textTransform: "uppercase",
-            px: 4,
-            py: 1.5,
-          }}
-        >
-          Workouts
         </Button>
       </Box>
     </Box>

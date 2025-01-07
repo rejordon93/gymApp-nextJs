@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import { UserWorkoutContext } from "@/context/context";
+import { UserExercisesContext } from "@/context/context";
 import { useRouter } from "next/navigation";
 import { ActionType } from "@/context/exerciseReducer";
 import axios from "axios";
@@ -17,17 +17,36 @@ import ExercisesAddBtnResults from "./ExercisesAddMoreBtn";
 import Footer from "@/components/Footer";
 
 export default function ExercisesResults() {
-  const { workoutState, workoutDispatch } = UserWorkoutContext();
+  const { exercisesState, exercisesDispatch } = UserExercisesContext();
   const [isLoading] = useState(false);
+  const [workoutId, setWorkoutId] = useState<number>();
   const router = useRouter();
 
+  const getWorkoutData = async () => {
+    try {
+      const res = await axios.get("/api/workouts/getWorkout");
+
+      if (res.status === 200 && res.data) {
+        setWorkoutId(res.data.id); // Assuming the API returns an object with `id`
+      } else {
+        console.error("Unexpected response:", res);
+      }
+    } catch (error) {
+      console.error("Error fetching workout data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getWorkoutData();
+  }, []);
+
   const handleDetailsBtn = (id: string) => {
-    const selectedWorkout = workoutState.workoutsArr.find(
+    const selectedWorkout = exercisesState.exercisesArr.find(
       (exercise) => exercise.id === id
     );
 
     if (selectedWorkout) {
-      workoutDispatch({
+      exercisesDispatch({
         type: ActionType.SET_CURRENT,
         payload: selectedWorkout,
       });
@@ -37,12 +56,17 @@ export default function ExercisesResults() {
   };
 
   const handleLikeBtn = async (id: string) => {
-    const addToFav = workoutState.workoutsArr.find(
+    const addToFav = exercisesState.exercisesArr.find(
       (exercise) => exercise.id === id
     );
 
     if (!addToFav) {
       console.error("Workout not found");
+      return;
+    }
+
+    if (!workoutId) {
+      console.error("Workout ID is not set");
       return;
     }
 
@@ -54,6 +78,7 @@ export default function ExercisesResults() {
       instructions: addToFav.instructions || [""],
       secondaryMuscles: addToFav.secondaryMuscles || [""],
       target: addToFav.target,
+      id: workoutId,
     };
 
     try {
@@ -63,20 +88,24 @@ export default function ExercisesResults() {
       );
       console.log("API Response:", response.data);
 
-      workoutDispatch({
+      exercisesDispatch({
         type: ActionType.ADD_TO_FAVORITES,
-        payload: [...workoutState.favExercises, addToFav], // Pass the object directly
+        payload: [...exercisesState.favExercises, addToFav],
       });
     } catch (error) {
-      console.error("Error adding workout to favorites:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("Axios error:", error.response?.data || error.message);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
   const handleRemoveBtn = (id: string) => {
-    const removeBtn = workoutState.workoutsArr.filter(
+    const removeBtn = exercisesState.exercisesArr.filter(
       (exercise) => exercise.id !== id
     );
-    workoutDispatch({
+    exercisesDispatch({
       type: ActionType.REMOVE_WORKOUT,
       payload: removeBtn,
     });
@@ -113,7 +142,7 @@ export default function ExercisesResults() {
             maxWidth: 1200,
           }}
         >
-          {workoutState.workoutsArr.map((exercise) => (
+          {exercisesState.exercisesArr.map((exercise) => (
             <Card
               key={exercise.id}
               sx={{

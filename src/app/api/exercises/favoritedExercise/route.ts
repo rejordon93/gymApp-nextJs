@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
       instructions,
       secondaryMuscles,
       target,
+      bodyPart,
     } = body;
 
     // Check for logged in user
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
       !instructions ||
       !secondaryMuscles ||
       !target ||
+      !bodyPart ||
       !id
     ) {
       return NextResponse.json(
@@ -65,7 +67,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+    console.log(favoritedExercise);
     // If the exercise doesn't exist, create it
     favoritedExercise = await prisma.favoritedExercise.create({
       data: {
@@ -75,8 +77,10 @@ export async function POST(req: NextRequest) {
         instructions,
         secondaryMuscles,
         target,
+        bodyPart,
       },
     });
+    console.log(favoritedExercise);
 
     // Update userWorkout with the new favoritedExercise
     const updatedUserWorkout = await prisma.userWorkout.update({

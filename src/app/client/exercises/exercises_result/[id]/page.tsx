@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { UserWorkoutContext } from "@/context/context";
+import { UserExercisesContext } from "@/context/context";
 import { useRouter } from "next/navigation";
 import { ActionType } from "@/context/exerciseReducer";
 import {
@@ -17,8 +17,8 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function WorkoutsById() {
-  const { workoutState, workoutDispatch } = UserWorkoutContext();
-  workoutState.currentWorkout;
+  const { exercisesState, exercisesDispatch } = UserExercisesContext();
+  exercisesState.currentExercises;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -28,9 +28,9 @@ export default function WorkoutsById() {
   }, []);
 
   const handleBackBtn = () => {
-    workoutDispatch({
+    exercisesDispatch({
       type: ActionType.SET_CURRENT,
-      payload: workoutState.currentWorkout,
+      payload: exercisesState.currentExercises,
     });
     router.push("/client/exercises/exercises_result");
   };
@@ -58,13 +58,13 @@ export default function WorkoutsById() {
       }}
     >
       <Grid container spacing={4} sx={{ mt: 4, flexGrow: 1 }}>
-        <React.Fragment key={workoutState.currentWorkout.id}>
+        <React.Fragment key={exercisesState.currentExercises.id}>
           <Grid item xs={12} md={8}>
             <Paper elevation={3}>
               <Card sx={{ padding: 3 }}>
                 <CardContent>
                   <Typography variant="h4" component="div" sx={{ mb: 2 }}>
-                    {workoutState.currentWorkout.name}
+                    {exercisesState.currentExercises.name}
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -72,7 +72,7 @@ export default function WorkoutsById() {
                     sx={{ mb: 1 }}
                   >
                     <strong>Target:</strong>{" "}
-                    {workoutState.currentWorkout.target}
+                    {exercisesState.currentExercises.target}
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -80,7 +80,7 @@ export default function WorkoutsById() {
                     sx={{ mb: 1 }}
                   >
                     <strong>Equipment:</strong>{" "}
-                    {workoutState.currentWorkout.equipment}
+                    {exercisesState.currentExercises.equipment}
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -88,7 +88,7 @@ export default function WorkoutsById() {
                     sx={{ mb: 1 }}
                   >
                     <strong>Body Part:</strong>{" "}
-                    {workoutState.currentWorkout.bodyPart}
+                    {exercisesState.currentExercises.bodyPart}
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -96,7 +96,7 @@ export default function WorkoutsById() {
                     sx={{ mb: 1 }}
                   >
                     <strong>Secondary Muscles:</strong>{" "}
-                    {workoutState.currentWorkout.secondaryMuscles}
+                    {exercisesState.currentExercises.secondaryMuscles}
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -104,7 +104,7 @@ export default function WorkoutsById() {
                     sx={{ mt: 2 }}
                   >
                     <strong>Instructions:</strong>{" "}
-                    {workoutState.currentWorkout.instructions}
+                    {exercisesState.currentExercises.instructions}
                   </Typography>
                 </CardContent>
               </Card>
@@ -116,8 +116,8 @@ export default function WorkoutsById() {
                 <CardMedia
                   component="img"
                   sx={{ width: "100%", height: "auto" }}
-                  image={workoutState.currentWorkout.gifUrl}
-                  alt={workoutState.currentWorkout.name}
+                  image={exercisesState.currentExercises.gifUrl}
+                  alt={exercisesState.currentExercises.name}
                 />
               </Card>
             </Paper>

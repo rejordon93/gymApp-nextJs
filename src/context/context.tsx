@@ -3,10 +3,11 @@ import React, { createContext, useContext, ReactNode, useReducer } from "react";
 import reducer from "@/context/authReducer";
 import exercisesReducer from "@/context/exerciseReducer";
 import visitsReducer from "@/context/visitsReducer";
+import workoutReducer from "./workoutReducer";
 import { Action, UserState, AUTH_INITIAL_STATE } from "@/context/authReducer";
 import {
-  WorkoutAction,
-  WorkoutState,
+  ExercisesAction,
+  ExercisesState,
   EXERCISE_INITIAL_STATE,
 } from "@/context/exerciseReducer";
 import {
@@ -15,6 +16,12 @@ import {
   VISIT_INITIAL_STATE,
 } from "@/context/visitsReducer";
 
+import {
+  WorkoutAction,
+  WorkoutState,
+  WORKOUT_INITIAL_STATE,
+} from "@/context/workoutReducer";
+
 // Define the shape of the main app context
 interface UserContextType {
   userState: UserState;
@@ -22,25 +29,33 @@ interface UserContextType {
 }
 
 // Define the shape of the workout context
-interface WorkoutContextType {
-  workoutState: WorkoutState;
-  workoutDispatch: React.Dispatch<WorkoutAction>;
+interface ExercisestContextType {
+  exercisesState: ExercisesState;
+  exercisesDispatch: React.Dispatch<ExercisesAction>;
 }
 
 interface VisitContextType {
   visitState: VisitState;
   visitDispatch: React.Dispatch<VisitAction>;
 }
+interface WorkoutContextType {
+  workoutState: WorkoutState;
+  workoutDispatch: React.Dispatch<WorkoutAction>;
+}
 
 // Create contexts for the app state and workout data
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
-export const WorkoutContext = createContext<WorkoutContextType | undefined>(
+export const ExercisesContext = createContext<
+  ExercisestContextType | undefined
+>(undefined);
+
+export const VisitsContext = createContext<VisitContextType | undefined>(
   undefined
 );
 
-export const VisitsContext = createContext<VisitContextType | undefined>(
+export const WorkoutContext = createContext<WorkoutContextType | undefined>(
   undefined
 );
 
@@ -51,7 +66,7 @@ type AppProviderProps = {
 // Combined provider that supplies both contexts
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [userState, userDispatch] = useReducer(reducer, AUTH_INITIAL_STATE);
-  const [workoutState, workoutDispatch] = useReducer(
+  const [exercisesState, exercisesDispatch] = useReducer(
     exercisesReducer,
     EXERCISE_INITIAL_STATE
   );
@@ -59,14 +74,20 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     visitsReducer,
     VISIT_INITIAL_STATE
   );
+  const [workoutState, workoutDispatch] = useReducer(
+    workoutReducer,
+    WORKOUT_INITIAL_STATE
+  );
 
   return (
     <UserContext.Provider value={{ userState, userDispatch }}>
-      <WorkoutContext.Provider value={{ workoutState, workoutDispatch }}>
+      <ExercisesContext.Provider value={{ exercisesState, exercisesDispatch }}>
         <VisitsContext.Provider value={{ visitState, visitDispatch }}>
-          {children}
+          <WorkoutContext.Provider value={{ workoutState, workoutDispatch }}>
+            {children}
+          </WorkoutContext.Provider>
         </VisitsContext.Provider>
-      </WorkoutContext.Provider>
+      </ExercisesContext.Provider>
     </UserContext.Provider>
   );
 };
@@ -80,8 +101,8 @@ export function AuthAppContext() {
   return context;
 }
 
-export function UserWorkoutContext() {
-  const context = useContext(WorkoutContext);
+export function UserExercisesContext() {
+  const context = useContext(ExercisesContext);
   if (!context) {
     throw new Error("UserWorkoutContext must be used within an AppProvider");
   }
@@ -92,6 +113,14 @@ export function UserVisitContext() {
   const context = useContext(VisitsContext);
   if (!context) {
     throw new Error("UserVisitContext must be used within an AppProvider");
+  }
+  return context;
+}
+
+export function UserWorkoutContext() {
+  const context = useContext(WorkoutContext);
+  if (!context) {
+    throw new Error("UserWorkoutContext must be used within an AppProvider");
   }
   return context;
 }

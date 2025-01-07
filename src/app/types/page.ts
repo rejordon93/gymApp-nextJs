@@ -16,8 +16,8 @@ export type ExercisesInterfaces = {
   bodyPart: string;
   equipment: string | null;
   gifUrl: string;
-  instructions: string[];
-  secondaryMuscles: string[];
+  instructions: string;
+  secondaryMuscles: string;
   target: string;
 };
 
@@ -26,9 +26,10 @@ export type FavoritedExerciseType = {
   name: string;
   equipment: string;
   gifUrl: string;
-  instructions: string;
-  secondaryMuscles: string;
+  instructions: string[];
+  secondaryMuscles: string[];
   target: string;
+  bodyPart: string;
 };
 
 export type ProfileType = {
