@@ -49,8 +49,8 @@ model Visits {
 model UserWorkout {
   id                Int                 @id @default(autoincrement())
   userId            Int
-  workout           String
-  workoutDay        String
+  workout           String              
+  workoutDay        String              @unique
   createdAt         DateTime            @default(now())
   editedAt          DateTime            @default(now())
   completed         Boolean

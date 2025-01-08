@@ -91,7 +91,6 @@ export default function Planer() {
       setLoading(false);
     }
   };
-  console.log(workoutState.workout);
   const cardStyle = (title: string) => ({
     width: "100%",
     height: 350,

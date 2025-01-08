@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     // Check if userWorkout exists
     const userWorkout = await prisma.userWorkout.findUnique({
-      where: { id },
+      where: { id: id },
     });
 
     if (!userWorkout) {
@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
         { status: 404 }
       );
     }
+    //
 
     // Check if an exercise with this name already exists
     let favoritedExercise = await prisma.favoritedExercise.findUnique({

@@ -62,8 +62,6 @@ export async function GET(req: NextRequest) {
       };
     });
 
-    console.log("Formatted Visits:", formattedVisits);
-
     return NextResponse.json({ visits: formattedVisits }, { status: 200 });
   } catch (error) {
     console.error("Error fetching user visits:", error);

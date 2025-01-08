@@ -1,7 +1,8 @@
 {
-  "/client/profile/page": "app/client/profile/page.js",
+  "/api/profile/get/route": "app/api/profile/get/route.js",
   "/client/planner/page": "app/client/planner/page.js",
+  "/client/exercises/exercises_result/page": "app/client/exercises/exercises_result/page.js",
   "/client/exercises/page": "app/client/exercises/page.js",
-  "/page": "app/page.js",
-  "/client/exercises/exercises_result/page": "app/client/exercises/exercises_result/page.js"
+  "/client/login/page": "app/client/login/page.js",
+  "/client/logout/page": "app/client/logout/page.js"
 }
