@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ProfileType } from "@/app/types/page";
 import { useContext } from "react";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import {
   Box,
@@ -67,10 +70,17 @@ export default function ProfilePage() {
       visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
       console.log("Visit updated successfully:", res.data);
       setBtn(false);
-      router.push("/client/planner");
     } catch (error) {
       if (error instanceof Error) {
         visitDispatch({ type: ActionType.SET_ERROR, payload: error.message });
+        // Show the error toast notification
+        Toastify({
+          text: "ERROR: Missing profile data. Please update your profile.",
+          duration: 3000,
+          gravity: "top", // Position: "top" or "bottom"
+          position: "right", // Align: "left", "center" or "right"
+          backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)", // Custom styling
+        }).showToast();
       }
     }
   };
@@ -183,54 +193,48 @@ export default function ProfilePage() {
         {/* Left Column */}
         <Grid item xs={12} md={6}>
           <List>
-            {profileData ? (
-              [
-                {
-                  icon: <Person color="primary" />,
-                  label: "User Name",
-                  value: userState.user.username,
-                },
-                {
-                  icon: <Person color="primary" />,
-                  label: "First Name",
-                  value: profileData.firstName,
-                },
-                {
-                  icon: <Person color="primary" />,
-                  label: "Last Name",
-                  value: profileData?.lastName,
-                },
-                {
-                  icon: <Home color="primary" />,
-                  label: "Home Club",
-                  value: profileData?.homeClub,
-                },
-                {
-                  icon: <CalendarToday color="primary" />,
-                  label: "Member Since",
-                  value: profileData?.memberSince,
-                },
-                {
-                  icon: <Person color="primary" />,
-                  label: "Current Status",
-                  value: profileData?.currentStatus,
-                },
-              ].map(({ icon, label, value }, index) => (
-                <ListItem key={index} sx={{ py: 1.5 }}>
-                  <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText
-                    primary={label}
-                    secondary={value || "Not available"}
-                    primaryTypographyProps={{ fontWeight: "bold" }}
-                    secondaryTypographyProps={{ color: "textSecondary" }}
-                  />
-                </ListItem>
-              ))
-            ) : (
-              <Typography variant="body2" color="textSecondary">
-                Loading profile data...
-              </Typography>
-            )}
+            {[
+              {
+                icon: <Person color="primary" />,
+                label: "User Name",
+                value: userState.user.username,
+              },
+              {
+                icon: <Person color="primary" />,
+                label: "First Name",
+                value: profileData?.firstName || "Not available",
+              },
+              {
+                icon: <Person color="primary" />,
+                label: "Last Name",
+                value: profileData?.lastName,
+              },
+              {
+                icon: <Home color="primary" />,
+                label: "Home Club",
+                value: profileData?.homeClub,
+              },
+              {
+                icon: <CalendarToday color="primary" />,
+                label: "Member Since",
+                value: profileData?.memberSince,
+              },
+              {
+                icon: <Person color="primary" />,
+                label: "Current Status",
+                value: profileData?.currentStatus,
+              },
+            ].map(({ icon, label, value }, index) => (
+              <ListItem key={index} sx={{ py: 1.5 }}>
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText
+                  primary={label}
+                  secondary={value || "Not available"}
+                  primaryTypographyProps={{ fontWeight: "bold" }}
+                  secondaryTypographyProps={{ color: "textSecondary" }}
+                />
+              </ListItem>
+            ))}
           </List>
         </Grid>
 

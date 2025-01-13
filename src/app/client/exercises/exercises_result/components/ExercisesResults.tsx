@@ -15,12 +15,23 @@ import { ActionType } from "@/context/exerciseReducer";
 import axios from "axios";
 import ExercisesAddBtnResults from "./ExercisesAddMoreBtn";
 import Footer from "@/components/Footer";
-
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 export default function ExercisesResults() {
   const { exercisesState, exercisesDispatch } = UserExercisesContext();
   const [isLoading] = useState(false);
   const [workoutId, setWorkoutId] = useState<number>();
   const router = useRouter();
+
+  const showToast = (message: string, duration = 2000) => {
+    Toastify({
+      text: message,
+      duration,
+      gravity: "top",
+      position: "right",
+      backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+    }).showToast();
+  };
 
   const getWorkoutData = async () => {
     try {
@@ -33,6 +44,7 @@ export default function ExercisesResults() {
       }
     } catch (error) {
       console.error("Error fetching workout data:", error);
+      showToast("Error fetching workout data.");
     }
   };
 
@@ -62,11 +74,13 @@ export default function ExercisesResults() {
 
     if (!addToFav) {
       console.error("Workout not found");
+      showToast("Exercise not found. Try a different name.");
       return;
     }
 
     if (!workoutId) {
       console.error("Workout ID is not set");
+      showToast("You are not logged in. Please log in.");
       return;
     }
 
@@ -87,7 +101,7 @@ export default function ExercisesResults() {
         FavExercise
       );
       console.log("API Response:", response.data);
-
+      showToast(`${FavExercise} added to favorites!`);
       exercisesDispatch({
         type: ActionType.ADD_TO_FAVORITES,
         payload: [...exercisesState.favExercises, addToFav],
@@ -97,6 +111,7 @@ export default function ExercisesResults() {
         console.error("Axios error:", error.response?.data || error.message);
       } else {
         console.error("Unexpected error:", error);
+        showToast("Failed to add exercise to favorites.");
       }
     }
   };
@@ -109,6 +124,7 @@ export default function ExercisesResults() {
       type: ActionType.REMOVE_WORKOUT,
       payload: removeBtn,
     });
+    showToast("Exercise removed successfully!");
   };
 
   return (

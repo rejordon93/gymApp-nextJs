@@ -27,7 +27,7 @@ export type WorkoutAction =
 interface Workout {
   id?: number;
   userId?: number;
-  workout?: string;
+  workout?: string[];
   workoutDay?: string;
   createdAt?: string | null;
   completed?: boolean;
@@ -46,7 +46,7 @@ export interface WorkoutState {
 export const WORKOUT_INITIAL_STATE: WorkoutState = {
   workout: {
     userId: 0,
-    workout: "",
+    workout: [],
     workoutDay: "",
     createdAt: new Date().toISOString(), // Use ISO string format for clarity
     completed: false,
