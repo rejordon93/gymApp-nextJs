@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -7,40 +6,50 @@ import {
   Typography,
   Grid,
   Button,
-  CircularProgress,
-  IconButton,
-  CardMedia,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import { UserWorkoutContext } from "@/context/context";
 import { ActionType } from "@/context/workoutReducer";
 import { ProfileType } from "@/app/types/page";
 import axios from "axios";
 import { showToast } from "@/app/utils/ToastUtils";
-import { cardStyle } from "@/styles/workout";
-import { weekDays, cardData } from "@/app/utils/ToastUtils";
+import { cardData } from "@/app/utils/ToastUtils";
+import FavCards from "./FavCards";
 
 export default function Cards() {
   const [cardVal, setCardVal] = useState<string>("");
   const { workoutState, workoutDispatch } = UserWorkoutContext();
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
-  const [btnChange, setButChange] = useState(false); // Track if the button text should change
-  const [isFirstWorkout, setIsFirstWorkout] = useState(true); // Flag to check if it's the first workout
+  const [btnChange, setButChange] = useState(false);
+  const [isFirstWorkout, setIsFirstWorkout] = useState(true);
 
-  const handleClickBtn = (item: string) => {
-    setCardVal(item); // Update state with the selected card name
+  useEffect(() => {
+    showToast("Click the card you want to add workout");
+    const timer = setTimeout(() => {}, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleClickCard = (item: string) => {
+    setCardVal(item);
     const today = new Date();
     const dayOfWeek = today.getDay();
-    const dayName = weekDays[dayOfWeek];
+    const dayName = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ][dayOfWeek];
     const workoutObj = {
-      userId: profileData?.userId, // Make sure profileData is valid
+      userId: profileData?.userId,
       workoutDay: dayName,
       workout: [item],
       completed: true,
       createdAt: new Date().toISOString(),
     };
     workoutDispatch({ type: ActionType.SET_WORKOUT, payload: workoutObj });
-    setButChange(true); // Set button to show "Add Workout"
+    setButChange(true);
   };
 
   const handleButton = async () => {
@@ -51,33 +60,26 @@ export default function Cards() {
       }
       const { workout } = workoutState;
 
-      // POST request for the first workout (Create new workout)
       if (isFirstWorkout) {
         const res = await axios.post("/api/workouts/postWorkout", workout);
         showToast(`Workout ${workout.workout} added successfully!`);
-
-        // Dispatch workout to context
         workoutDispatch({
           type: ActionType.SET_WORKOUT,
           payload: res.data,
         });
-
-        setIsFirstWorkout(false); // Set the flag to false after the first workout
-        setButChange(false); // Reset the button text to "Add more Workouts"
+        setIsFirstWorkout(false);
+        setButChange(false);
         console.log(res.data);
       } else {
-        // PATCH request for subsequent workouts (Update existing workout)
         const res = await axios.patch("/api/workouts/patchWorkout", {
           newWorkout: workout,
         });
         showToast(`Workout ${workout.workout} updated successfully!`);
-
-        // Dispatch updated workout to context
         workoutDispatch({
           type: ActionType.SET_UPDATED_WORKOUT,
           payload: res.data,
         });
-        setButChange(false); // Reset the button text to "Add more Workouts"
+        setButChange(false);
         console.log(res.data);
       }
     } catch (error) {
@@ -92,45 +94,78 @@ export default function Cards() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "2rem" }}>
-      <Grid container spacing={2} justifyContent="center" maxWidth={1200}>
-        {cardData.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card
-              sx={{
-                maxWidth: 345,
-                padding: "1rem",
-                transition: "transform 0.3s ease",
-                "&:hover": { transform: "scale(1.05)" }, // Add hover effect
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  sx={{ textAlign: "center" }}
+      <Grid container spacing={3} justifyContent="center" maxWidth={1200}>
+        {/* Left side: Cards */}
+        <Grid item xs={12} sm={6} md={8}>
+          <Grid container spacing={3} justifyContent="center">
+            {cardData.map((item, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card
+                  sx={{
+                    maxWidth: 400,
+                    height: 250,
+                    padding: "1rem",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                    },
+                    borderRadius: "16px",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onClick={() => handleClickCard(item)}
                 >
-                  {item} {/* Display the card name */}
-                </Typography>
-                <Button
-                  size="small"
-                  color="primary"
-                  onClick={() => handleClickBtn(item)} // Pass the name directly
-                  sx={{ marginTop: "1rem" }}
-                >
-                  Select
-                </Button>
-              </CardContent>
-            </Card>
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      component="div"
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: 600,
+                        fontSize: "1.2rem",
+                        color: "#3f3f3f",
+                      }}
+                    >
+                      {item}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
-        ))}
+        </Grid>
+
+        {/* Right side: FavCards */}
+        <Grid item xs={12} sm={6} md={4}>
+          <FavCards />
+        </Grid>
       </Grid>
+
       <Button
-        sx={{ alignContent: "center", marginTop: "2rem" }}
+        sx={{
+          marginTop: "2rem",
+          padding: "0.8rem 2rem",
+          fontSize: "1rem",
+          backgroundColor: "#1976d2",
+          color: "white",
+          "&:hover": {
+            backgroundColor: "#1565c0",
+          },
+        }}
         onClick={handleButton}
-        disabled={!cardVal} // Disable button if no workout is selected
+        disabled={!cardVal}
       >
-        {btnChange ? "Add Workout" : "Add more Workouts"}{" "}
-        {/* Button text changes */}
+        {btnChange ? "Add Workout" : "Add more Workouts"}
       </Button>
     </div>
   );

@@ -1,7 +1,14 @@
 {
+  "/api/workouts/postWorkout/route": "app/api/workouts/postWorkout/route.js",
   "/api/workouts/patchWorkout/route": "app/api/workouts/patchWorkout/route.js",
-  "/client/login/page": "app/client/login/page.js",
+  "/api/workouts/getWorkout/route": "app/api/workouts/getWorkout/route.js",
+  "/api/profile/get/route": "app/api/profile/get/route.js",
+  "/api/users/logout/route": "app/api/users/logout/route.js",
+  "/api/visits/getVisits/route": "app/api/visits/getVisits/route.js",
+  "/api/users/login/route": "app/api/users/login/route.js",
+  "/client/logout/page": "app/client/logout/page.js",
+  "/client/exercises/page": "app/client/exercises/page.js",
   "/client/planner/page": "app/client/planner/page.js",
-  "/client/profile/page": "app/client/profile/page.js",
-  "/client/profileUpdateForm/page": "app/client/profileUpdateForm/page.js"
+  "/client/login/page": "app/client/login/page.js",
+  "/client/profile/page": "app/client/profile/page.js"
 }
