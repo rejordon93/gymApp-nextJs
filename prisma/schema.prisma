@@ -49,11 +49,8 @@ model Visits {
 model UserWorkout {
   id                Int                 @id @default(autoincrement())
   userId            Int                
-  workout           String[]       
-  workoutDay        String              
-  createdAt         DateTime            @default(now())
+  workout           String               
   editedAt          DateTime            @default(now())
-  completed         Boolean
   user              User                @relation(fields: [userId], references: [id])
   visits      Visits[]       @relation("WorkoutToUserWorkout") // Many-to-many relationship
   favoritedExercise FavoritedExercise[] @relation("UserWorkoutFavoritedExercises")

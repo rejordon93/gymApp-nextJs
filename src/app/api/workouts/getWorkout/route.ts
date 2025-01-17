@@ -15,10 +15,12 @@ export async function GET(req: NextRequest) {
         { status: 401 }
       );
     }
-    const findFirst = await prisma.userWorkout.findFirst({
+    const findFirst = await prisma.userWorkout.findMany({
       where: { userId: userToken },
-      orderBy: { workoutDay: "desc" },
+      orderBy: { workout: "desc" },
     });
+
+    console.log(findFirst);
 
     // Send back the fetched data
     return NextResponse.json(findFirst, { status: 200 });

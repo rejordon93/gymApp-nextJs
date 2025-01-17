@@ -5,69 +5,65 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, workout, createdAt, completed, workoutDay } = body;
+    const { workout } = body;
 
-    // Validate request body
-    if (
-      !workout ||
-      !createdAt ||
-      typeof completed !== "boolean" ||
-      !workoutDay
-    ) {
+    // Check if the workout title is provided
+    if (!workout) {
       return NextResponse.json(
-        { error: "Missing or invalid required fields" },
+        { error: "Missing required workout title" },
         { status: 400 }
       );
     }
 
-    // Validate user token
-    let userId: number;
-    try {
-      userId = getDataFromToken(req);
-    } catch {
-      return NextResponse.json(
-        { error: "Invalid token provided" },
-        { status: 401 }
-      );
-    }
+    // Get the userId from the token
+    const userId = getDataFromToken(req);
+
+    // Check if the userId is valid
     if (!userId) {
-      return NextResponse.json(
-        { error: "No user associated with this request" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "No user token" }, { status: 401 });
     }
 
-    // Check if the user already has a workout entry for the day
-    const existingWorkout = await prisma.userWorkout.findFirst({
-      where: {
-        id: id,
+    // Create the new user workout
+    const postWorkout = await prisma.userWorkout.create({
+      data: {
+        workout,
+        userId,
       },
     });
 
-    let response;
-    // If no workout exists, create a new one
-    if (!existingWorkout) {
-      const newWorkout = await prisma.userWorkout.create({
-        data: {
-          workout,
-          workoutDay,
-          createdAt,
-          completed,
-          userId,
-        },
-      });
-      response = {
-        message: "Workout successfully added",
-        userWorkout: newWorkout,
-      };
+    // Retrieve the visit ID for the user
+    const visit = await prisma.visits.findFirst({
+      where: { userId },
+    });
+
+    // Check if a visit exists for the user
+    if (!visit) {
+      return NextResponse.json(
+        { error: `No visit found for user ID ${userId}` },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(response, { status: 201 });
+    // Update the Visits table by linking the new UserWorkout
+    const updateVisit = await prisma.visits.update({
+      where: {
+        id: visit.id, // Use the visit's ID for the update
+      },
+      data: {
+        userWorkouts: {
+          connect: { id: postWorkout.id }, // Connect the new UserWorkout to the visit
+        },
+      },
+    });
+
+    console.log("Post Workout:", updateVisit, postWorkout); // Debugging line
+
+    // Return a successful response with the created workout
+    return NextResponse.json(postWorkout, { status: 201 });
   } catch (error) {
-    // Log and handle internal server errors
-    console.error("Error processing workout creation or update:", error);
+    console.error("Error in POST /api/workouts:", error);
     return NextResponse.json(
-      { error: "An internal server error occurred. Please try again later." },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }

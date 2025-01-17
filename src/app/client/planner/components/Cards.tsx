@@ -1,179 +1,201 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Card,
   CardContent,
   Typography,
-  Grid,
+  CardActionArea,
+  Snackbar,
+  SnackbarContent,
   Button,
+  Stack,
 } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 import { UserWorkoutContext } from "@/context/context";
 import { ActionType } from "@/context/workoutReducer";
-import { ProfileType } from "@/app/types/page";
 import axios from "axios";
-import { showToast } from "@/app/utils/ToastUtils";
-import { cardData } from "@/app/utils/ToastUtils";
 import FavCards from "./FavCards";
 
 export default function Cards() {
-  const [cardVal, setCardVal] = useState<string>("");
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [openMessage, setOpenMessage] = useState(false);
+  const [message, setMessage] = useState(""); // Dynamic message state
+  const [isError, setIsError] = useState(false); // Track success or error
   const { workoutState, workoutDispatch } = UserWorkoutContext();
-  const [profileData, setProfileData] = useState<ProfileType | null>(null);
-  const [btnChange, setButChange] = useState(false);
-  const [isFirstWorkout, setIsFirstWorkout] = useState(true);
 
-  useEffect(() => {
-    showToast("Click the card you want to add workout");
-    const timer = setTimeout(() => {}, 5000);
-    return () => clearTimeout(timer);
-  }, []);
+  const cards = [
+    { id: 1, title: "Chest", description: "Upper body" },
+    { id: 2, title: "Back", description: "Upper body" },
+    { id: 3, title: "Legs", description: "Lower body" },
+    { id: 4, title: "Arms", description: "Upper/Lower arms" },
+    { id: 5, title: "Cardio", description: "Core body" },
+    { id: 6, title: "Abs", description: "Lower body" },
+  ];
 
-  const handleClickCard = (item: string) => {
-    setCardVal(item);
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const dayName = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ][dayOfWeek];
-    const workoutObj = {
-      userId: profileData?.userId,
-      workoutDay: dayName,
-      workout: [item],
-      completed: true,
-      createdAt: new Date().toISOString(),
-    };
-    workoutDispatch({ type: ActionType.SET_WORKOUT, payload: workoutObj });
-    setButChange(true);
+  const handleCardClick = (title: string) => {
+    setSelectedCard(title);
+    setMessage(`You selected: ${title}`);
+    setIsError(false);
+    setOpenMessage(true);
   };
 
-  const handleButton = async () => {
+  const handleClose = () => setOpenMessage(false);
+
+  const handleBtn = async () => {
+    if (!selectedCard) {
+      setMessage("Please select a workout first.");
+      setIsError(true);
+      setOpenMessage(true);
+      return;
+    }
     try {
-      if (!cardVal) {
-        showToast("Please select a card before proceeding.");
-        return;
-      }
-      const { workout } = workoutState;
-      const res = await axios.post("/api/workouts/postWorkout", workout);
-      showToast(`Workout ${workout.workout} added successfully!`);
-      workoutDispatch({
-        type: ActionType.SET_WORKOUT,
-        payload: res.data,
-      });
-      setIsFirstWorkout(false);
-      setButChange(false);
-      console.log(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        showToast(`Error: ${error.response?.data?.message || error.message}`);
+      const data = { workout: selectedCard };
+      const res = await axios.post("/api/workouts/postWorkout", data);
+
+      if (res.status === 201) {
+        workoutDispatch({ type: ActionType.SET_WORKOUT, payload: res.data });
+        setMessage(`Workout "${selectedCard}" added successfully!`);
+        setIsError(false);
+        setOpenMessage(true);
       } else {
-        showToast(`Error: ${(error as Error).message}`);
+        throw new Error("Unexpected error occurred.");
       }
-      console.error("error", error);
-    }
-  };
-
-  const patchWorkout = async () => {
-    try {
-      const { workout } = workoutState;
-
-      // Prepare the data to send, ensure all necessary fields are included
-      const payload = {
-        id: workout.id, // Assuming `id` exists on your workout object
-        workoutDay: workout.workoutDay, // Include workout day if necessary
-        workout: workout.workout, // The actual workout array
-        completed: workout.completed, // Assuming completed is part of the workout state
-        createdAt: workout.createdAt, // Created date, if necessary
-      };
-      console.log(payload);
-
-      // Sending POST request with the proper payload
-      const res = await axios.post("/api/workouts/postWorkout", payload);
-      console.log(res.data); // Log the response data
     } catch (error) {
-      console.error("Error:", error);
+      setMessage("Failed to add workout. Please Check in First.");
+      setIsError(true);
+      setOpenMessage(true);
     }
   };
+
+  const renderSnackbarContent = () => (
+    <SnackbarContent
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: isError ? "#d32f2f" : "#2e7d32",
+        color: "#fff",
+      }}
+      message={
+        <Box display="flex" alignItems="center">
+          {isError ? (
+            <ErrorIcon sx={{ marginRight: "8px" }} />
+          ) : (
+            <CheckCircleIcon sx={{ marginRight: "8px" }} />
+          )}
+          {message}
+        </Box>
+      }
+    />
+  );
 
   return (
-    <div style={{ textAlign: "center", marginTop: "2rem" }}>
-      <Grid container spacing={3} justifyContent="center" maxWidth={1200}>
-        {/* Left side: Cards */}
-        <Grid item xs={12} sm={6} md={8}>
-          <Grid container spacing={3} justifyContent="center">
-            {cardData.map((item, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card
-                  sx={{
-                    maxWidth: 400,
-                    height: 250,
-                    padding: "1rem",
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                    },
-                    borderRadius: "16px",
-                    cursor: "pointer",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onClick={() => handleClickCard(item)}
-                >
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{
-                        textAlign: "center",
-                        fontWeight: 600,
-                        fontSize: "1.2rem",
-                        color: "#3f3f3f",
-                      }}
-                    >
-                      {item}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
-
-        {/* Right side: FavCards */}
-        <Grid item xs={12} sm={6} md={4}>
-          <FavCards />
-        </Grid>
-      </Grid>
-
-      <Button
+    <>
+      <Box
         sx={{
-          marginTop: "2rem",
-          padding: "0.8rem 2rem",
-          fontSize: "1rem",
-          backgroundColor: "#1976d2",
-          color: "white",
-          "&:hover": {
-            backgroundColor: "#1565c0",
-          },
+          width: "100%",
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 2,
         }}
-        onClick={btnChange ? handleButton : patchWorkout}
       >
-        {btnChange ? "Add Workout" : "Add more Workouts"}
-      </Button>
-    </div>
+        {cards.map((card) => (
+          <Card
+            key={card.id}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              height: "350px",
+              alignItems: "center",
+              textAlign: "center",
+              padding: 2,
+              boxShadow: 3,
+            }}
+          >
+            <CardActionArea
+              onClick={() => handleCardClick(card.title)}
+              data-active={selectedCard === card.title ? "" : undefined}
+              sx={{
+                width: "100%",
+                height: "100%",
+                "&[data-active]": {
+                  backgroundColor: "action.selected",
+                  "&:hover": {
+                    backgroundColor: "action.selectedHover",
+                  },
+                },
+              }}
+            >
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    fontWeight: "bold",
+                    fontFamily: "Roboto, sans-serif",
+                    marginBottom: 1,
+                  }}
+                >
+                  {card.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ fontFamily: "Roboto, sans-serif" }}
+                >
+                  {card.description}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))}
+      </Box>
+      <Snackbar
+        open={openMessage}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        {renderSnackbarContent()}
+      </Snackbar>
+      <Stack
+        direction="row"
+        marginTop="2rem"
+        height="4rem"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Button
+          onClick={handleBtn}
+          variant="contained"
+          sx={{
+            padding: "0.75rem 2rem",
+            fontSize: "1rem",
+            fontWeight: "bold",
+            textTransform: "none",
+            borderRadius: "2rem",
+            backgroundColor: "#1976d2",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#155a9c",
+            },
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          Add A Workout
+        </Button>
+        <Button sx={{ padding: 0 }}>
+          <FavCards />
+        </Button>
+      </Stack>
+    </>
   );
 }

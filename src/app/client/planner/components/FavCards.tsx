@@ -1,94 +1,116 @@
 import { useState, useEffect } from "react";
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
   CircularProgress,
+  Button,
+  Menu,
+  MenuItem,
+  Typography,
 } from "@mui/material";
-import { showToast } from "@/app/utils/ToastUtils";
 import axios from "axios";
 
+interface Workout {
+  workout: string;
+}
+
 export default function FavCards() {
-  const [favWorkouts, setFavWorkouts] = useState<string[]>([]);
+  const [favWorkouts, setFavWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       try {
         const res = await axios.get("/api/workouts/getWorkout");
-        setFavWorkouts(res.data.workout);
-        setLoading(false);
-        showToast("Favorited workouts loaded!");
+        if (Array.isArray(res.data)) {
+          setFavWorkouts(res.data);
+        }
       } catch (error) {
-        console.error("error", error);
+        console.error("Error fetching workouts:", error);
+      } finally {
         setLoading(false);
-        showToast("Failed to load workouts.");
       }
     };
     getData();
   }, []);
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  if (loading) {
+    return (
+      <div
+        style={{ display: "flex", justifyContent: "center", padding: "1rem" }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <Typography
-        variant="h4"
+    <div
+      style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }}
+    >
+      <Button
+        variant="contained"
+        onClick={handleClick}
         sx={{
-          textAlign: "center",
-          marginTop: "-6.6rem", // Adjust this value to move it upwards
-          paddingBottom: "4rem", // Adjust or remove this if unnecessary
+          backgroundColor: "#1976d2",
+          color: "#fff",
+          fontWeight: "bold",
+          textTransform: "none",
+          borderRadius: "1rem",
+          padding: "0.5rem 1.5rem",
+          "&:hover": {
+            backgroundColor: "#155a9c",
+          },
         }}
       >
-        Created Plans
-      </Typography>
-
-      {loading ? (
-        <CircularProgress
-          sx={{ display: "block", margin: "auto", marginTop: "2rem" }}
-        />
-      ) : favWorkouts.length === 0 ? (
-        <Typography
-          variant="h6"
-          sx={{ textAlign: "center", marginTop: "2rem" }}
-        >
-          No favorite workouts found.
-        </Typography>
-      ) : (
-        <Grid container spacing={3} justifyContent="center" maxWidth={1200}>
-          {favWorkouts.map((item, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card
-                sx={{
-                  maxWidth: 550,
-                  height: 250,
-                  padding: "1rem",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                  },
-                  borderRadius: "16px",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <CardContent>
-                  <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ textAlign: "center", padding: "2rem" }}
-                  >
-                    {item}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+        Show Created Plans
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: 48 * 4.5,
+            width: "20ch",
+            borderRadius: "10px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+          },
+        }}
+      >
+        {favWorkouts.length > 0 ? (
+          favWorkouts.map((workout, index) => (
+            <MenuItem
+              key={index}
+              onClick={handleClose}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "#f5f5f5",
+                },
+                padding: "0.75rem 1.5rem",
+              }}
+            >
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                {workout.workout}
+              </Typography>
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled sx={{ padding: "0.75rem 1.5rem" }}>
+            <Typography variant="body1" color="text.secondary">
+              No workouts found
+            </Typography>
+          </MenuItem>
+        )}
+      </Menu>
     </div>
   );
 }

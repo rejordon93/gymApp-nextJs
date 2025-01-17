@@ -6,31 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/client/planner/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/client/planner/page.css",
-      "static/chunks/app/client/planner/page.js"
-    ],
-    "/api/workouts/getWorkout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/getWorkout/route.js"
-    ],
-    "/api/profile/get/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/profile/get/route.js"
-    ],
-    "/client/logout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/logout/page.js"
-    ],
-    "/api/users/logout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/logout/route.js"
+      "static/chunks/app/page.js"
     ],
     "/client/login/page": [
       "static/chunks/webpack.js",
@@ -48,10 +27,25 @@
       "static/css/app/client/profile/page.css",
       "static/chunks/app/client/profile/page.js"
     ],
+    "/client/planner/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/planner/page.js"
+    ],
     "/api/visits/getVisits/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/visits/getVisits/route.js"
+    ],
+    "/api/profile/get/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/profile/get/route.js"
+    ],
+    "/api/workouts/getWorkout/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/workouts/getWorkout/route.js"
     ],
     "/client/exercises/page": [
       "static/chunks/webpack.js",
@@ -62,6 +56,21 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/workouts/postWorkout/route.js"
+    ],
+    "/client/logout/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/logout/page.js"
+    ],
+    "/api/users/logout/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/users/logout/route.js"
+    ],
+    "/api/visits/usersVisits/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/visits/usersVisits/route.js"
     ]
   }
 }
