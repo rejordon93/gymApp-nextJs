@@ -1,60 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log("Received body:", body); // Debugging the incoming request body
+    const { id, workoutDay, workout, completed, createdAt } = body;
 
-    const { newWorkout } = body;
-
-    if (!newWorkout) {
+    // Validate required fields
+    if (!id || !workout) {
       return NextResponse.json(
-        { error: "Missing required field: newWorkout" },
+        { error: "Missing or invalid required fields" },
         { status: 400 }
       );
     }
 
-    const userId = getDataFromToken(req);
-    if (!userId) {
-      return NextResponse.json(
-        { error: "Invalid token or no user associated with this request" },
-        { status: 401 }
-      );
-    }
-    const existingWorkout = await prisma.userWorkout.findUnique({
-      where: { userId },
+    // Find the existing workout by id
+    const existingWorkout = await prisma.userWorkout.findFirst({
+      where: { id },
     });
 
-    console.log("Existing workout:", existingWorkout);
+    if (!existingWorkout) {
+      return NextResponse.json({ error: "Workout not found" }, { status: 404 });
+    }
 
+    // Update the workout by appending new items or updating specific fields
     const updatedWorkout = await prisma.userWorkout.update({
-      where: { userId },
+      where: { id },
       data: {
         workout: {
-          push: newWorkout.workout, // Append to the existing workout array
+          // Appending new workouts to the existing workout array
+          set: [...existingWorkout.workout, ...workout], // Using `set` to update workout array
         },
-        editedAt: new Date(),
+        workoutDay: workoutDay ?? existingWorkout.workoutDay, // Update workout day if provided, else keep old value
+        completed: completed ?? existingWorkout.completed, // Update completed if provided, else keep old value
+        createdAt: createdAt ?? existingWorkout.createdAt, // Update createdAt if provided, else keep old value
       },
     });
 
-    console.log("Updated workout:", updatedWorkout); // Log updatedWorkout here
-
-    // Check if update returned null or invalid response
-    if (!updatedWorkout) {
-      console.error("Failed to update workout for user:", userId);
-      return NextResponse.json(
-        { error: "Failed to update workout" },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(updatedWorkout, { status: 200 });
+    return NextResponse.json(updatedWorkout, { status: 200 }); // Return the updated workout
   } catch (error) {
-    console.error("Error updating workout:", error); // Improved error logging
+    console.error("Error updating workout:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Failed to update workout. Please try again." },
       { status: 500 }
     );
   }

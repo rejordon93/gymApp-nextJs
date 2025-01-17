@@ -12,25 +12,15 @@
       "static/css/app/client/planner/page.css",
       "static/chunks/app/client/planner/page.js"
     ],
-    "/api/workouts/patchWorkout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/patchWorkout/route.js"
-    ],
-    "/api/profile/get/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/profile/get/route.js"
-    ],
     "/api/workouts/getWorkout/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/workouts/getWorkout/route.js"
     ],
-    "/api/workouts/postWorkout/route": [
+    "/api/profile/get/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/postWorkout/route.js"
+      "static/chunks/app/api/profile/get/route.js"
     ],
     "/client/logout/page": [
       "static/chunks/webpack.js",
@@ -63,25 +53,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/visits/getVisits/route.js"
     ],
-    "/client/profileUpdateForm/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/profileUpdateForm/page.js"
-    ],
-    "/api/profile/patch/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/profile/patch/route.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/client/exercises/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/client/exercises/page.js"
+    ],
+    "/api/workouts/postWorkout/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/workouts/postWorkout/route.js"
     ]
   }
 }

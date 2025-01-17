@@ -59,29 +59,15 @@ export default function Cards() {
         return;
       }
       const { workout } = workoutState;
-
-      if (isFirstWorkout) {
-        const res = await axios.post("/api/workouts/postWorkout", workout);
-        showToast(`Workout ${workout.workout} added successfully!`);
-        workoutDispatch({
-          type: ActionType.SET_WORKOUT,
-          payload: res.data,
-        });
-        setIsFirstWorkout(false);
-        setButChange(false);
-        console.log(res.data);
-      } else {
-        const res = await axios.patch("/api/workouts/patchWorkout", {
-          newWorkout: workout,
-        });
-        showToast(`Workout ${workout.workout} updated successfully!`);
-        workoutDispatch({
-          type: ActionType.SET_UPDATED_WORKOUT,
-          payload: res.data,
-        });
-        setButChange(false);
-        console.log(res.data);
-      }
+      const res = await axios.post("/api/workouts/postWorkout", workout);
+      showToast(`Workout ${workout.workout} added successfully!`);
+      workoutDispatch({
+        type: ActionType.SET_WORKOUT,
+        payload: res.data,
+      });
+      setIsFirstWorkout(false);
+      setButChange(false);
+      console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         showToast(`Error: ${error.response?.data?.message || error.message}`);
@@ -89,6 +75,28 @@ export default function Cards() {
         showToast(`Error: ${(error as Error).message}`);
       }
       console.error("error", error);
+    }
+  };
+
+  const patchWorkout = async () => {
+    try {
+      const { workout } = workoutState;
+
+      // Prepare the data to send, ensure all necessary fields are included
+      const payload = {
+        id: workout.id, // Assuming `id` exists on your workout object
+        workoutDay: workout.workoutDay, // Include workout day if necessary
+        workout: workout.workout, // The actual workout array
+        completed: workout.completed, // Assuming completed is part of the workout state
+        createdAt: workout.createdAt, // Created date, if necessary
+      };
+      console.log(payload);
+
+      // Sending POST request with the proper payload
+      const res = await axios.post("/api/workouts/postWorkout", payload);
+      console.log(res.data); // Log the response data
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -162,8 +170,7 @@ export default function Cards() {
             backgroundColor: "#1565c0",
           },
         }}
-        onClick={handleButton}
-        disabled={!cardVal}
+        onClick={btnChange ? handleButton : patchWorkout}
       >
         {btnChange ? "Add Workout" : "Add more Workouts"}
       </Button>

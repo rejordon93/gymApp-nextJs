@@ -48,7 +48,7 @@ model Visits {
 
 model UserWorkout {
   id                Int                 @id @default(autoincrement())
-  userId            Int                 @unique
+  userId            Int                
   workout           String[]       
   workoutDay        String              
   createdAt         DateTime            @default(now())
