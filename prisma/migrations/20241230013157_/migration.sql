@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Visits" ALTER COLUMN "checkout" DROP NOT NULL,
+ALTER COLUMN "checkout" DROP DEFAULT;
