@@ -9,7 +9,7 @@ import {
   FormGroup,
 } from "@mui/material";
 import axios from "axios";
-
+// can the any
 export default function CheckInModel() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any[]>([]); // Adjusted to handle array of objects
