@@ -1,6 +1,9 @@
 {
   "/api/visits/usersVisits/route": "app/api/visits/usersVisits/route.js",
   "/api/visits/updateUsersVisits/route": "app/api/visits/updateUsersVisits/route.js",
+  "/client/signup/page": "app/client/signup/page.js",
   "/client/login/page": "app/client/login/page.js",
-  "/client/profile/page": "app/client/profile/page.js"
+  "/client/planner/page": "app/client/planner/page.js",
+  "/client/profile/page": "app/client/profile/page.js",
+  "/client/profileUpdateForm/page": "app/client/profileUpdateForm/page.js"
 }

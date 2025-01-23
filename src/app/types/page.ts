@@ -50,6 +50,7 @@ export type WorkoutPlanInput = {
   weight?: number | null;
   updateWeighIn?: number | null;
   workoutReview?: string | null;
+  time?: Date | string;
   checkout: Date | string;
 };
 

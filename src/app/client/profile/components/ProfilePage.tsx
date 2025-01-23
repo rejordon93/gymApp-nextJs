@@ -28,7 +28,6 @@ export default function ProfilePage() {
   const [data, setData] = useState<string[]>([]);
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
   const [btn, setBtn] = useState(true);
-  // set up open close model state
   const [open, setOpen] = useState(false);
   const [selectedWorkouts, setSelectedWorkouts] = useState<number[]>([]);
 
@@ -67,9 +66,6 @@ export default function ProfilePage() {
         userId: profileData?.userId,
         checkin: new Date().toISOString(),
         checkOut: null,
-        weight: 0,
-        updateWeighIn: 0,
-        workoutReview: "Passing Data",
       };
 
       try {
@@ -89,17 +85,25 @@ export default function ProfilePage() {
           }).showToast();
         }
       }
-    }, 10000); // Small delay to allow rendering of the state change
+    }, 1000); // Small delay to allow rendering of the state change
   };
 
-  // console.log(visitState.visit.data.checkout);
   const handleCheckOutBtn = async () => {
+    const checkoutDate = new Date(); // Current timestamp for checkout
+    // const checkinDate = new Date(visitState.visit.data.checkin); // Convert checkin to Date object
+
+    // Calculate the time difference in hours
+    // const timeDifference = (checkoutDate - checkinDate) / (1000 * 60 * 60);
+
     const data = {
       userId: visitState.visit.data.userId,
-      checkin: visitState.visit.data.checkin,
-      checkout: new Date().toISOString(),
+      checkin: visitState.visit.data.checkin, // Existing checkin
+      checkout: checkoutDate.toISOString(), // Current timestamp as ISO string
+      // time: parseFloat(timeDifference.toFixed(2)), // Time in hours, rounded to 2 decimal places
     };
-    console.log(data);
+
+    console.log("Checkout Data:", data);
+
     try {
       const res = await axios.patch("/api/visits/updateUsersVisits", data);
       visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
@@ -112,6 +116,7 @@ export default function ProfilePage() {
       }
     }
   };
+
   const handleCheckboxChange = (index: number) => {
     setSelectedWorkouts((prevSelected) => {
       if (prevSelected.includes(index)) {

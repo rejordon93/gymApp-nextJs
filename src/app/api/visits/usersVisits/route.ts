@@ -22,8 +22,6 @@ export async function POST(req: NextRequest) {
     }
 
     const checkinDate = new Date().toISOString();
-    const timeData = new Date().toISOString();
-    // const checkoutDate = new Date().toISOString();
 
     // Create workout plan in the database
     const userVisit = await prisma.visits.create({
@@ -31,7 +29,6 @@ export async function POST(req: NextRequest) {
         userId,
         checkin: checkinDate,
         checkout: null,
-        time: timeData,
       },
     });
 

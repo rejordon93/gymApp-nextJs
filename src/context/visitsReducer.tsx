@@ -28,9 +28,7 @@ interface Visit {
   id?: number;
   userId: number;
   checkin: string | null;
-  weight?: number;
-  updateWeighIn?: number;
-  workoutReview?: string;
+  time?: string;
   checkout?: string;
 }
 
@@ -49,9 +47,7 @@ export const VISIT_INITIAL_STATE: VisitState = {
   visit: {
     userId: 0,
     checkin: Date.now().toString(),
-    weight: 0,
-    updateWeighIn: 0,
-    workoutReview: "",
+    time: Date.toString(),
     checkout: Date.toString(),
   },
   apiRequestContext: {

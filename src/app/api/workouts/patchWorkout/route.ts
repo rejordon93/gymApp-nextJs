@@ -1,47 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, workoutDay, workout, completed, createdAt } = body;
+    const { id, workout } = body; // Extract workoutId and updated workout details
+
+    console.log(workout); // Debugging logs
 
     // Validate required fields
-    if (!id || !workout) {
+    if (!workout) {
       return NextResponse.json(
-        { error: "Missing or invalid required fields" },
+        { error: "Missing required fields: workoutId or workout" },
         { status: 400 }
       );
     }
 
-    // Find the existing workout by id
-    const existingWorkout = await prisma.userWorkout.findFirst({
-      where: { id },
-    });
+    // Get the userId from the token
+    const userId = getDataFromToken(req);
 
-    if (!existingWorkout) {
-      return NextResponse.json({ error: "Workout not found" }, { status: 404 });
+    // Check if the userId is valid
+    if (!userId) {
+      return NextResponse.json({ message: "No user token" }, { status: 401 });
     }
 
-    // Update the workout by appending new items or updating specific fields
+    // Update the workout details
     const updatedWorkout = await prisma.userWorkout.update({
-      where: { id },
-      data: {
-        workout: {
-          // Appending new workouts to the existing workout array
-          set: [...existingWorkout.workout, ...workout], // Using `set` to update workout array
-        },
-        workoutDay: workoutDay ?? existingWorkout.workoutDay, // Update workout day if provided, else keep old value
-        completed: completed ?? existingWorkout.completed, // Update completed if provided, else keep old value
-        createdAt: createdAt ?? existingWorkout.createdAt, // Update createdAt if provided, else keep old value
-      },
+      where: { id: id, userId: userId },
+      data: { workout },
     });
 
-    return NextResponse.json(updatedWorkout, { status: 200 }); // Return the updated workout
+    console.log("Updated Workout:", updatedWorkout); // Debugging logs
+
+    // Return the updated workout
+    return NextResponse.json(updatedWorkout, { status: 200 });
   } catch (error) {
-    console.error("Error updating workout:", error);
+    console.error("Error in PATCH /api/workouts:", error);
     return NextResponse.json(
-      { error: "Failed to update workout. Please try again." },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
