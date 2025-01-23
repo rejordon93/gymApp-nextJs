@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { ProfileType } from "@/app/types/page";
 import { useContext } from "react";
 import Toastify from "toastify-js";
@@ -12,37 +11,26 @@ import {
   Box,
   Button,
   Typography,
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+  Modal,
 } from "@mui/material";
-import {
-  Edit,
-  Person,
-  Email,
-  Phone,
-  Home,
-  LocationCity,
-  CalendarToday,
-} from "@mui/icons-material";
 
-import { AuthAppContext } from "@/context/context";
 import { VisitsContext } from "@/context/context";
 import { ActionType } from "@/context/visitsReducer";
+import ProfileLowerBtn from "./ProfileLowerBtns";
+import ProfileInfo from "./ProfileInfo";
 
 export default function ProfilePage() {
   const context = useContext(VisitsContext)!;
-
-  const { userState } = AuthAppContext();
   const { visitState, visitDispatch } = context;
-
+  const [data, setData] = useState<string[]>([]);
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
   const [btn, setBtn] = useState(true);
-
-  const router = useRouter();
+  // set up open close model state
+  const [open, setOpen] = useState(false);
+  const [selectedWorkouts, setSelectedWorkouts] = useState<number[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,34 +45,53 @@ export default function ProfilePage() {
     fetchData();
   }, []);
 
-  const handleCheckInBtn = async () => {
-    const data = {
-      userId: profileData?.userId,
-      checkin: new Date().toISOString(),
-      checkOut: null,
-      weight: 0,
-      updateWeighIn: 0,
-      workoutReview: "Passing Data",
-    };
-    try {
-      const res = await axios.post("/api/visits/usersVisits", data);
-      visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
-      console.log("Visit updated successfully:", res.data);
-      setBtn(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        visitDispatch({ type: ActionType.SET_ERROR, payload: error.message });
-        // Show the error toast notification
-        Toastify({
-          text: "ERROR: Missing profile data. Please update your profile.",
-          duration: 3000,
-          gravity: "top", // Position: "top" or "bottom"
-          position: "right", // Align: "left", "center" or "right"
-          backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)", // Custom styling
-        }).showToast();
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await axios.get("/api/workouts/getWorkout");
+        setData(res.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
-    }
+    };
+    getData();
+  }, []);
+
+  const handleCheckInBtn = async () => {
+    // Update the state before making the API call
+    setOpen(true);
+
+    // Wait for the UI to render the open state before proceeding
+    setTimeout(async () => {
+      const data = {
+        userId: profileData?.userId,
+        checkin: new Date().toISOString(),
+        checkOut: null,
+        weight: 0,
+        updateWeighIn: 0,
+        workoutReview: "Passing Data",
+      };
+
+      try {
+        const res = await axios.post("/api/visits/usersVisits", data);
+        visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
+        console.log("Visit updated successfully:", res.data);
+        setBtn(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          visitDispatch({ type: ActionType.SET_ERROR, payload: error.message });
+          Toastify({
+            text: "ERROR: Missing profile data. Please update your profile.",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+          }).showToast();
+        }
+      }
+    }, 10000); // Small delay to allow rendering of the state change
   };
+
   // console.log(visitState.visit.data.checkout);
   const handleCheckOutBtn = async () => {
     const data = {
@@ -98,13 +105,29 @@ export default function ProfilePage() {
       visitDispatch({ type: ActionType.SET_VISIT, payload: res.data });
       console.log("Visit updated successfully:", res.data);
       setBtn(true);
+      setOpen(false);
     } catch (error) {
       if (error instanceof Error) {
         visitDispatch({ type: ActionType.SET_ERROR, payload: error.message });
       }
     }
   };
+  const handleCheckboxChange = (index: number) => {
+    setSelectedWorkouts((prevSelected) => {
+      if (prevSelected.includes(index)) {
+        return prevSelected.filter((item) => item !== index); // Uncheck the box
+      } else {
+        return [...prevSelected, index]; // Check the box
+      }
+    });
+  };
 
+  const handleStartWorkout = () => {
+    // Log the selected workouts
+    const selectedNames = selectedWorkouts.map((index) => data[index].workout);
+    setOpen(false);
+    console.log(selectedNames);
+  };
   return (
     <Box
       sx={{
@@ -174,6 +197,20 @@ export default function ProfilePage() {
             onClick={handleCheckInBtn}
             variant="contained"
             color="primary"
+            sx={{
+              fontWeight: "bold",
+              fontSize: "1rem",
+              textTransform: "uppercase",
+              px: 4,
+              py: 1.5,
+              borderRadius: "12px", // Rounded corners
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)", // Shadow effect
+              background: "linear-gradient(to right, #2196F3, #21CBF3)", // Gradient background
+              "&:hover": {
+                background: "linear-gradient(to right, #21CBF3, #2196F3)", // Reverse gradient
+                boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)", // Slightly larger shadow
+              },
+            }}
           >
             Check In
           </Button>
@@ -182,147 +219,136 @@ export default function ProfilePage() {
             onClick={handleCheckOutBtn}
             variant="contained"
             color="warning"
+            sx={{
+              fontWeight: "bold",
+              fontSize: "1rem",
+              textTransform: "uppercase",
+              px: 4,
+              py: 1.5,
+              borderRadius: "12px", // Rounded corners
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)", // Shadow effect
+              background: "linear-gradient(to right, #FF9800, #FFC107)", // Gradient background
+              "&:hover": {
+                background: "linear-gradient(to right, #FFC107, #FF9800)", // Reverse gradient
+                boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)", // Slightly larger shadow
+              },
+            }}
           >
             Check Out
           </Button>
         )}
       </Box>
 
-      <Divider sx={{ mb: 3, borderColor: "#ddd" }} />
+      <div>
+        {data.map((item, index) => (
+          <Modal key={index} open={open} onClose={() => setOpen(false)}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                bgcolor: "background.paper",
+                borderRadius: 2,
+                p: 4, // Increased padding for better spacing
+                width: "380px", // Increased width
+                maxWidth: "90%",
+                boxShadow: 24,
+                mx: "auto",
+                mt: "15%", // Adjusted margin top for better positioning
+                transition: "all 0.3s ease",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 3, // Increased bottom margin
+                  fontWeight: "bold",
+                  color: "primary.main",
+                  textAlign: "center", // Center the title
+                  fontSize: "1.25rem", // Increased font size for better readability
+                }}
+              >
+                Select a Plan for today
+              </Typography>
 
-      <Grid container spacing={4}>
-        {/* Left Column */}
-        <Grid item xs={12} md={6}>
-          <List>
-            {[
-              {
-                icon: <Person color="primary" />,
-                label: "User Name",
-                value: userState.user.username,
-              },
-              {
-                icon: <Person color="primary" />,
-                label: "First Name",
-                value: profileData?.firstName || "Not available",
-              },
-              {
-                icon: <Person color="primary" />,
-                label: "Last Name",
-                value: profileData?.lastName,
-              },
-              {
-                icon: <Home color="primary" />,
-                label: "Home Club",
-                value: profileData?.homeClub,
-              },
-              {
-                icon: <CalendarToday color="primary" />,
-                label: "Member Since",
-                value: profileData?.memberSince,
-              },
-              {
-                icon: <Person color="primary" />,
-                label: "Current Status",
-                value: profileData?.currentStatus,
-              },
-            ].map(({ icon, label, value }, index) => (
-              <ListItem key={index} sx={{ py: 1.5 }}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText
-                  primary={label}
-                  secondary={value || "Not available"}
-                  primaryTypographyProps={{ fontWeight: "bold" }}
-                  secondaryTypographyProps={{ color: "textSecondary" }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
+              <FormGroup sx={{ width: "100%", mb: 3 }}>
+                {" "}
+                {/* Increased margin-bottom */}
+                {data.map((workout, workoutIndex) => (
+                  <FormControlLabel
+                    key={workoutIndex}
+                    control={
+                      <Checkbox
+                        checked={selectedWorkouts.includes(workoutIndex)}
+                        onChange={() => handleCheckboxChange(workoutIndex)}
+                      />
+                    }
+                    label={workout.workout}
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: 500,
+                      mb: 1, // Added margin-bottom to separate checkboxes
+                    }}
+                  />
+                ))}
+              </FormGroup>
 
-        {/* Right Column */}
-        <Grid item xs={12} md={6}>
-          <List>
-            {[
-              {
-                icon: <Email color="primary" />,
-                label: "E-mail",
-                value: userState.user.email,
-              },
-              {
-                icon: <Phone color="primary" />,
-                label: "Cell Phone",
-                value: profileData?.cellPhone,
-              },
-              {
-                icon: <LocationCity color="primary" />,
-                label: "City",
-                value: profileData?.city,
-              },
-              {
-                icon: <LocationCity color="primary" />,
-                label: "State",
-                value: profileData?.state,
-              },
-              {
-                icon: <LocationCity color="primary" />,
-                label: "Zip/Postals",
-                value: profileData?.zipCode,
-              },
-            ].map(({ icon, label, value }, index) => (
-              <ListItem key={index} sx={{ py: 1.5 }}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText
-                  primary={label}
-                  secondary={value || "Not available"}
-                  primaryTypographyProps={{ fontWeight: "bold" }}
-                  secondaryTypographyProps={{ color: "textSecondary" }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
-      </Grid>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  gap: 3, // Increased gap for more space between buttons
+                }}
+              >
+                {/* Close Button */}
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setOpen(false)}
+                  sx={{
+                    width: "48%",
+                    borderRadius: "30px",
+                    padding: "12px 24px", // Increased padding for a larger button
+                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                    "&:hover": {
+                      backgroundColor: "secondary.light",
+                      boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
+                    },
+                  }}
+                >
+                  Close
+                </Button>
 
+                {/* Start Workout Button */}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleStartWorkout}
+                  sx={{
+                    width: "48%",
+                    borderRadius: "30px",
+                    padding: "12px 24px", // Increased padding for a larger button
+                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                    "&:hover": {
+                      backgroundColor: "primary.dark",
+                      boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
+                    },
+                  }}
+                >
+                  Start Your Workout
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
+        ))}
+      </div>
+
+      {/* update Profile */}
+      <ProfileInfo />
       {/* Action Buttons */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mt: 4,
-        }}
-      >
-        <Button
-          onClick={() => router.push("http://127.0.0.1:3000/")}
-          startIcon={<Edit />}
-          variant="contained"
-          color="primary"
-          sx={{
-            fontWeight: "bold",
-            fontSize: "1rem",
-            textTransform: "uppercase",
-            px: 4,
-            py: 1.5,
-          }}
-        >
-          Back
-        </Button>
-        <Button
-          onClick={() => router.push("/client/profileUpdateForm")}
-          startIcon={<Edit />}
-          variant="contained"
-          color="primary"
-          sx={{
-            fontWeight: "bold",
-            fontSize: "1rem",
-            textTransform: "uppercase",
-            px: 4,
-            py: 1.5,
-          }}
-        >
-          Update Profile
-        </Button>
-      </Box>
+      <ProfileLowerBtn />
     </Box>
   );
 }

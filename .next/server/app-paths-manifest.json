@@ -1,11 +1,6 @@
 {
-  "/api/visits/getVisits/route": "app/api/visits/getVisits/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/profile/get/route": "app/api/profile/get/route.js",
-  "/client/planner/page": "app/client/planner/page.js",
+  "/api/visits/usersVisits/route": "app/api/visits/usersVisits/route.js",
+  "/api/visits/updateUsersVisits/route": "app/api/visits/updateUsersVisits/route.js",
   "/client/login/page": "app/client/login/page.js",
-  "/client/profileUpdateForm/page": "app/client/profileUpdateForm/page.js",
-  "/client/profile/page": "app/client/profile/page.js",
-  "/client/exercises/page": "app/client/exercises/page.js"
+  "/client/profile/page": "app/client/profile/page.js"
 }

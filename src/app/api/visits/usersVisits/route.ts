@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     }
 
     const checkinDate = new Date().toISOString();
+    const timeData = new Date().toISOString();
     // const checkoutDate = new Date().toISOString();
 
     // Create workout plan in the database
@@ -30,9 +31,7 @@ export async function POST(req: NextRequest) {
         userId,
         checkin: checkinDate,
         checkout: null,
-        weight: 0,
-        updateWeighIn: 0,
-        workoutReview: "",
+        time: timeData,
       },
     });
 

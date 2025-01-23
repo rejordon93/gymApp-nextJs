@@ -1,69 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id            Int             @id @default(autoincrement())
-  username      String          @unique
-  email         String          @unique
-  password      String          // Ensure encryption in app logic
-  createdAt     DateTime        @default(now())
-  userWorkouts  UserWorkout[]   // One-to-many relationship
-  visits        Visits[]   // One-to-many relationship
-  profilePlan   ProfilePlan?    // One-to-one relationship
+  id           Int           @id @default(autoincrement())
+  username     String        @unique
+  email        String        @unique
+  password     String
+  createdAt    DateTime      @default(now())
+  profilePlan  ProfilePlan?
+  userWorkouts UserWorkout[]
+  visits       Visits[]
 }
 
 model ProfilePlan {
   id            Int     @id @default(autoincrement())
-  userId        Int?    @unique
   firstName     String
   lastName      String
-  homeClub      String?
-  memberSince   String?
-  currentStatus String?
+  userId        Int?    @unique
   cellPhone     String?
   city          String?
+  currentStatus String?
+  homeClub      String?
   state         String?
   zipCode       String?
+  memberSince   String?
   user          User?   @relation(fields: [userId], references: [id])
 }
 
-
 model Visits {
-  id            Int              @id @default(autoincrement())
-  userId        Int                  
+  id            Int           @id @default(autoincrement())
+  userId        Int
   checkin       DateTime
-  weight        Int
-  updateWeighIn Int
-  workoutReview String? 
+  time          DateTime?
   checkout      DateTime?
-  user          User             @relation(fields: [userId], references: [id])
-  userWorkouts  UserWorkout[]    @relation("WorkoutToUserWorkout")
+  user          User          @relation(fields: [userId], references: [id])
+  userWorkouts  UserWorkout[] @relation("WorkoutToUserWorkout")
 }
 
 model UserWorkout {
   id                Int                 @id @default(autoincrement())
-  userId            Int                
-  workout           String               
+  userId            Int
   editedAt          DateTime            @default(now())
+  workout           String
   user              User                @relation(fields: [userId], references: [id])
-  visits            Visits[]       @relation("WorkoutToUserWorkout") // Many-to-many relationship
   favoritedExercise FavoritedExercise[] @relation("UserWorkoutFavoritedExercises")
+  visits            Visits[]            @relation("WorkoutToUserWorkout")
 }
 
 model FavoritedExercise {
-  id               Int                  @id @default(autoincrement())
-  name             String               @unique
+  id               Int           @id @default(autoincrement())
+  name             String        @unique
   equipment        String
   gifUrl           String
+  target           String
+  bodyPart         String
   instructions     String[]
   secondaryMuscles String[]
-  target           String
-  bodyPart         String 
-  userWorkouts     UserWorkout[]        @relation("UserWorkoutFavoritedExercises")
+  userWorkouts     UserWorkout[] @relation("UserWorkoutFavoritedExercises")
 }
