@@ -38,6 +38,8 @@ model Visits {
   userId        Int
   checkin       DateTime
   checkout      DateTime?
+  // should time  be a int or float
+  checkinBtn    Boolean?
   user          User          @relation(fields: [userId], references: [id])
   userWorkouts  UserWorkout[] @relation("WorkoutToUserWorkout")
 }

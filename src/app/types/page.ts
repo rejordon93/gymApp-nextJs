@@ -45,11 +45,10 @@ export type ProfileType = {
   userId: number;
 };
 export type WorkoutPlanInput = {
+  id: number;
   userId?: number;
   checkin?: Date | string;
-  weight?: number | null;
-  updateWeighIn?: number | null;
-  workoutReview?: string | null;
+  checkinBtn?: boolean;
   time?: Date | string;
   checkout: Date | string;
 };

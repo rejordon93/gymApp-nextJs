@@ -1,31 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Button,
-  CircularProgress,
-  IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { UserWorkoutContext } from "@/context/context";
-import { ActionType } from "@/context/workoutReducer";
+import { Box, Typography } from "@mui/material";
+
 import { ProfileType } from "@/app/types/page";
 import axios from "axios";
-import { showToast } from "@/app/utils/ToastUtils";
-import { cardStyle } from "@/styles/workout";
-import { weekDays, cardData } from "@/app/utils/ToastUtils";
+
 import Cards from "./components/Cards";
 
 export default function Planer() {
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
-  const { workoutState, workoutDispatch } = UserWorkoutContext();
-  const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
-  const [favorited, setFavorited] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getProfileData = async () => {

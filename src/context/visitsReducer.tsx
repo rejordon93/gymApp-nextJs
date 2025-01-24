@@ -30,6 +30,7 @@ interface Visit {
   checkin: string | null;
   time?: string;
   checkout?: string;
+  checkinBtn?: boolean;
 }
 
 interface ApiRequestContext {
@@ -46,9 +47,10 @@ export interface VisitState {
 export const VISIT_INITIAL_STATE: VisitState = {
   visit: {
     userId: 0,
-    checkin: Date.now().toString(),
+    checkin: new Date().toISOString(),
     time: Date.toString(),
     checkout: Date.toString(),
+    checkinBtn: true,
   },
   apiRequestContext: {
     error: null,
@@ -65,7 +67,9 @@ export default function visitsReducer(
     case ActionType.SET_VISIT:
       return {
         ...state,
-        visit: action.payload,
+        visit: {
+          ...action.payload, // Update the visit state with the payload
+        },
         apiRequestContext: {
           ...state.apiRequestContext,
           isLoading: false,
@@ -92,7 +96,6 @@ export default function visitsReducer(
           success: false,
         },
       };
-
     default:
       return state;
   }

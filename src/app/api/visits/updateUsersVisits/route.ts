@@ -1,52 +1,49 @@
-import { NextRequest, NextResponse } from "next/server"; // Import Next.js request/response utilities
-import prisma from "@/database/prisma"; // Import Prisma client instance
-import { getDataFromToken } from "@/helpers/getDataFromToken"; // Helper function to extract data from user token
-import { WorkoutPlanInput } from "@/app/types/page"; // Import type definitions for the request body
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/database/prisma";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
+import { WorkoutPlanInput } from "@/app/types/page";
 
-// Handler for the PATCH HTTP request
 export async function PATCH(req: NextRequest) {
   try {
-    // Parse the JSON body from the incoming request
     const body: WorkoutPlanInput = await req.json();
-    const { userId, checkin, checkout } = body; // Destructure required fields from the request body
+    const { userId, checkout, checkinBtn } = body;
 
-    // Retrieve and validate user token
-    const userToken = getDataFromToken(req);
+    console.log("Request body:", body); // Log the request body
 
-    // If no valid user token is found, return a 401 Unauthorized response
-    if (!userToken) {
-      return NextResponse.json({ error: "No user logged in" }, { status: 401 });
-    }
-
-    // Validate that all required fields are present in the request body
-    if (!userId || !checkin || !checkout) {
+    // Validate request body
+    if (!userId || !checkout || checkinBtn === undefined) {
       return NextResponse.json(
-        { error: "Missing or invalid required fields" },
+        { error: "Missing required fields in request body" },
         { status: 400 }
       );
     }
 
-    // Search for the user's visit record in the database
-    const userVisit = await prisma.visits.findFirst({
-      where: { userId: userId, checkin: checkin }, // Match by userId and checkin time
+    // Retrieve and validate user token
+    const userToken = getDataFromToken(req);
+    if (!userToken) {
+      return NextResponse.json({ error: "No user logged in" }, { status: 401 });
+    }
+
+    console.log("Updating visit for userId:", userId); // Log the userId
+
+    const visit = await prisma.visits.findFirst({
+      where: { userId: userId },
     });
 
-    // If no visit record is found, return a 404 Not Found response
-    if (!userVisit) {
+    if (!visit) {
       return NextResponse.json(
-        { error: "No user visit found" },
+        { error: "Visit record not found for the provided userId" },
         { status: 404 }
       );
     }
 
-    // Update the visit record with the checkout time
+    // Update the visit record with the checkout time and checkin button state
     const updatedVisit = await prisma.visits.update({
-      where: { id: userVisit.id }, // Use the unique id of the visit record
-      data: { checkout: checkout }, // Update the checkout field
+      where: { id: visit.id }, // Use the correct primary key (`id`)
+      data: { checkout: checkout, checkinBtn: checkinBtn },
     });
 
-    // Log the updated visit record for debugging purposes
-    console.log(updatedVisit);
+    console.log("Updated visit:", updatedVisit); // Log the updated visit
 
     // Return a success response with the updated visit data
     return NextResponse.json(
@@ -54,9 +51,14 @@ export async function PATCH(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    // Handle any unexpected errors and return a 500 Internal Server Error response
+    // Ensure error is an object
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    console.error("Error updating visit:", errorMessage);
+
+    // Return a 500 Internal Server Error response
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error", details: errorMessage },
       { status: 500 }
     );
   }

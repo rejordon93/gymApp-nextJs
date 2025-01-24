@@ -5,15 +5,27 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
 import { Box, Button, Container, Typography } from "@mui/material";
+import { AuthAppContext } from "@/context/context"; // Import your context
+import { ActionType } from "@/context/authReducer"; // Import your action types
+
 export default function LogoutPage() {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
+  const { userDispatch } = AuthAppContext(); // Access the dispatch function from context
 
   const logout = async () => {
     setLoading(true); // Start loading
     try {
+      // Call the logout API
       await axios.get("/api/users/logout");
+
+      // Dispatch the LOGOUT action to clear the user's token and data
+      userDispatch({ type: ActionType.SETLOGOUT, payload: false });
+
+      // Show success message
       toast.success("Logout successful", { duration: 5000 });
+
+      // Redirect to the login page
       router.push("/client/login");
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -29,8 +29,10 @@ export async function POST(req: NextRequest) {
         userId,
         checkin: checkinDate,
         checkout: null,
+        checkinBtn: false,
       },
     });
+    console.log(userVisit);
 
     return NextResponse.json(
       {

@@ -35,6 +35,7 @@ export default function LoginPage() {
       console.log("Login success", response.data);
       const userData = response.data;
       userDispatch({ type: ActionType.SET_USER, payload: userData });
+
       router.push("/client/profile");
     } catch (error) {
       userDispatch({

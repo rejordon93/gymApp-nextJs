@@ -3,6 +3,7 @@ export enum ActionType {
   SET_USER = "SET_USER",
   SET_ERROR = "SET_ERROR",
   SET_LOADING = "SET_LOADING",
+  SETLOGOUT = "SET_LOGOUT",
 }
 
 // Action interface for setting the user.
@@ -19,10 +20,9 @@ interface SetErrorAction {
 
 // Action interface for setting the loading state.
 interface SetLoadingAction {
-  readonly type: ActionType.SET_LOADING;
-  readonly payload: boolean; // Payload is a boolean (loading state)
+  readonly type: ActionType.SETLOGOUT; // Use a relevant action type
+  readonly payload: boolean; // Payload is a boolean (true/false for loading state)
 }
-
 // Union of all possible action types. This allows the reducer to handle multiple action types.
 export type Action = SetErrorAction | SetUserAction | SetLoadingAction;
 
@@ -106,7 +106,7 @@ export default function reducer(state: UserState, action: Action): UserState {
       };
 
     // Case to handle loading state.
-    case ActionType.SET_LOADING:
+    case ActionType.SETLOGOUT:
       return {
         ...state,
         apiRequestContext: {

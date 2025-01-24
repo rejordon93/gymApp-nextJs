@@ -2,9 +2,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import { useContext } from "react";
-import { UserContext } from "@/context/context";
+import { useEffect } from "react";
+import { AuthAppContext } from "@/context/context";
 import { AppBar, Toolbar, Button, Box, IconButton } from "@mui/material";
+import axios from "axios";
+import { ActionType } from "@/context/authReducer";
 
 const publicNavLinks = [
   {
@@ -42,11 +44,24 @@ const privateNavLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const context = useContext(UserContext);
+  const { userState, userDispatch } = AuthAppContext();
 
-  const navLinks = context?.userState.user.token
-    ? privateNavLinks
-    : publicNavLinks;
+  // Determine navLinks based on user authentication status
+  const navLinks = userState?.user?.token ? privateNavLinks : publicNavLinks;
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const getNavBar = async () => {
+      try {
+        const res = await axios.get("/api/users/login");
+        userDispatch({ type: ActionType.SET_USER, payload: res.data });
+        console.log(res.data);
+      } catch (error) {
+        console.error("Error", error);
+      }
+    };
+    getNavBar();
+  }, [userDispatch]); // Add userDispatch to dependency array
 
   return (
     <AppBar
