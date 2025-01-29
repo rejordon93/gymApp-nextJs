@@ -11,6 +11,8 @@ import {
   Container,
   TextField,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 export default function SignupPage() {
@@ -20,6 +22,13 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUserName] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [severity, setSeverity] = useState<"success" | "error">("success");
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   const onSignup = async () => {
     try {
@@ -29,13 +38,20 @@ export default function SignupPage() {
         password,
         email,
       });
-      console.log("Signup success", response.data);
-      router.push("/client/login");
+      console.log(response.data);
+      setSeverity("success");
+      setSnackbarMessage("Signup successful! Redirecting to login...");
+      setOpenSnackbar(true);
+
+      setTimeout(() => router.push("/client/login"), 1500);
     } catch (error) {
-      userdispatch({
-        type: ActionType.SET_ERROR,
-        payload: error instanceof Error ? error.message : String(error),
-      });
+      setSeverity("error");
+      setSnackbarMessage(
+        axios.isAxiosError(error)
+          ? error.response?.data?.error || "Signup failed. Please try again."
+          : "An unexpected error occurred."
+      );
+      setOpenSnackbar(true);
     } finally {
       userdispatch({ type: ActionType.SET_LOADING, payload: false });
     }
@@ -99,12 +115,6 @@ export default function SignupPage() {
           required
         />
 
-        {userState.apiRequestContext.error && (
-          <Typography color="error" sx={{ mt: 1 }}>
-            {userState.apiRequestContext.error}
-          </Typography>
-        )}
-
         <Button
           onClick={onSignup}
           variant="contained"
@@ -129,7 +139,7 @@ export default function SignupPage() {
 
         <Typography sx={{ mt: 2, color: "text.secondary" }}>
           Already have an account?{" "}
-          <Link href="/login" passHref>
+          <Link href="/client/login" passHref>
             <Typography
               component="span"
               sx={{
@@ -142,6 +152,21 @@ export default function SignupPage() {
             </Typography>
           </Link>
         </Typography>
+
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={5000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Container>
   );

@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import { AppProvider } from "@/context/context"; // Import the provider
 import { Toaster } from "react-hot-toast";
 
-import Header from "@/components/Header";
+import NavBar from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
@@ -38,7 +38,7 @@ export default function RootLayout({
         className={`${geistSans.variable} min-h-screen bg-zinc-100 text-zinc-800  ${geistMono.variable} antialiased`}
       >
         <AppProvider>
-          <Header />
+          <NavBar />
           <Toaster />
           {children}
           <Footer />

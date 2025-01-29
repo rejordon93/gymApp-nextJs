@@ -20,7 +20,7 @@ import {
   WorkoutAction,
   WorkoutState,
   WORKOUT_INITIAL_STATE,
-} from "@/context/workoutReducer";
+} from "./workoutReducer";
 
 // Define the shape of the main app context
 interface UserContextType {

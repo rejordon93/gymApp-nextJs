@@ -6,12 +6,12 @@ export enum ActionType {
 
 interface SetVisitAction {
   readonly type: ActionType.SET_VISIT;
-  readonly payload: Visit;
+  readonly payload: VisitContext;
 }
 
 interface SetUpdatedVisitAction {
   readonly type: ActionType.SET_UPDATED_VISIT;
-  readonly payload: Visit;
+  readonly payload: VisitContext;
 }
 
 interface SetErrorAction {
@@ -24,13 +24,14 @@ export type VisitAction =
   | SetUpdatedVisitAction
   | SetErrorAction;
 
-interface Visit {
-  id?: number;
-  userId: number;
-  checkin: string | null;
-  time?: string;
-  checkout?: string;
+interface VisitContext {
   checkinBtn?: boolean;
+  visit: {
+    id?: number;
+    userId: number;
+    checkin: string | null;
+    checkout?: string | null;
+  };
 }
 
 interface ApiRequestContext {
@@ -41,16 +42,17 @@ interface ApiRequestContext {
 
 export interface VisitState {
   apiRequestContext: ApiRequestContext;
-  visit: Visit;
+  visitData: VisitContext;
 }
 
 export const VISIT_INITIAL_STATE: VisitState = {
-  visit: {
-    userId: 0,
-    checkin: new Date().toISOString(),
-    time: Date.toString(),
-    checkout: Date.toString(),
-    checkinBtn: true,
+  visitData: {
+    checkinBtn: true, // Default to true
+    visit: {
+      userId: 0,
+      checkin: null, // Default to null
+      checkout: null, // Default to null
+    },
   },
   apiRequestContext: {
     error: null,
@@ -67,8 +69,9 @@ export default function visitsReducer(
     case ActionType.SET_VISIT:
       return {
         ...state,
-        visit: {
-          ...action.payload, // Update the visit state with the payload
+        visitData: {
+          ...action.payload,
+          checkinBtn: false, // After check-in, set checkinBtn to false
         },
         apiRequestContext: {
           ...state.apiRequestContext,
@@ -79,7 +82,10 @@ export default function visitsReducer(
     case ActionType.SET_UPDATED_VISIT:
       return {
         ...state,
-        visit: action.payload,
+        visitData: {
+          ...action.payload,
+          checkinBtn: true, // After check-out, set checkinBtn to true
+        },
         apiRequestContext: {
           ...state.apiRequestContext,
           isLoading: false,

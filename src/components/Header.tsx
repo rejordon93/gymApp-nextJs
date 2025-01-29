@@ -17,10 +17,6 @@ const publicNavLinks = [
     href: "/client/login",
     label: "Login",
   },
-  {
-    href: "/client/logout",
-    label: "Logout",
-  },
 ];
 
 const privateNavLinks = [
@@ -50,18 +46,6 @@ export default function Header() {
   const navLinks = userState?.user?.token ? privateNavLinks : publicNavLinks;
 
   // Fetch user data on component mount
-  useEffect(() => {
-    const getNavBar = async () => {
-      try {
-        const res = await axios.get("/api/users/login");
-        userDispatch({ type: ActionType.SET_USER, payload: res.data });
-        console.log(res.data);
-      } catch (error) {
-        console.error("Error", error);
-      }
-    };
-    getNavBar();
-  }, [userDispatch]); // Add userDispatch to dependency array
 
   return (
     <AppBar

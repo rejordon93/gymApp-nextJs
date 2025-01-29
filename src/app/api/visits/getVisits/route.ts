@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
     const formattedVisits = userVisits.map((visit) => {
       const checkinDate = new Date(visit.checkin);
       const checkoutDate = visit.checkout ? new Date(visit.checkout) : null;
+      const id = visit.id;
 
       // Calculate visit time in milliseconds
       const visitDurationMs = checkoutDate
@@ -59,6 +60,7 @@ export async function GET(req: NextRequest) {
         visitDuration: checkoutDate
           ? `${visitDurationHours}h ${visitDurationMinutes}m`
           : "N/A", // If no checkout, duration is not available
+        id,
       };
     });
 

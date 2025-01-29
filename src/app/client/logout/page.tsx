@@ -17,7 +17,7 @@ export default function LogoutPage() {
     setLoading(true); // Start loading
     try {
       // Call the logout API
-      await axios.get("/api/users/logout");
+      await axios.delete("/api/users/logout");
 
       // Dispatch the LOGOUT action to clear the user's token and data
       userDispatch({ type: ActionType.SETLOGOUT, payload: false });

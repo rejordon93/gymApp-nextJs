@@ -6,7 +6,7 @@ import { WorkoutPlanInput } from "@/app/types/page";
 export async function POST(req: NextRequest) {
   try {
     const body: WorkoutPlanInput = await req.json();
-    const { userId, checkin } = body;
+    const { id, userId, checkin } = body;
 
     // Validate user token
     const userToken = getDataFromToken(req);
@@ -26,13 +26,12 @@ export async function POST(req: NextRequest) {
     // Create workout plan in the database
     const userVisit = await prisma.visits.create({
       data: {
+        id,
         userId,
         checkin: checkinDate,
         checkout: null,
-        checkinBtn: false,
       },
     });
-    console.log(userVisit);
 
     return NextResponse.json(
       {

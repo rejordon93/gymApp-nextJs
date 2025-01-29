@@ -20,8 +20,6 @@ export async function GET(req: NextRequest) {
       orderBy: { workout: "desc" },
     });
 
-    console.log(findFirst);
-
     // Send back the fetched data
     return NextResponse.json(findFirst, { status: 200 });
   } catch (error) {

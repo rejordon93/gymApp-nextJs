@@ -6,21 +6,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
-    "/client/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/login/page.js"
-    ],
-    "/api/users/login/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/login/route.js"
-    ],
     "/client/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -46,40 +31,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/visits/usersVisits/route.js"
     ],
-    "/api/visits/updateUsersVisits/route": [
+    "/client/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/visits/updateUsersVisits/route.js"
+      "static/chunks/app/client/login/page.js"
     ],
-    "/client/logout/page": [
+    "/api/users/login/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/logout/page.js"
-    ],
-    "/api/users/logout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/logout/route.js"
-    ],
-    "/client/profileUpdateForm/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/profileUpdateForm/page.js"
-    ],
-    "/client/exercises/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/exercises/page.js"
+      "static/chunks/app/api/users/login/route.js"
     ],
     "/client/planner/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/client/planner/page.js"
     ],
-    "/_not-found/page": [
+    "/api/visits/updateUsersVisits/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/api/visits/updateUsersVisits/route.js"
     ]
   }
 }
