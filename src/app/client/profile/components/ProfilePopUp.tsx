@@ -175,6 +175,7 @@ export default function ProfilePopUp() {
       {/* Main Profile Section */}
       <Box
         display="flex"
+        marginTop="2rem"
         justifyContent="space-between"
         alignItems="center"
         sx={{ mb: 2 }}

@@ -39,9 +39,9 @@ export default function ProfileInfo() {
 
   return (
     <div>
-      <Divider sx={{ mb: 3, borderColor: "#ddd" }} />
+      <Divider sx={{ mb: 3, borderColor: "#ddd", paddingTop: "2rem" }} />
 
-      <Grid container spacing={4}>
+      <Grid container spacing={20} paddingLeft="17%">
         {/* Left Column */}
         <Grid item xs={12} md={6}>
           <List>

@@ -1,11 +1,12 @@
 {
   "/api/users/login/route": "app/api/users/login/route.js",
   "/api/visits/getVisits/route": "app/api/visits/getVisits/route.js",
-  "/api/profile/get/route": "app/api/profile/get/route.js",
   "/api/workouts/getWorkout/route": "app/api/workouts/getWorkout/route.js",
-  "/api/users/logout/route": "app/api/users/logout/route.js",
+  "/api/profile/get/route": "app/api/profile/get/route.js",
   "/client/login/page": "app/client/login/page.js",
   "/client/profile/page": "app/client/profile/page.js",
   "/page": "app/page.js",
-  "/client/logout/page": "app/client/logout/page.js"
+  "/client/logout/page": "app/client/logout/page.js",
+  "/client/planner/page": "app/client/planner/page.js",
+  "/client/exercises/page": "app/client/exercises/page.js"
 }
