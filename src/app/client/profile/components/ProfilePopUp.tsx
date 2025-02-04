@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { ProfileType } from "@/app/types/page";
 import { useContext } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 // MUI Components
 import {
   Box,
@@ -19,6 +20,7 @@ import {
 import { VisitsContext } from "@/context/context";
 import { ActionType } from "@/context/visitsReducer";
 // Custom Component
+
 interface Workout {
   workout: string;
 }
@@ -32,6 +34,7 @@ export default function ProfilePopUp() {
   const [open, setOpen] = useState(false); // Modal open/close state
   const [selectedWorkouts, setSelectedWorkouts] = useState<number[]>([]); // Selected workouts
   const [loading, setLoading] = useState(false); // Loading state for API calls
+  const router = useRouter(); // routing to new page
   // Snackbar State
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -76,6 +79,7 @@ export default function ProfilePopUp() {
   const handleStartWorkout = () => {
     const selectedNames = selectedWorkouts.map((index) => data[index].workout);
     setOpen(false);
+    router.push("/client/exercises");
     console.log(selectedNames);
     showSnackbar("Workout started successfully", "success");
   };

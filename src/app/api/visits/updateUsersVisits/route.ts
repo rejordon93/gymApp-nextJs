@@ -8,12 +8,12 @@ export async function PATCH(req: NextRequest) {
     const body: WorkoutPlanInput = await req.json();
     const { userId, checkout } = body;
 
-    console.log("Request body:", body); // Log the request body
+    console.log("Request Body:", body);
 
     // Validate request body
     if (!userId || !checkout) {
       return NextResponse.json(
-        { error: "Missing required fields in request body" },
+        { error: "Missing required fields: userId and checkout" },
         { status: 400 }
       );
     }
@@ -21,45 +21,63 @@ export async function PATCH(req: NextRequest) {
     // Retrieve and validate user token
     const userToken = getDataFromToken(req);
     if (!userToken) {
-      return NextResponse.json({ error: "No user logged in" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized: No user logged in" },
+        { status: 401 }
+      );
     }
 
-    console.log("Updating visit for userId:", userId); // Log the userId
+    console.log("Updating visit for userId:", userId);
 
+    // Find the most recent visit with a null checkout
     const activeVisit = await prisma.visits.findFirst({
-      where: { userId: userId, checkout: null },
+      where: { userId, checkout: null },
       orderBy: { checkin: "desc" },
     });
 
     if (!activeVisit) {
       return NextResponse.json(
-        { error: "Visit record not found for the provided userId" },
+        { error: "No active visit record found for this userId" },
         { status: 404 }
       );
     }
-    console.log(activeVisit);
-    // Update the visit record with the checkout time and checkin button state
-    const updatedVisit = await prisma.visits.update({
-      where: { id: activeVisit.id }, // Use the correct primary key (`id`)
-      data: { checkout: checkout },
+
+    console.log("Active Visit:", activeVisit);
+
+    // Find the user's most recent workout
+    const findUserWorkout = await prisma.userWorkout.findFirst({
+      where: { userId },
+      orderBy: { id: "desc" },
     });
 
-    console.log("Updated visit:", updatedVisit); // Log the updated visit
+    // Update the visit record
+    const updatedVisit = await prisma.visits.update({
+      where: { id: activeVisit.id },
+      data: {
+        checkout,
+        userWorkouts: findUserWorkout
+          ? { connect: { id: findUserWorkout.id } }
+          : undefined,
+      },
+    });
 
-    // Return a success response with the updated visit data
+    console.log("Updated Visit:", updatedVisit);
+
     return NextResponse.json(
       { message: "Visit updated successfully", data: updatedVisit },
       { status: 200 }
     );
   } catch (error) {
-    // Ensure error is an object
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    console.error("Error updating visit:", errorMessage);
+    console.error(
+      "Error updating visit:",
+      error instanceof Error ? error.message : error
+    );
 
-    // Return a 500 Internal Server Error response
     return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
+      {
+        error: "Internal Server Error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }

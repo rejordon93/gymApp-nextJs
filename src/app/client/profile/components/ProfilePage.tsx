@@ -10,71 +10,70 @@ import { Box, Snackbar, Alert } from "@mui/material";
 // Custom Components
 import ProfileLowerBtn from "./ProfileLowerBtns";
 import ProfileInfo from "./ProfileInfo";
-
-interface Workout {
-  workout: string;
-}
+import { DayTracker } from "./BarChart";
 
 export default function ProfilePage() {
-  // State and Context
-  // Local State
-  const [data, setData] = useState<Workout[]>([]); // Workout data
-  const [profileData, setProfileData] = useState<ProfileType | null>(null); // User profile data
-  // Snackbar State
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
-  const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message
+  // Local state to store the user's profile data
+  const [profileData, setProfileData] = useState<ProfileType | null>(null);
+
+  // Snackbar state to manage notifications
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Controls Snackbar visibility
+  const [snackbarMessage, setSnackbarMessage] = useState(""); // Message to be displayed in Snackbar
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
-  ); // Snackbar severity
+  ); // Type of message (success or error)
 
-  // Fetch Profile Data
+  // Fetch Profile Data on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("/api/profile/get");
-        const data = Array.isArray(res.data) ? res.data[0] : res.data;
-        setProfileData(data);
+        const res = await axios.get("/api/profile/get"); // API call to get user profile data
+        const data = Array.isArray(res.data) ? res.data[0] : res.data; // Ensure data format is correct
+        setProfileData(data); // Store fetched data in state
       } catch (error) {
         console.error("Error fetching profile data:", error);
-        showSnackbar("Error fetching profile data", "error");
+        showSnackbar("Error fetching profile data", "error"); // Show error message in Snackbar
       }
     };
     fetchData();
-  }, []);
+  }, []); // Runs only once when component mounts
 
-  // Show Snackbar
+  // Function to show Snackbar with a message and severity
   const showSnackbar = (message: string, severity: "success" | "error") => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
 
-  // Close Snackbar
+  // Function to close Snackbar
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
 
   return (
     <Box>
-      {/* Update Profile */}
+      {/* Pop-up component for additional profile actions */}
       <ProfilePopUp />
+
+      {/* Component to display profile information */}
       <ProfileInfo />
-      {/* Action Buttons */}
+
+      {/* Lower section buttons for profile actions */}
       <ProfileLowerBtn />
 
-      {/* Snackbar for Notifications */}
+      {/* Snackbar for displaying notifications */}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        autoHideDuration={3000} // Automatically hides after 3 seconds
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }} // Positioning of Snackbar
       >
         <Alert
           onClose={handleCloseSnackbar}
-          severity={snackbarSeverity}
+          severity={snackbarSeverity} // Sets severity level (success or error)
           sx={{ width: "100%" }}
         >
-          {snackbarMessage}
+          {snackbarMessage} {/* Displays the message */}
         </Alert>
       </Snackbar>
     </Box>

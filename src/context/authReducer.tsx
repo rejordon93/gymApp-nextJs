@@ -1,32 +1,10 @@
-// Enum for action types. Defines all possible action types as string constants.
 export enum ActionType {
   SET_USER = "SET_USER",
   SET_ERROR = "SET_ERROR",
   SET_LOADING = "SET_LOADING",
-  SETLOGOUT = "SET_LOGOUT",
+  SET_LOGOUT = "SET_LOGOUT",
 }
 
-// Action interface for setting the user.
-interface SetUserAction {
-  readonly type: ActionType.SET_USER;
-  readonly payload: User; // Payload is a User object
-}
-
-// Action interface for setting an error message.
-interface SetErrorAction {
-  readonly type: ActionType.SET_ERROR;
-  readonly payload: string | null; // Payload is a string (error message)
-}
-
-// Action interface for setting the loading state.
-interface SetLoadingAction {
-  readonly type: ActionType.SETLOGOUT; // Use a relevant action type
-  readonly payload: boolean; // Payload is a boolean (true/false for loading state)
-}
-// Union of all possible action types. This allows the reducer to handle multiple action types.
-export type Action = SetErrorAction | SetUserAction | SetLoadingAction;
-
-// User interface to define the shape of the user object.
 interface User {
   id?: number;
   email: string;
@@ -43,20 +21,42 @@ interface User {
   zipCode?: string;
 }
 
-// Interface for the API request context, which includes the error message, loading status, and success flag.
-interface ApiRequstContext {
-  error: string | null; //  `string`containing an error message.
-  isLoading: boolean; // `true` if loading, `false` if not.
-  success: boolean; // Indicates whether the request was successful.
+interface ApiRequestContext {
+  error: string | null;
+  isLoading: boolean;
+  success: boolean;
 }
 
-// The overall state of the application, which combines all contexts and the user.
 export interface UserState {
-  apiRequestContext: ApiRequstContext;
+  apiRequestContext: ApiRequestContext;
   user: User;
 }
 
-// Initial state for the reducer.
+interface SetUserAction {
+  type: ActionType.SET_USER;
+  payload: User;
+}
+
+interface SetErrorAction {
+  type: ActionType.SET_ERROR;
+  payload: string | null;
+}
+
+interface SetLoadingAction {
+  type: ActionType.SET_LOADING;
+  payload: boolean;
+}
+
+interface SetLogoutAction {
+  type: ActionType.SET_LOGOUT;
+}
+
+export type Action =
+  | SetUserAction
+  | SetErrorAction
+  | SetLoadingAction
+  | SetLogoutAction;
+
 export const AUTH_INITIAL_STATE: UserState = {
   user: {
     email: "",
@@ -72,6 +72,7 @@ export const AUTH_INITIAL_STATE: UserState = {
     state: "",
     zipCode: "",
   },
+
   apiRequestContext: {
     error: null,
     isLoading: false,
@@ -79,42 +80,47 @@ export const AUTH_INITIAL_STATE: UserState = {
   },
 };
 
-// Reducer function that updates the state based on the action type.
 export default function reducer(state: UserState, action: Action): UserState {
   switch (action.type) {
-    // Case to handle setting an error message.
     case ActionType.SET_ERROR:
       return {
         ...state,
         apiRequestContext: {
           ...state.apiRequestContext,
-          error: action.payload, // Set error message.
-          success: false, // Mark request as unsuccessful.
+          error: action.payload,
+          success: false,
         },
       };
 
-    // Case to handle setting user information.
     case ActionType.SET_USER:
       return {
         ...state,
-        user: { ...state.user, ...action.payload }, // Update the user object.
+        user: { ...AUTH_INITIAL_STATE.user, ...action.payload },
         apiRequestContext: {
           ...state.apiRequestContext,
-          success: true, // Mark request as successful.
-          error: null, // Clear any errors.
+          success: true,
+          error: null,
         },
       };
 
-    // Case to handle loading state.
-    case ActionType.SETLOGOUT:
+    case ActionType.SET_LOADING:
       return {
         ...state,
         apiRequestContext: {
           ...state.apiRequestContext,
-          isLoading: action.payload, // Update loading status.
+          isLoading: action.payload,
         },
       };
-    // Default case when no valid action is provided.
+
+    case ActionType.SET_LOGOUT:
+      return {
+        ...AUTH_INITIAL_STATE,
+        apiRequestContext: {
+          ...AUTH_INITIAL_STATE.apiRequestContext,
+          isLoading: false,
+        },
+      };
+
     default:
       return state;
   }

@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import { AppProvider } from "@/context/context"; // Import the provider
 import { Toaster } from "react-hot-toast";
 
-import NavBar from "@/components/Header";
+import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import "./globals.css";
 

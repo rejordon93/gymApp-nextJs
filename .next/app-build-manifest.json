@@ -6,6 +6,21 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/client/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/login/page.js"
+    ],
+    "/api/users/login/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/users/login/route.js"
+    ],
     "/client/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -26,30 +41,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/workouts/getWorkout/route.js"
     ],
-    "/api/visits/usersVisits/route": [
+    "/client/exercises/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/visits/usersVisits/route.js"
+      "static/chunks/app/client/exercises/page.js"
     ],
-    "/client/login/page": [
+    "/api/users/getUser/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/login/page.js"
+      "static/chunks/app/api/users/getUser/route.js"
     ],
-    "/api/users/login/route": [
+    "/client/logout/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/users/login/route.js"
+      "static/chunks/app/client/logout/page.js"
     ],
-    "/client/planner/page": [
+    "/api/users/logout/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/planner/page.js"
-    ],
-    "/api/visits/updateUsersVisits/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/visits/updateUsersVisits/route.js"
+      "static/chunks/app/api/users/logout/route.js"
     ]
   }
 }

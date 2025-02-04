@@ -3,97 +3,189 @@ import React from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast, Toaster } from "react-hot-toast";
-import { Box, Button, Container, Typography } from "@mui/material";
-import { AuthAppContext } from "@/context/context"; // Import your context
-import { ActionType } from "@/context/authReducer"; // Import your action types
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  CircularProgress,
+  IconButton,
+  Snackbar,
+  Alert,
+} from "@mui/material"; // Added Snackbar and Alert
+import CloseIcon from "@mui/icons-material/Close";
+import { AuthAppContext } from "@/context/context";
+import { ActionType } from "@/context/authReducer";
 
 export default function LogoutPage() {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
-  const { userDispatch } = AuthAppContext(); // Access the dispatch function from context
+  const { userDispatch } = AuthAppContext();
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = React.useState<
+    "success" | "error"
+  >("success");
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   const logout = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
-      // Call the logout API
-      await axios.delete("/api/users/logout");
+      const res = await axios.delete("/api/users/logout");
+      userDispatch({ type: ActionType.SET_LOADING, payload: false });
+      userDispatch({ type: ActionType.SET_USER, payload: res.data.token });
+      setSnackbarSeverity("success");
+      setSnackbarMessage("Logged out successfully");
+      setOpenSnackbar(true);
 
-      // Dispatch the LOGOUT action to clear the user's token and data
-      userDispatch({ type: ActionType.SETLOGOUT, payload: false });
-
-      // Show success message
-      toast.success("Logout successful", { duration: 5000 });
-
-      // Redirect to the login page
       router.push("/client/login");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error("Logout failed. Please try again later.", {
-          duration: 5000,
-        });
-      } else if (error instanceof Error) {
-        console.log(error.message);
-        toast.error("An unexpected error occurred.", { duration: 5000 });
-      }
+      setSnackbarSeverity("error");
+      setSnackbarMessage("Logout failed. Please try again.");
+      setOpenSnackbar(true);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Toaster position="top-right" reverseOrder={false} />
+    <Container
+      component="main"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        pt: 8,
+      }}
+    >
+      {/* Main Content */}
       <Box
         sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: 4,
-          boxShadow: 3,
-          borderRadius: 2,
-          backgroundColor: "white",
+          maxWidth: 500,
+          margin: "0 auto",
+          flexGrow: 0,
+          transform: "translateY(25%)",
         }}
       >
-        <Typography
-          component="h1"
-          variant="h5"
-          color="text.primary"
-          sx={{ mb: 2 }}
+        <Box
+          sx={{
+            position: "relative",
+            padding: 6,
+            borderRadius: 3,
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+            backgroundColor: "white",
+            border: "1px solid #dddfe2",
+            textAlign: "center",
+          }}
         >
-          Logout
-        </Typography>
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          align="center"
-          sx={{ mb: 4 }}
-        >
-          Are you sure you want to log out?
-        </Typography>
-
-        <Button
-          onClick={logout}
-          variant="contained"
-          color="error"
-          fullWidth
-          sx={{ mb: 2 }}
-          disabled={loading} // Disable button while logging out
-        >
-          {loading ? "Logging out..." : "Logout"}
-        </Button>
-
-        <Link href="/client/profile" passHref>
-          <Typography
-            variant="body2"
-            color="primary"
-            sx={{ cursor: "pointer", textAlign: "center" }}
+          {/* Close Button */}
+          <IconButton
+            component={Link}
+            href="/client/profile"
+            sx={{
+              position: "absolute",
+              right: 24,
+              top: 24,
+              color: "#606770",
+              "&:hover": {
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+              },
+            }}
           >
-            Cancel
-          </Typography>
-        </Link>
+            <CloseIcon fontSize="medium" />
+          </IconButton>
+
+          {/* Content */}
+          <Box sx={{ pt: 4, px: 2 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#606770",
+                mb: 4,
+                lineHeight: 1.5,
+                fontSize: "1.25rem",
+              }}
+            >
+              Are you sure you want to log out?
+            </Typography>
+
+            <Button
+              onClick={logout}
+              fullWidth
+              variant="contained"
+              disabled={loading}
+              sx={{
+                bgcolor: "#1877f2",
+                color: "white",
+                borderRadius: 2,
+                py: 2.5,
+                textTransform: "none",
+                fontSize: "1.1rem",
+                fontWeight: 600,
+                "&:hover": {
+                  bgcolor: "#166fe5",
+                },
+                "&:disabled": {
+                  bgcolor: "#e4e6eb",
+                  color: "#bcc0c4",
+                },
+                height: "56px",
+              }}
+            >
+              {loading ? (
+                <CircularProgress size={28} color="inherit" />
+              ) : (
+                "Log Out"
+              )}
+            </Button>
+
+            <Button
+              component={Link}
+              href="/client/profile"
+              fullWidth
+              sx={{
+                mt: 3,
+                color: "#1877f2",
+                textTransform: "none",
+                fontSize: "1rem",
+                fontWeight: 600,
+                height: "48px",
+                "&:hover": {
+                  backgroundColor: "rgba(24, 119, 242, 0.05)",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
       </Box>
+
+      {/* MUI Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{
+            width: "100%",
+            alignItems: "center",
+            fontSize: "0.875rem",
+            fontWeight: 500,
+          }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

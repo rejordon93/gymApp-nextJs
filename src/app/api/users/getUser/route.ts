@@ -1,23 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function GET(req: NextRequest) {
   try {
-    const reqBody = await req.json();
-    const { email } = reqBody;
-    console.log(reqBody);
-
-    if (!email) {
-      return NextResponse.json(
-        { error: "Authorization email is required" },
-        { status: 401 }
-      );
-    }
-
     // Extract token from headers
-    const token = req.headers.get("Authorization")?.replace("Bearer ", "");
+    const userId = await getDataFromToken(req);
+    const token = req.cookies.get("token")?.value;
 
-    // Validate token
     if (!token) {
       return NextResponse.json(
         { error: "Authorization token is required" },
@@ -25,12 +15,17 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    if (!userId) {
+      return NextResponse.json({ error: "No user logged in" }, { status: 401 });
+    }
+
     // Fetch user from the database
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: {
+        id: userId,
+      },
     });
 
-    // Check if the user exists
     if (!user) {
       return NextResponse.json(
         { error: "User does not exist" },
@@ -41,9 +36,9 @@ export async function GET(req: NextRequest) {
     // Return the user data
     return NextResponse.json({
       message: "Data from GET_USER",
-      token: token, // For debugging purposes only; avoid exposing tokens in production
       username: user.username,
       email: user.email,
+      token: token,
     });
   } catch (error) {
     console.error("Error:", error);
