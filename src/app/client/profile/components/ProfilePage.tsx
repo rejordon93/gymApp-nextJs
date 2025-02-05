@@ -10,7 +10,6 @@ import { Box, Snackbar, Alert } from "@mui/material";
 // Custom Components
 import ProfileLowerBtn from "./ProfileLowerBtns";
 import ProfileInfo from "./ProfileInfo";
-import { DayTracker } from "./BarChart";
 
 export default function ProfilePage() {
   // Local state to store the user's profile data
