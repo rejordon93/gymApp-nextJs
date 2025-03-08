@@ -7,10 +7,6 @@ import ProfilePopUp from "./ProfilePopUp";
 // MUI Components
 import { Box, Snackbar, Alert } from "@mui/material";
 
-// Custom Components
-import ProfileLowerBtn from "./ProfileLowerBtns";
-import ProfileInfo from "./ProfileInfo";
-
 export default function ProfilePage() {
   // Local state to store the user's profile data
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
@@ -53,12 +49,6 @@ export default function ProfilePage() {
     <Box>
       {/* Pop-up component for additional profile actions */}
       <ProfilePopUp />
-
-      {/* Component to display profile information */}
-      <ProfileInfo />
-
-      {/* Lower section buttons for profile actions */}
-      <ProfileLowerBtn />
 
       {/* Snackbar for displaying notifications */}
       <Snackbar

@@ -1,1 +1,10 @@
-{}
+{
+  "/api/visits/getVisits/route": "app/api/visits/getVisits/route.js",
+  "/api/profile/get/route": "app/api/profile/get/route.js",
+  "/api/workouts/getWorkout/route": "app/api/workouts/getWorkout/route.js",
+  "/client/exercises/page": "app/client/exercises/page.js",
+  "/client/myHomePage/page": "app/client/myHomePage/page.js",
+  "/client/login/page": "app/client/login/page.js",
+  "/client/profile/page": "app/client/profile/page.js",
+  "/client/profileUpdateForm/page": "app/client/profileUpdateForm/page.js"
+}
