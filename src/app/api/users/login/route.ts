@@ -19,6 +19,15 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // update isOnline = true
+    await prisma.user.update({
+      where: { email },
+      data: {
+        isOnline: true,
+      },
+    });
+
     //check if password is correct
     const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) {

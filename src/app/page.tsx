@@ -36,7 +36,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-white mb-4">
             MONTH-TO-MONTH MEMBERSHIPS, CANCEL ANYTIME
           </h1>
-          <Link href={"/signup"}>
+          <Link href={"/client/signup"}>
             <button className="px-6 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-md shadow-md hover:bg-indigo-700 transition duration-300">
               JOIN NOW
             </button>

@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import { useEffect } from "react";
 import { AuthAppContext } from "@/context/context";
 import { AppBar, Toolbar, Button, Box, IconButton } from "@mui/material";
 import axios from "axios";
@@ -41,18 +40,6 @@ const privateNavLinks = [
 export default function NavBar() {
   const pathname = usePathname();
   const { userState, userDispatch } = AuthAppContext();
-
-  const getData = async () => {
-    try {
-      const res = await axios.get("/api/users/getUser", {
-        withCredentials: true,
-      });
-      userDispatch({ type: ActionType.SET_USER, payload: res.data });
-      console.log("User Data:", res.data);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-    }
-  };
 
   // Determine navLinks based on user authentication status
   const navLinks = userState?.user?.token ? privateNavLinks : publicNavLinks;
