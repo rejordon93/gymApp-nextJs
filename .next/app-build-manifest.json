@@ -16,35 +16,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/client/login/page.js"
     ],
-    "/api/users/login/route": [
+    "/client/signup/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/users/login/route.js"
-    ],
-    "/client/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/profile/page.js"
-    ],
-    "/api/visits/getVisits/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/visits/getVisits/route.js"
-    ],
-    "/api/profile/get/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/profile/get/route.js"
-    ],
-    "/api/workouts/getWorkout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/workouts/getWorkout/route.js"
-    ],
-    "/client/myHomePage/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/myHomePage/page.js"
+      "static/chunks/app/client/signup/page.js"
     ]
   }
 }

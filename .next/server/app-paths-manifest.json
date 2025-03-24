@@ -1,11 +1,6 @@
 {
-  "/api/users/login/route": "app/api/users/login/route.js",
-  "/api/visits/getVisits/route": "app/api/visits/getVisits/route.js",
-  "/api/profile/get/route": "app/api/profile/get/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/workouts/getWorkout/route": "app/api/workouts/getWorkout/route.js",
-  "/page": "app/page.js",
   "/client/login/page": "app/client/login/page.js",
-  "/client/myHomePage/page": "app/client/myHomePage/page.js",
-  "/client/profile/page": "app/client/profile/page.js"
+  "/client/signup/page": "app/client/signup/page.js",
+  "/page": "app/page.js"
 }
