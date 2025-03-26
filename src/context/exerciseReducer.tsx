@@ -87,7 +87,6 @@ export interface ExercisesState {
   favExercises: Exercises[];
   option: Options;
 }
-console.log("");
 
 // Initial state for the workout
 export const EXERCISE_INITIAL_STATE: ExercisesState = {

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { AuthAppContext } from "@/context/context";
 import { ActionType } from "@/context/authReducer";
 import axios from "axios";
+import io from "socket.io-client";
+const socket = io("http://127.0.0.1:3000");
 
 // Material-UI Components
 import {
@@ -27,6 +29,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [requestAdmin, setRequestAdmin] = useState(false);
 
   // Login Handler
   const onLogin = async () => {
@@ -35,7 +38,12 @@ export default function LoginPage() {
       const response = await axios.post("/api/users/login", {
         email,
         password,
+        requestAdmin,
       });
+
+      if (requestAdmin) {
+        await socket.emit("request_admin", email);
+      }
 
       // Update global state with user data
       userDispatch({ type: ActionType.SET_USER, payload: response.data });
@@ -50,10 +58,31 @@ export default function LoginPage() {
     }
   };
 
+  // handle checkBoxs
+  // const handleCheckBoxChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ): void => {
+  //   setRequestAdmin(event.target.checked);
+  // };
+
   // Enable/Disable login button based on input
   useEffect(() => {
     setIsButtonDisabled(!(email.length > 0 && password.length > 0));
   }, [email, password]);
+
+  // useEffect(() => {
+  //   const socket = io("http://127.0.0.1:3000"); // Adjust URL for production
+  //   socket.on("connect", () => {
+  //     console.log("Connected to server:", socket.id);
+  //   });
+  //   socket.on("admin", (checked: boolean) => {
+  //     console.log("Message from admin:", checked);
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   return (
     <Container
@@ -189,7 +218,14 @@ export default function LoginPage() {
               "Sign In"
             )}
           </Button>
-
+          <label>
+            <input
+              type="checkbox"
+              checked={requestAdmin}
+              onChange={(e) => setRequestAdmin(e.target.checked)}
+            />
+            Request Admin Access
+          </label>
           {/* Registration Link */}
           <Typography
             variant="body2"

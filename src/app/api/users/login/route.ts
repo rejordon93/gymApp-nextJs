@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { email, password } = reqBody;
+    const { email, password, requestAdmin } = reqBody;
     console.log(reqBody);
 
     const user = await prisma.user.findUnique({
@@ -27,6 +27,14 @@ export async function POST(request: NextRequest) {
         isOnline: true,
       },
     });
+
+    // If requestAdmin is true, update user role request
+    if (requestAdmin) {
+      await prisma.user.update({
+        where: { email },
+        data: { isAdminRequested: true },
+      });
+    }
 
     //check if password is correct
     const validPassword = await bcryptjs.compare(password, user.password);
