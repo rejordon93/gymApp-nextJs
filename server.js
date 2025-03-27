@@ -11,26 +11,26 @@ const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
-  const io = new Server(httpServer);
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "*", // Adjust this for production security
+      methods: ["GET", "POST"],
+    },
+  });
 
   io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
+    socket.on("admin", () => {
+      console.log(`Admin request received from: ${socket.id}`);
+      socket.broadcast.emit(
+        "requestAdmin",
+        `User ${socket.id} would like to be admin`
+      );
+    });
+
     socket.on("disconnect", () => {
       console.log(`User disconnected: ${socket.id}`);
-    });
-
-    socket.on("request_admin", ({ email }) => {
-      console.log(`${email} is requesting admin access`);
-
-      // Notify all admins
-      io.in("admin").emit("request_admin", `${email} whats to be an admin`);
-    });
-
-    // Add more socket event handlers here as needed
-    socket.on("message", (msg) => {
-      console.log("Message received:", msg);
-      io.emit("message", msg); // Example: broadcast to all clients
     });
   });
 

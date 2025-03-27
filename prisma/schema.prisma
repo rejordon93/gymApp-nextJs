@@ -8,18 +8,29 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  username     String        @unique
-  email        String        @unique
-  password     String
-  createdAt    DateTime      @default(now())
-  isOnline    Boolean       @default(false)
-  isAdmin        Boolean @default(false)
-  isAdminRequested Boolean @default(false) // Tracks admin requests
-  profilePlan  ProfilePlan?
-  userWorkouts UserWorkout[]
-  visits       Visits[]
+  id              Int           @id @default(autoincrement())
+  username        String        @unique
+  email           String        @unique
+  password        String
+  createdAt       DateTime      @default(now())
+  isOnline        Boolean       @default(false)
+  requestedAdmin  Boolean       @default(false) // User can request to be an admin
+  userAdmin       Boolean       @default(false) // User is an admin or not
+  profilePlan     ProfilePlan?
+  userWorkouts    UserWorkout[]
+  visits          Visits[]
+  admin           Admin?        // One-to-one relation with Admin
 }
+
+
+// adding Admin
+model Admin {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
 
 model ProfilePlan {
   id            Int     @id @default(autoincrement())

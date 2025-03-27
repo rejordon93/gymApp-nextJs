@@ -10,7 +10,6 @@ import { Box, Snackbar, Alert } from "@mui/material";
 export default function ProfilePage() {
   // Local state to store the user's profile data
   const [profileData, setProfileData] = useState<ProfileType | null>(null);
-
   // Snackbar state to manage notifications
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Controls Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Message to be displayed in Snackbar
@@ -49,7 +48,6 @@ export default function ProfilePage() {
     <Box>
       {/* Pop-up component for additional profile actions */}
       <ProfilePopUp />
-
       {/* Snackbar for displaying notifications */}
       <Snackbar
         open={snackbarOpen}

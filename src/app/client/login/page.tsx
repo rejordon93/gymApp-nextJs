@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { AuthAppContext } from "@/context/context";
 import { ActionType } from "@/context/authReducer";
 import axios from "axios";
-import io from "socket.io-client";
-const socket = io("http://127.0.0.1:3000");
+// import io from "socket.io-client";
+// const socket = io("http://127.0.0.1:3000");
 
 // Material-UI Components
 import {
@@ -20,7 +20,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-export default function LoginPage() {
+type Props = {
+  userId: number;
+};
+
+export default function LoginPage({ userId }: Props) {
   // Hooks and Context
   const router = useRouter();
   const { userState, userDispatch } = AuthAppContext();
@@ -40,13 +44,10 @@ export default function LoginPage() {
         password,
         requestAdmin,
       });
-
-      if (requestAdmin) {
-        await socket.emit("request_admin", email);
-      }
-
       // Update global state with user data
       userDispatch({ type: ActionType.SET_USER, payload: response.data });
+      // socket.emit("admin");
+      handleRequestAdmin();
       router.push("/client/profile");
     } catch (error) {
       userDispatch({
@@ -58,31 +59,32 @@ export default function LoginPage() {
     }
   };
 
-  // handle checkBoxs
-  // const handleCheckBoxChange = (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ): void => {
-  //   setRequestAdmin(event.target.checked);
-  // };
-
   // Enable/Disable login button based on input
   useEffect(() => {
     setIsButtonDisabled(!(email.length > 0 && password.length > 0));
   }, [email, password]);
 
   // useEffect(() => {
-  //   const socket = io("http://127.0.0.1:3000"); // Adjust URL for production
-  //   socket.on("connect", () => {
-  //     console.log("Connected to server:", socket.id);
-  //   });
-  //   socket.on("admin", (checked: boolean) => {
-  //     console.log("Message from admin:", checked);
+  //   // Listen for the "requestAdmin" event
+  //   socket.on("requestAdmin", (message: string) => {
+  //     console.log("Received from admin:", message);
+  //     setRequestAdmin(true);
   //   });
 
   //   return () => {
-  //     socket.disconnect();
+  //     socket.off("requestAdmin"); // Corrected cleanup
   //   };
   // }, []);
+
+  const handleRequestAdmin = async () => {
+    const res = await axios.patch("/api/admin/patchRequest", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
+    console.log(res.data);
+    setRequestAdmin(true);
+  };
 
   return (
     <Container
@@ -226,6 +228,7 @@ export default function LoginPage() {
             />
             Request Admin Access
           </label>
+
           {/* Registration Link */}
           <Typography
             variant="body2"
