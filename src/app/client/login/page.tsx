@@ -20,11 +20,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-type Props = {
-  userId: number;
-};
-
-export default function LoginPage({ userId }: Props) {
+export default function LoginPage() {
   // Hooks and Context
   const router = useRouter();
   const { userState, userDispatch } = AuthAppContext();
@@ -33,7 +29,7 @@ export default function LoginPage({ userId }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [requestAdmin, setRequestAdmin] = useState(false);
+  const [requestAdmin] = useState(false);
 
   // Login Handler
   const onLogin = async () => {
@@ -47,7 +43,7 @@ export default function LoginPage({ userId }: Props) {
       // Update global state with user data
       userDispatch({ type: ActionType.SET_USER, payload: response.data });
       // socket.emit("admin");
-      handleRequestAdmin();
+      // handleRequestAdmin();
       router.push("/client/profile");
     } catch (error) {
       userDispatch({
@@ -76,15 +72,15 @@ export default function LoginPage({ userId }: Props) {
   //   };
   // }, []);
 
-  const handleRequestAdmin = async () => {
-    const res = await axios.patch("/api/admin/patchRequest", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
-    });
-    console.log(res.data);
-    setRequestAdmin(true);
-  };
+  // const handleRequestAdmin = async () => {
+  //   const res = await axios.patch("/api/admin/patchRequest", {
+  //     method: "PATCH",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ userId }),
+  //   });
+  //   console.log(res.data);
+  //   setRequestAdmin(true);
+  // };
 
   return (
     <Container
@@ -220,14 +216,9 @@ export default function LoginPage({ userId }: Props) {
               "Sign In"
             )}
           </Button>
-          <label>
-            <input
-              type="checkbox"
-              checked={requestAdmin}
-              onChange={(e) => setRequestAdmin(e.target.checked)}
-            />
-            Request Admin Access
-          </label>
+          <Link href="/client/admin">
+            <Button>Admin</Button>
+          </Link>
 
           {/* Registration Link */}
           <Typography

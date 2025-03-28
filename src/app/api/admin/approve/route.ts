@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/database/prisma";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 export async function POST(req: NextRequest) {
   // Check if method is POST
@@ -11,15 +10,27 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Get user from token
-  const userId = getDataFromToken(req);
+  // Get userId from the request body (not from token)
+  const { userId } = await req.json();
 
-  // Check if user exists in the token
+  // Check if userId is provided in the request
   if (!userId) {
-    return NextResponse.json({ message: "No User Found" }, { status: 401 });
+    return NextResponse.json(
+      { message: "User ID is required" },
+      { status: 400 }
+    );
   }
 
   try {
+    // Check if the user exists
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
     // Check if the user is already an admin before adding them again
     const existingAdmin = await prisma.admin.findUnique({
       where: { userId },

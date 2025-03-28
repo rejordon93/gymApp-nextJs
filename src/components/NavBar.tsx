@@ -4,8 +4,6 @@ import { usePathname } from "next/navigation";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { AuthAppContext } from "@/context/context";
 import { AppBar, Toolbar, Button, Box, IconButton } from "@mui/material";
-import axios from "axios";
-import { ActionType } from "@/context/authReducer";
 
 const publicNavLinks = [
   {

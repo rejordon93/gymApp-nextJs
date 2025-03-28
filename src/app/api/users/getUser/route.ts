@@ -19,12 +19,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "No user logged in" }, { status: 401 });
     }
 
-    // Fetch user from the database
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
+    const user = await prisma.user.findMany();
 
     if (!user) {
       return NextResponse.json(
@@ -33,12 +28,31 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Fetch user from the database
+    // const user = await prisma.user.findUnique({
+    //   where: {
+    //     id: userId,
+    //   },
+    // });
+
+    // if (!user) {
+    //   return NextResponse.json(
+    //     { error: "User does not exist" },
+    //     { status: 404 }
+    //   );
+    // }
+
     // Return the user data
+    // return NextResponse.json({
+    //   message: "Data from GET_USER",
+    //   username: user.username,
+    //   email: user.email,
+    //   token: token,
+    // });
+
     return NextResponse.json({
-      message: "Data from GET_USER",
-      username: user.username,
-      email: user.email,
-      token: token,
+      message: { message: "Data from User" },
+      user,
     });
   } catch (error) {
     console.error("Error:", error);
