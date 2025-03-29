@@ -4,7 +4,9 @@ import reducer from "@/context/authReducer";
 import exercisesReducer from "@/context/exerciseReducer";
 import visitsReducer from "@/context/visitsReducer";
 import workoutReducer from "./workoutReducer";
+import adminReducer from "./adminReducer";
 import { Action, UserState, AUTH_INITIAL_STATE } from "@/context/authReducer";
+
 import {
   ExercisesAction,
   ExercisesState,
@@ -21,6 +23,8 @@ import {
   WorkoutState,
   WORKOUT_INITIAL_STATE,
 } from "./workoutReducer";
+
+import { AdminAction, AdminState, ADMIN_INITIAL_STATE } from "./adminReducer";
 
 // Define the shape of the main app context
 interface UserContextType {
@@ -43,6 +47,11 @@ interface WorkoutContextType {
   workoutDispatch: React.Dispatch<WorkoutAction>;
 }
 
+interface AdminContextType {
+  adminState: AdminState;
+  adminDispatch: React.Dispatch<AdminAction>;
+}
+
 // Create contexts for the app state and workout data
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
@@ -56,6 +65,9 @@ export const VisitsContext = createContext<VisitContextType | undefined>(
 );
 
 export const WorkoutContext = createContext<WorkoutContextType | undefined>(
+  undefined
+);
+export const AdminContext = createContext<AdminContextType | undefined>(
   undefined
 );
 
@@ -79,12 +91,19 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     WORKOUT_INITIAL_STATE
   );
 
+  const [adminState, adminDispatch] = useReducer(
+    adminReducer,
+    ADMIN_INITIAL_STATE
+  );
+
   return (
     <UserContext.Provider value={{ userState, userDispatch }}>
       <ExercisesContext.Provider value={{ exercisesState, exercisesDispatch }}>
         <VisitsContext.Provider value={{ visitState, visitDispatch }}>
           <WorkoutContext.Provider value={{ workoutState, workoutDispatch }}>
-            {children}
+            <AdminContext.Provider value={{ adminState, adminDispatch }}>
+              {children}
+            </AdminContext.Provider>
           </WorkoutContext.Provider>
         </VisitsContext.Provider>
       </ExercisesContext.Provider>
@@ -121,6 +140,14 @@ export function UserWorkoutContext() {
   const context = useContext(WorkoutContext);
   if (!context) {
     throw new Error("UserWorkoutContext must be used within an AppProvider");
+  }
+  return context;
+}
+
+export function UserAdminContext() {
+  const context = useContext(AdminContext);
+  if (!context) {
+    throw new Error("UserVisitContext must be used within an AppProvider");
   }
   return context;
 }

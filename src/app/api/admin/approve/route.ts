@@ -44,8 +44,15 @@ export async function POST(req: NextRequest) {
     }
 
     // Create an admin user in the admin table
-    await prisma.admin.create({
-      data: { userId }, // associate the admin with the user
+    const admin = await prisma.admin.create({
+      data: {
+        isAdmin: true,
+        user: {
+          connect: {
+            id: userId, // This connects the existing user
+          },
+        },
+      },
     });
 
     // Update the user's 'requestedAdmin' to false and 'userAdmin' to true
@@ -56,7 +63,7 @@ export async function POST(req: NextRequest) {
 
     // Return success response
     return NextResponse.json(
-      { message: "User has been promoted to Admin" },
+      { ...admin, message: "User has been promoted to Admin" },
       { status: 201 }
     );
   } catch (error) {

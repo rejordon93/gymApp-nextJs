@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { UserAdminContext } from "@/context/context";
 
 type dataProps = {
   id: number;
@@ -23,7 +24,7 @@ export default function AdminHome() {
   const [adminRequests, setAdminRequests] = useState<dataProps[]>([]);
   const [userData, setUserData] = useState<dataProps[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { adminState, adminDispatch } = UserAdminContext();
   // Fetch admin requests (users who requested admin access)
   useEffect(() => {
     const getData = async () => {
@@ -68,6 +69,10 @@ export default function AdminHome() {
       console.error("Error ", error);
     }
   };
+
+  useEffect(() => {
+    console.log("Admin State:", adminState);
+  }, [adminState]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 5, mb: 5 }}>

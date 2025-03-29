@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { AuthAppContext } from "@/context/context";
+import { UserAdminContext } from "@/context/context"; // Ensure this is the correct path
 import axios from "axios";
 
 // Material-UI Components
@@ -13,56 +13,55 @@ import {
   Typography,
   Divider,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import { ActionType } from "@/context/adminReducer";
 
 export default function AdminLogin() {
   const router = useRouter();
-  const { userState, userDispatch } = AuthAppContext();
+
+  // Use the correct context hook
+  const { adminState, adminDispatch } = UserAdminContext();
 
   // Component State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Snackbar state
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const onAdmin = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.post("/api/admin/createAdmin", {
         email,
         password,
       });
-      console.log("Login response:", res.data);
-
-      // Decode JWT to get user role
-      const token = res.data.token;
-      const payload = JSON.parse(atob(token.split(".")[1])); // Decodes the JWT payload
-
-      if (payload.role === "admin") {
-        router.push("/client/admin/adminHome");
-        // handleRequestAdmin();
-      } else {
-        console.error("Access Denied: Not an admin");
-      }
+      adminDispatch({ type: ActionType.SET_ADMIN, payload: res.data });
+      // Redirect to the admin home page
+      router.push("/client/admin/adminHome");
     } catch (error) {
       console.error("Error logging in:", error);
+      setSnackbarMessage("Access denied. Admins only.");
+      setOpenSnackbar(true); // Open the Snackbar with the error message
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  // Might not need this ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
-  // const handleRequestAdmin = async () => {
-  //   try {
-  //     const res = await axios.patch("/api/admin/patchRequest", { userId });
-  //     console.log(res.data);
-  //     setRequestAdmin(true);
-  //     router.push("/client/admin/adminHome");
-  //   } catch (error) {
-  //     console.error("Error updating admin request:", error);
-  //   }
-  // };
 
   useEffect(() => {
     setIsButtonDisabled(!(email.length > 0 && password.length > 0));
   }, [email, password]);
+
+  // Handle Snackbar close
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <Container
       component="main"
@@ -87,9 +86,7 @@ export default function AdminLogin() {
           backgroundColor: "background.paper",
           backgroundImage: "linear-gradient(to bottom right, #f5f5f5, #ffffff)",
           transition: "transform 0.3s ease",
-          "&:hover": {
-            transform: "translateY(-2px)",
-          },
+          "&:hover": { transform: "translateY(-2px)" },
         }}
       >
         <Typography
@@ -103,11 +100,7 @@ export default function AdminLogin() {
             WebkitTextFillColor: "transparent",
           }}
         >
-          {userState?.apiRequestContext?.isLoading ? (
-            <CircularProgress size={28} color="inherit" />
-          ) : (
-            "Admin Login"
-          )}
+          Admin Login
         </Typography>
         <Divider sx={{ width: "100%", mb: 3, borderColor: "divider" }} />
 
@@ -126,9 +119,7 @@ export default function AdminLogin() {
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: 2,
-                "&.Mui-focused fieldset": {
-                  borderColor: "primary.main",
-                },
+                "&.Mui-focused fieldset": { borderColor: "primary.main" },
               },
             }}
           />
@@ -144,11 +135,7 @@ export default function AdminLogin() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 2,
-              },
-            }}
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
           />
 
           <Button
@@ -163,17 +150,12 @@ export default function AdminLogin() {
               fontWeight: 600,
               textTransform: "none",
               transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "translateY(-1px)",
-                boxShadow: 2,
-              },
+              "&:hover": { transform: "translateY(-1px)", boxShadow: 2 },
             }}
             onClick={onAdmin}
-            disabled={
-              isButtonDisabled || userState?.apiRequestContext?.isLoading
-            }
+            disabled={isButtonDisabled || isLoading}
           >
-            {userState?.apiRequestContext?.isLoading ? (
+            {isLoading ? (
               <CircularProgress size={24} color="inherit" />
             ) : (
               "Login"
@@ -181,6 +163,25 @@ export default function AdminLogin() {
           </Button>
         </Box>
       </Box>
+
+      {/* Snackbar for error message */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{
+          vertical: "top", // Position at the top
+          horizontal: "center", // Centered horizontally
+        }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

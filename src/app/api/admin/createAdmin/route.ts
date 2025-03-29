@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     // ✅ Get user by email
     const user = await prisma.user.findUnique({
       where: { email },
-      include: { admin: true }, // Check if user is an admin
+      include: { admin: true }, // Ensure we include admin relation
     });
 
     if (!user) {
@@ -52,9 +52,17 @@ export async function POST(req: NextRequest) {
       { expiresIn: "1h" }
     );
 
+    // ✅ Prepare admin data
+    const adminData = {
+      id: user.admin.id,
+      userId: user.id,
+      createdAt: user.admin.createdAt,
+      isAdmin: user.admin.isAdmin,
+    };
+
     // ✅ Set token in response cookie
     const response = NextResponse.json(
-      { message: "Admin login successful", token },
+      { message: "Admin login successful", token, admin: adminData },
       { status: 200 }
     );
     response.cookies.set("token", token, { httpOnly: true, secure: true });
