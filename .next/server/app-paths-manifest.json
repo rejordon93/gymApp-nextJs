@@ -1,5 +1,7 @@
 {
   "/api/admin/createAdmin/route": "app/api/admin/createAdmin/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/client/admin/page": "app/client/admin/page.js"
+  "/api/admin/getRequest/route": "app/api/admin/getRequest/route.js",
+  "/api/users/getUser/route": "app/api/users/getUser/route.js",
+  "/client/admin/page": "app/client/admin/page.js",
+  "/client/admin/adminHome/page": "app/client/admin/adminHome/page.js"
 }
