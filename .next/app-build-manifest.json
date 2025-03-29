@@ -6,21 +6,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/client/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/admin/page.js"
-    ],
-    "/api/admin/patchRequest/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/admin/patchRequest/route.js"
-    ],
-    "/api/admin/createAdmin/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/admin/createAdmin/route.js"
-    ],
     "/client/admin/adminHome/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -35,6 +20,36 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/users/getUser/route.js"
+    ],
+    "/api/profile/get/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/profile/get/route.js"
+    ],
+    "/client/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/login/page.js"
+    ],
+    "/client/admin/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/admin/page.js"
+    ],
+    "/api/admin/createAdmin/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/admin/createAdmin/route.js"
+    ],
+    "/client/admin/registerNewUsers/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/admin/registerNewUsers/page.js"
+    ],
+    "/api/users/signup/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/users/signup/route.js"
     ]
   }
 }
