@@ -14,24 +14,14 @@ model User {
   password        String
   createdAt       DateTime      @default(now())
   isOnline        Boolean       @default(false)
-  requestedAdmin  Boolean       @default(false) // User can request to be an admin
-  userAdmin       Boolean       @default(false) // User is an admin or not
+  requestedAdmin  Boolean       @default(false)
+  userAdmin       Boolean       @default(false)
   profilePlan     ProfilePlan?
   userWorkouts    UserWorkout[]
   visits          Visits[]
-  admin           Admin?        // One-to-one relation with Admin
+  admin        Admin[]
+  trainer         Trainer[]
 }
-
-
-// adding Admin
-model Admin {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
-  isAdmin    Boolean
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-}
-
 
 model ProfilePlan {
   id            Int     @id @default(autoincrement())
@@ -67,6 +57,8 @@ model UserWorkout {
   visits            Visits[]            @relation("WorkoutToUserWorkout")
 }
 
+
+
 model FavoritedExercise {
   id               Int           @id @default(autoincrement())
   name             String        @unique
@@ -77,4 +69,28 @@ model FavoritedExercise {
   instructions     String[]
   secondaryMuscles String[]
   userWorkouts     UserWorkout[] @relation("UserWorkoutFavoritedExercises")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  user          User          @relation(fields: [userId], references: [id])
+}
+
+model Trainer {
+  id                Int                @id @default(autoincrement())
+  userId            Int                @unique
+  messages          String
+  trainingSessions  TrainingSession[] 
+  user          User          @relation(fields: [userId], references: [id])
+}
+
+model TrainingSession {
+  id          Int      @id @default(autoincrement())
+  trainerId   Int
+  title       String   
+  description String  
+  time        DateTime 
+  trainer     Trainer  @relation(fields: [trainerId], references: [id])
 }

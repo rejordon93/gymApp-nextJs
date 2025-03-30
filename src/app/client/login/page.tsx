@@ -205,7 +205,7 @@ export default function LoginPage() {
             align="center"
             sx={{ color: "text.secondary", mt: 2 }}
           >
-            Don't have an account?{" "}
+            Dont have an account?{" "}
             <Link href="/client/signup" passHref>
               <Typography
                 component="span"
