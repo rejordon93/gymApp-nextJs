@@ -31,7 +31,7 @@ export default function RegisterNewUser() {
   const onSignup = async () => {
     try {
       userDispatch({ type: ActionType.SET_LOADING, payload: true });
-      const response = await axios.post("/api/users/signup", {
+      await axios.post("/api/users/signup", {
         username,
         password,
         email,

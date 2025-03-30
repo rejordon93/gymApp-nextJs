@@ -1,7 +1,5 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { UserAdminContext } from "@/context/context";
 import {
   Container,
   Paper,
@@ -11,9 +9,9 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import AdminRequestCard from "./AdminRequestCard";
 import UserCard from "./UserCard"; // Import the component
 import Link from "next/link";
+
 type dataProps = {
   id: number;
   username: string;
@@ -23,23 +21,8 @@ type dataProps = {
 };
 
 export default function AdminHome() {
-  const [adminRequests, setAdminRequests] = useState<dataProps[]>([]);
   const [userData, setUserData] = useState<dataProps[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const { adminState, adminDispatch } = UserAdminContext();
-
-  // Fetch admin requests (users who requested admin access)
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get("/api/admin/getRequest");
-        setAdminRequests(res.data);
-      } catch (error) {
-        console.error("Error fetching admin requests:", error);
-      }
-    };
-    getData();
-  }, []);
 
   // Fetch all users
   useEffect(() => {
@@ -61,7 +44,10 @@ export default function AdminHome() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 5, mb: 5 }}>
-      <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
+      <Paper
+        elevation={6}
+        sx={{ p: 4, borderRadius: 3, backgroundColor: "#f5f5f5" }}
+      >
         <Typography
           variant="h4"
           fontWeight={700}
@@ -75,59 +61,65 @@ export default function AdminHome() {
           Admin Dashboard
         </Typography>
 
-        {/* Grid Layout for Admin Requests and Users */}
-        <Grid container spacing={4}>
-          {/* Admin Requests Section */}
-          <Grid item xs={12} md={6}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-              Users Requesting Admin Access:
+        {/* All Registered Users Section */}
+        <Grid container spacing={4} sx={{ mt: 4 }}>
+          {/* Search Bar Centered */}
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+            <Typography variant="body1" fontWeight={600} sx={{ mb: 2 }}>
+              Search Users:
             </Typography>
-            {adminRequests.length === 0 ? (
-              <Typography color="text.secondary">
-                No pending requests
-              </Typography>
-            ) : (
-              adminRequests.map((req) => (
-                <AdminRequestCard key={req.id} req={req} />
-              ))
-            )}
+            <TextField
+              label="Search User"
+              variant="outlined"
+              size="small"
+              sx={{ width: "300px", mb: 3 }}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </Grid>
 
-          {/* All Registered Users Section */}
-          <Grid item xs={12} md={6}>
-            <Typography variant="h6" sx={{ mt: 4, mb: 2, fontWeight: 600 }}>
-              All Registered Users:
-            </Typography>
-
-            {/* Search Bar */}
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{ mb: 3 }}
-            >
-              <Typography variant="body1" fontWeight={600}>
-                Search Users:
-              </Typography>
-              <TextField
-                label="Search User"
-                variant="outlined"
-                size="small"
-                sx={{ width: "250px" }}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </Box>
-
-            {filteredUsers.length === 0 ? (
-              <Typography color="text.secondary">No users found</Typography>
-            ) : (
-              filteredUsers.map((user) => (
-                <UserCard key={user.id} user={user} />
-              ))
-            )}
+          {/* Users Grid (3 users per row) */}
+          <Grid item xs={12}>
+            <Grid container spacing={4}>
+              {filteredUsers.length === 0 ? (
+                <Typography
+                  color="text.secondary"
+                  sx={{ width: "100%", textAlign: "center" }}
+                >
+                  No users found
+                </Typography>
+              ) : (
+                filteredUsers.map((user) => (
+                  <Grid item xs={12} sm={6} md={4} key={user.id}>
+                    <UserCard user={user} />
+                  </Grid>
+                ))
+              )}
+            </Grid>
           </Grid>
         </Grid>
-        <Link href="/client/admin/registerNewUsers">Add New User</Link>
+
+        {/* Bottom Buttons in Row */}
+        <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
+          <Link href="/client/admin/adminRequesting" passHref>
+            <Button variant="contained" color="primary" sx={{ flex: 1, mx: 1 }}>
+              View Requests
+            </Button>
+          </Link>
+          <Link href="/client/admin/registerNewUsers" passHref>
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ flex: 1, mx: 1 }}
+            >
+              Add New User
+            </Button>
+          </Link>
+          <Link href="/client/admin/registerNewUsers" passHref>
+            <Button variant="contained" color="success" sx={{ flex: 1, mx: 1 }}>
+              Add Trainer
+            </Button>
+          </Link>
+        </Box>
       </Paper>
     </Container>
   );

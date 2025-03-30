@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { AuthAppContext } from "@/context/context";
 import { ActionType } from "@/context/authReducer";
 import axios from "axios";
-// import io from "socket.io-client";
-// const socket = io("http://127.0.0.1:3000");
 
 // Material-UI Components
 import {
@@ -59,28 +57,6 @@ export default function LoginPage() {
   useEffect(() => {
     setIsButtonDisabled(!(email.length > 0 && password.length > 0));
   }, [email, password]);
-
-  // useEffect(() => {
-  //   // Listen for the "requestAdmin" event
-  //   socket.on("requestAdmin", (message: string) => {
-  //     console.log("Received from admin:", message);
-  //     setRequestAdmin(true);
-  //   });
-
-  //   return () => {
-  //     socket.off("requestAdmin"); // Corrected cleanup
-  //   };
-  // }, []);
-
-  // const handleRequestAdmin = async () => {
-  //   const res = await axios.patch("/api/admin/patchRequest", {
-  //     method: "PATCH",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ userId }),
-  //   });
-  //   console.log(res.data);
-  //   setRequestAdmin(true);
-  // };
 
   return (
     <Container
@@ -218,6 +194,9 @@ export default function LoginPage() {
           </Button>
           <Link href="/client/admin">
             <Button>Admin</Button>
+          </Link>
+          <Link href="/client/trainer">
+            <Button>Trainer</Button>
           </Link>
 
           {/* Registration Link */}

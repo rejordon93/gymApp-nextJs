@@ -1,8 +1,6 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/admin/getRequest/route": "app/api/admin/getRequest/route.js",
-  "/api/users/getUser/route": "app/api/users/getUser/route.js",
-  "/client/admin/adminHome/page": "app/client/admin/adminHome/page.js",
   "/client/admin/page": "app/client/admin/page.js",
-  "/client/admin/registerNewUsers/page": "app/client/admin/registerNewUsers/page.js"
+  "/client/admin/adminHome/page": "app/client/admin/adminHome/page.js",
+  "/client/trainer/page": "app/client/trainer/page.js",
+  "/client/login/page": "app/client/login/page.js"
 }

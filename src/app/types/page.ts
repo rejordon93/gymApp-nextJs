@@ -61,3 +61,26 @@ export type updateBodyType = {
   secondaryMuscles: string;
   target: string;
 };
+
+export type ProfileProps = {
+  cellPhone: string;
+  city: string;
+  currentStatus: string;
+  firstName: string;
+  homeClub: string;
+  id: number;
+  lastName: string;
+  memberSince: string;
+  state: string;
+  zipCode: string;
+  userId: number;
+};
+export type UserCardProps = {
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    isOnline: boolean;
+    createdAt: string;
+  };
+};
