@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     // Create an admin user in the admin table
     const admin = await prisma.admin.create({
       data: {
-        isAdmin: true,
+        // Removed isAdmin as it does not exist in the schema
         user: {
           connect: {
             id: userId, // This connects the existing user

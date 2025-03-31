@@ -7,7 +7,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { ProfileProps } from "./UserCard";
+import { ProfileProps } from "@/app/types/page";
 
 type ProfileUpdateDialogProps = {
   open: boolean;

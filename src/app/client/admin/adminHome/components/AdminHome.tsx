@@ -114,7 +114,7 @@ export default function AdminHome() {
               Add New User
             </Button>
           </Link>
-          <Link href="/client/admin/registerNewUsers" passHref>
+          <Link href="/client/trainer" passHref>
             <Button variant="contained" color="success" sx={{ flex: 1, mx: 1 }}>
               Add Trainer
             </Button>

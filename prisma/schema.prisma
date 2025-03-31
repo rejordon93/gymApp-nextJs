@@ -15,12 +15,14 @@ model User {
   createdAt       DateTime      @default(now())
   isOnline        Boolean       @default(false)
   requestedAdmin  Boolean       @default(false)
+  requestedTrainer  Boolean       @default(false)
   userAdmin       Boolean       @default(false)
+  userTrainer     Boolean       @default(false)
   profilePlan     ProfilePlan?
   userWorkouts    UserWorkout[]
   visits          Visits[]
-  admin        Admin[]
-  trainer         Trainer[]
+  admin           Admin[]
+  trainer    Trainer[]
 }
 
 model ProfilePlan {
@@ -79,9 +81,10 @@ model Admin {
 }
 
 model Trainer {
-  id                Int                @id @default(autoincrement())
-  userId            Int                @unique
+  id                Int      @id @default(autoincrement())
   messages          String
+  userId    Int      @unique
+  createdAt DateTime @default(now())
   trainingSessions  TrainingSession[] 
   user          User          @relation(fields: [userId], references: [id])
 }

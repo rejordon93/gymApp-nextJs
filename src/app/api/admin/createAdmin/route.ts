@@ -53,12 +53,12 @@ export async function POST(req: NextRequest) {
     );
 
     // ✅ Prepare admin data
-    const adminData = {
-      id: user.admin.id,
+    const adminData = user.admin.map((admin) => ({
+      id: admin.id,
       userId: user.id,
-      createdAt: user.admin.createdAt,
-      isAdmin: user.admin.isAdmin,
-    };
+      createdAt: admin.createdAt,
+      isAdmin: true,
+    }));
 
     // ✅ Set token in response cookie
     const response = NextResponse.json(

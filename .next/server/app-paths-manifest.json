@@ -1,6 +1,4 @@
 {
-  "/client/login/page": "app/client/login/page.js",
-  "/client/admin/page": "app/client/admin/page.js",
-  "/client/admin/adminHome/page": "app/client/admin/adminHome/page.js",
+  "/client/trainer/trainerHome/page": "app/client/trainer/trainerHome/page.js",
   "/client/trainer/page": "app/client/trainer/page.js"
 }

@@ -1,20 +1,22 @@
-"use client";
 import { useState, useEffect } from "react";
-import { Typography, Grid, Paper, Box, Button } from "@mui/material";
+import { Box, Grid, Paper, Typography, Button } from "@mui/material";
 import AdminRequestCard from "../../adminHome/components/AdminRequestCard";
-import Link from "next/link";
 import axios from "axios";
+import Link from "next/link";
 
-type dataProps = {
+type DataProps = {
   id: number;
   username: string;
   email: string;
   isOnline: boolean;
   createdAt: string;
+  isAdminRequest: boolean;
+  isTrainerRequest: boolean;
 };
 
 export default function RequestingPage() {
-  const [adminRequests, setAdminRequests] = useState<dataProps[]>([]);
+  const [adminRequests, setAdminRequests] = useState<DataProps[]>([]);
+  const [trainerRequests, setTrainerRequests] = useState<DataProps[]>([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -28,6 +30,32 @@ export default function RequestingPage() {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    const getTrainerData = async () => {
+      try {
+        const res = await axios.get("/api/trainer/getRequest");
+        setTrainerRequests(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Error fetching trainer requests:", error);
+      }
+    };
+    getTrainerData();
+  }, []);
+
+  // Function to handle state updates after approve/reject actions
+  const updateRequests = (id: number, type: "admin" | "trainer") => {
+    if (type === "admin") {
+      setAdminRequests((prevRequests) =>
+        prevRequests.filter((req) => req.id !== id)
+      );
+    } else if (type === "trainer") {
+      setTrainerRequests((prevRequests) =>
+        prevRequests.filter((req) => req.id !== id)
+      );
+    }
+  };
 
   return (
     <Box sx={{ padding: "2rem" }}>
@@ -47,7 +75,11 @@ export default function RequestingPage() {
               </Typography>
             ) : (
               adminRequests.map((req) => (
-                <AdminRequestCard key={req.id} req={req} />
+                <AdminRequestCard
+                  key={req.id}
+                  req={req}
+                  updateRequests={updateRequests}
+                />
               ))
             )}
           </Paper>
@@ -62,13 +94,17 @@ export default function RequestingPage() {
             >
               Users Requesting Trainer Access:
             </Typography>
-            {adminRequests.length === 0 ? (
+            {trainerRequests.length === 0 ? (
               <Typography color="text.secondary">
                 No pending requests
               </Typography>
             ) : (
-              adminRequests.map((req) => (
-                <AdminRequestCard key={req.id} req={req} />
+              trainerRequests.map((req) => (
+                <AdminRequestCard
+                  key={req.id}
+                  req={req}
+                  updateRequests={updateRequests}
+                />
               ))
             )}
           </Paper>

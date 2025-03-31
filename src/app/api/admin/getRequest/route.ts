@@ -23,7 +23,13 @@ export async function GET(req: NextRequest) {
   try {
     const requests = await prisma.user.findMany({
       where: { requestedAdmin: true },
-      select: { id: true, username: true, email: true },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        createdAt: true,
+        isOnline: true,
+      },
     });
 
     // If successful, return requests with a 200 status

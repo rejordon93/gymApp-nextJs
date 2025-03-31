@@ -40,8 +40,6 @@ export default function LoginPage() {
       });
       // Update global state with user data
       userDispatch({ type: ActionType.SET_USER, payload: response.data });
-      // socket.emit("admin");
-      // handleRequestAdmin();
       router.push("/client/profile");
     } catch (error) {
       userDispatch({

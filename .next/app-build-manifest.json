@@ -6,50 +6,20 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/client/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/admin/page.js"
-    ],
-    "/api/admin/createAdmin/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/admin/createAdmin/route.js"
-    ],
-    "/client/admin/adminHome/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/admin/adminHome/page.js"
-    ],
-    "/api/users/getUser/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/users/getUser/route.js"
-    ],
-    "/api/profile/get/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/profile/get/route.js"
-    ],
-    "/client/admin/adminRequesting/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/admin/adminRequesting/page.js"
-    ],
-    "/api/admin/getRequest/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/admin/getRequest/route.js"
-    ],
-    "/client/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/login/page.js"
-    ],
     "/client/trainer/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/client/trainer/page.js"
+    ],
+    "/api/trainer/createTrainer/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/trainer/createTrainer/route.js"
+    ],
+    "/client/trainer/trainerHome/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/trainer/trainerHome/page.js"
     ]
   }
 }
