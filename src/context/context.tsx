@@ -5,6 +5,7 @@ import exercisesReducer from "@/context/exerciseReducer";
 import visitsReducer from "@/context/visitsReducer";
 import workoutReducer from "./workoutReducer";
 import adminReducer from "./adminReducer";
+import trainerReducer from "./trainerReducer";
 import { Action, UserState, AUTH_INITIAL_STATE } from "@/context/authReducer";
 
 import {
@@ -25,6 +26,12 @@ import {
 } from "./workoutReducer";
 
 import { AdminAction, AdminState, ADMIN_INITIAL_STATE } from "./adminReducer";
+
+import {
+  TrainerAction,
+  TrainerState,
+  TRAINER_INITIAL_STATE,
+} from "./trainerReducer";
 
 // Define the shape of the main app context
 interface UserContextType {
@@ -51,7 +58,10 @@ interface AdminContextType {
   adminState: AdminState;
   adminDispatch: React.Dispatch<AdminAction>;
 }
-
+interface TrainerContextType {
+  trainerState: TrainerState;
+  trainerDispatch: React.Dispatch<TrainerAction>;
+}
 // Create contexts for the app state and workout data
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
@@ -68,6 +78,10 @@ export const WorkoutContext = createContext<WorkoutContextType | undefined>(
   undefined
 );
 export const AdminContext = createContext<AdminContextType | undefined>(
+  undefined
+);
+
+export const TrainerContext = createContext<TrainerContextType | undefined>(
   undefined
 );
 
@@ -95,6 +109,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     adminReducer,
     ADMIN_INITIAL_STATE
   );
+  const [trainerState, trainerDispatch] = useReducer(
+    trainerReducer,
+    TRAINER_INITIAL_STATE
+  );
 
   return (
     <UserContext.Provider value={{ userState, userDispatch }}>
@@ -102,7 +120,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         <VisitsContext.Provider value={{ visitState, visitDispatch }}>
           <WorkoutContext.Provider value={{ workoutState, workoutDispatch }}>
             <AdminContext.Provider value={{ adminState, adminDispatch }}>
-              {children}
+              <TrainerContext.Provider
+                value={{ trainerState, trainerDispatch }}
+              >
+                {children}
+              </TrainerContext.Provider>
             </AdminContext.Provider>
           </WorkoutContext.Provider>
         </VisitsContext.Provider>
@@ -146,6 +168,14 @@ export function UserWorkoutContext() {
 
 export function UserAdminContext() {
   const context = useContext(AdminContext);
+  if (!context) {
+    throw new Error("UserVisitContext must be used within an AppProvider");
+  }
+  return context;
+}
+
+export function UserTrainerContext() {
+  const context = useContext(TrainerContext);
   if (!context) {
     throw new Error("UserVisitContext must be used within an AppProvider");
   }

@@ -1,17 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import { TrainerContext } from "@/context/trainerContext"; // Ensure this context exists
+import { UserTrainerContext } from "@/context/context";
 import axios from "axios";
 import { Container } from "@mui/material";
-// import { ActionType } from "@/context/trainerReducer"; // Ensure you have a trainerReducer
+
+import { ActionType } from "@/context/trainerReducer";
 import TrainerLoginForm from "./components/TrainerLoginForm";
 import TrainerSnackbar from "./components/TrainerSnackBar";
 import TrainerRequestModal from "./components/TrainerRequestModal";
 
 export default function TrainerLogin() {
   const router = useRouter();
-  // const { trainerDispatch } = TrainerContext(); // Dispatch for trainer authentication
+  const { trainerDispatch } = UserTrainerContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,12 +30,12 @@ export default function TrainerLogin() {
   const onTrainerLogin = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.post("/api/trainer/createTrainer", {
+      const res = await axios.post("/api/trainer/createTra", {
         email,
         password,
       });
       console.log(res.data);
-      // trainerDispatch({ type: ActionType.SET_TRAINER, payload: res.data });
+      trainerDispatch({ type: ActionType.SET_TRAINER, payload: res.data });
       router.push("/client/trainer/trainerHome"); // Redirect to trainer home page
     } catch (error) {
       setSnackbarMessage("Access denied. Trainers only.");
