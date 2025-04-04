@@ -7,29 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum EmployeeLevel {
+  ADMIN
+  TRAINER
+  STAFF
+  MANAGER
+}
+
 model User {
-  id              Int           @id @default(autoincrement())
-  username        String        @unique
-  email           String        @unique
-  password        String
-  createdAt       DateTime      @default(now())
-  isOnline        Boolean       @default(false)
-  requestedAdmin  Boolean       @default(false)
-  requestedTrainer  Boolean       @default(false)
-  userAdmin       Boolean       @default(false)
-  userTrainer     Boolean       @default(false)
-  profilePlan     ProfilePlan?
-  userWorkouts    UserWorkout[]
-  visits          Visits[]
-  admin           Admin[]
-  trainer    Trainer[]
+  id                Int               @id @default(autoincrement())
+  username          String            @unique
+  email             String            @unique
+  password          String
+  createdAt         DateTime          @default(now())
+  isOnline          Boolean           @default(false)
+  profilePlan       ProfilePlan?
+  userWorkouts      UserWorkout[]
+  visits            Visits[]       // Assuming many Trainers can be linked to one User
 }
 
 model ProfilePlan {
   id            Int     @id @default(autoincrement())
   firstName     String
   lastName      String
-  userId        Int?    @unique
+  userId        Int     @unique
   cellPhone     String?
   city          String?
   currentStatus String?
@@ -37,7 +38,7 @@ model ProfilePlan {
   state         String?
   zipCode       String?
   memberSince   String?
-  user          User?   @relation(fields: [userId], references: [id])
+  user          User    @relation(fields: [userId], references: [id])
 }
 
 model Visits {
@@ -59,8 +60,6 @@ model UserWorkout {
   visits            Visits[]            @relation("WorkoutToUserWorkout")
 }
 
-
-
 model FavoritedExercise {
   id               Int           @id @default(autoincrement())
   name             String        @unique
@@ -73,28 +72,41 @@ model FavoritedExercise {
   userWorkouts     UserWorkout[] @relation("UserWorkoutFavoritedExercises")
 }
 
+model Employee {
+  id             Int            @id @default(autoincrement())
+  username       String         @unique
+  email          String         @unique
+  password       String
+  createdAt      DateTime       @default(now())
+  employeeLevel  EmployeeLevel
+  admins         Admin[]        // Changed from Admin? to Admin[] (one-to-many)
+  trainers       Trainer[]      // Changed from Trainer? to Trainer[] (one-to-many)
+}
+
 model Admin {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
-  createdAt DateTime @default(now())
-  //role      String   @default("admin") // e.g., "superadmin", "moderator", "support"
-  user          User          @relation(fields: [userId], references: [id])
+  id         Int       @id @default(autoincrement())
+  employeeId Int      
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) 
+  employee   Employee  @relation(fields: [employeeId], references: [id])
 }
 
 model Trainer {
-  id                Int      @id @default(autoincrement())
-  messages          String
-  userId    Int      @unique
-  createdAt DateTime @default(now())
-  trainingSessions  TrainingSession[] 
-  user          User          @relation(fields: [userId], references: [id])
+  id           Int               @id @default(autoincrement())
+  clientNotes  String
+  events       String           
+  employeeId   Int              
+  createdAt    DateTime          @default(now())
+  employee     Employee          @relation(fields: [employeeId], references: [id])
+  schedules    TrainerSchedule[] // Multiple schedule entries
 }
 
-model TrainingSession {
-  id          Int      @id @default(autoincrement())
-  trainerId   Int
-  title       String   
-  description String  
-  time        DateTime 
-  trainer     Trainer  @relation(fields: [trainerId], references: [id])
+// set up Trainer scheduleing
+model TrainerSchedule {
+  id         Int      @id @default(autoincrement())
+  trainerId  Int
+  startTime  DateTime // Start of the scheduled slot
+  endTime    DateTime // End of the scheduled slot
+  createdAt  DateTime @default(now())
+  trainer    Trainer  @relation(fields: [trainerId], references: [id])
 }
