@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { Box, Grid, Paper, Typography, Button } from "@mui/material";
 import AdminRequestCard from "../../adminHome/components/AdminRequestCard";

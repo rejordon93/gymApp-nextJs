@@ -77,6 +77,7 @@ model Admin {
   id        Int      @id @default(autoincrement())
   userId    Int      @unique
   createdAt DateTime @default(now())
+  //role      String   @default("admin") // e.g., "superadmin", "moderator", "support"
   user          User          @relation(fields: [userId], references: [id])
 }
 

@@ -6,20 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/client/trainer/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/client/trainer/page.js"
-    ],
-    "/api/trainer/createTrainer/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/trainer/createTrainer/route.js"
-    ],
-    "/client/trainer/trainerHome/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/trainer/trainerHome/page.js"
+      "static/chunks/app/page.js"
     ]
   }
 }
