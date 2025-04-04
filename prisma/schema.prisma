@@ -22,7 +22,7 @@ model User {
   userWorkouts    UserWorkout[]
   visits          Visits[]
   admin           Admin[]
-  trainer    Trainer[]
+  trainer    Trainer[]s
 }
 
 model ProfilePlan {
