@@ -80,7 +80,7 @@ model Employee {
 
 model Role {
   id        Int        @id @default(autoincrement())
-  name      String     @unique
+  name      RoleType    @unique 
   createdAt DateTime   @default(now())
   editedAt  DateTime
   employees     EmployeeAuthority[]
@@ -106,9 +106,9 @@ enum RoleType {
 model Authority {
    id        Int        @id @default(autoincrement())
    authority AuthorityType
-    createdAt DateTime   @default(now())
-  editedAt  DateTime
-  roles EmployeeRole[]
+   createdAt DateTime   @default(now())
+   editedAt  DateTime
+   roles EmployeeRole[]
 }
 
 model EmployeeRole {
@@ -116,7 +116,7 @@ model EmployeeRole {
   authorityId Int
   role Role @relation(fields: [roleId], references: [id])
   authority  Authority @relation(fields: [authorityId], references: [id])
- @@id([roleId, authorityId])
+  @@id([roleId, authorityId])
 }
 
 enum AuthorityType {
