@@ -190,13 +190,9 @@ export default function LoginPage() {
               "Sign In"
             )}
           </Button>
-          <Link href="/client/admin">
-            <Button>Admin</Button>
+          <Link href="/client/employeeLogin/login">
+            <Button>Employee</Button>
           </Link>
-          <Link href="/client/trainer">
-            <Button>Trainer</Button>
-          </Link>
-
           {/* Registration Link */}
           <Typography
             variant="body2"
