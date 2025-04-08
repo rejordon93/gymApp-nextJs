@@ -1,3 +1,8 @@
 {
-  "/api/employee/getEmployee/route": "app/api/employee/getEmployee/route.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/client/employeeLogin/signup/page": "app/client/employeeLogin/signup/page.js",
+  "/client/employeeDashboard/page": "app/client/employeeDashboard/page.js",
+  "/client/employeeLogin/login/page": "app/client/employeeLogin/login/page.js",
+  "/client/login/page": "app/client/login/page.js",
+  "/client/signup/page": "app/client/signup/page.js"
 }
