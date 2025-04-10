@@ -2,6 +2,7 @@
 
 import React from "react";
 import { AppBar, Toolbar, Box, Button, Typography } from "@mui/material";
+import Link from "next/link";
 
 export default function DashBoardNav() {
   return (
@@ -12,9 +13,11 @@ export default function DashBoardNav() {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Button color="primary" variant="outlined">
-            Admin
-          </Button>
+          <Link href="/clinet/admin">
+            <Button color="primary" variant="outlined">
+              Admin
+            </Button>
+          </Link>
           <Button color="primary" variant="outlined">
             Trainer
           </Button>

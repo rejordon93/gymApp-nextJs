@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Box,
   TextField,
@@ -15,7 +16,7 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
@@ -35,6 +36,7 @@ export default function Signup() {
         email,
         password,
       });
+      console.log(res.data);
 
       setSnackbarMessage(res.data.message || "Signup successful!");
       setSnackbarSeverity("success");
@@ -43,6 +45,7 @@ export default function Signup() {
       setUsername("");
       setEmail("");
       setPassword("");
+      router.push("/client/employeeLogin/login");
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         setSnackbarMessage(

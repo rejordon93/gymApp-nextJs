@@ -16,20 +16,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check for existing employee
-    const existingEmployee = await prisma.employee.findFirst({
-      where: { email },
-    });
-    if (existingEmployee) {
+    const existingUser = await prisma.employee.findUnique({ where: { email } });
+    if (existingUser) {
       return NextResponse.json(
-        { message: "Email already in use" },
+        { message: "Email already registerd" },
         { status: 409 }
       );
     }
 
     // Hash password
     const hashedPassword = await bcryptjs.hash(password, 10);
-
     // Create new employee
     const newEmployee = await prisma.employee.create({
       data: {
@@ -40,16 +36,42 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const role = await prisma.role.create({
-      data: {
+    const staffRole = await prisma.role.upsert({
+      where: { name: "STAFF" },
+      update: { editedAt: new Date() },
+      create: {
         name: "STAFF",
+        editedAt: new Date(),
+      },
+    });
+
+    const createUserAuthority = await prisma.authority.upsert({
+      where: { authority: "CREATEUSER" },
+      update: { editedAt: new Date() },
+      create: {
+        authority: "CREATEUSER",
+        editedAt: new Date(),
+      },
+    });
+
+    await prisma.employeeRole.upsert({
+      where: {
+        roleId_authorityId: {
+          roleId: staffRole.id,
+          authorityId: createUserAuthority.id,
+        },
+      },
+      update: {},
+      create: {
+        roleId: staffRole.id,
+        authorityId: createUserAuthority.id,
       },
     });
 
     await prisma.employeeAuthority.create({
       data: {
         employeeId: newEmployee.id,
-        authorityId: role.id,
+        authorityId: staffRole.id,
       },
     });
 
@@ -65,13 +87,10 @@ export async function POST(req: NextRequest) {
     });
 
     // Create response
-    const response = NextResponse.json(
-      {
-        message: "Employee created successfully",
-        employeeId: newEmployee.id,
-      },
-      { status: 201 }
-    );
+    const response = NextResponse.json({
+      message: "Employee registered and linked to STAFF role",
+      employee: newEmployee,
+    });
 
     // Set token in a cookie (optional, or you could return it in the body)
     response.cookies.set("token", token, {

@@ -13,12 +13,14 @@ export default function Dashboard() {
     try {
       e.preventDefault();
 
-      const res = await axios.post("/api/employee/signup", {
+      const res = await axios.post("/api/employee/createDashboard", {
         username,
         email,
         password,
       });
-
+      setUsername("");
+      setEmail("");
+      setPassword("");
       console.log(res.data);
     } catch (error) {
       console.error("Error", error);

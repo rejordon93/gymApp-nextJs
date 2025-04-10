@@ -105,7 +105,7 @@ enum RoleType {
 
 model Authority {
    id        Int        @id @default(autoincrement())
-   authority AuthorityType
+   authority AuthorityType  @unique
    createdAt DateTime   @default(now())
    editedAt  DateTime
    roles EmployeeRole[]
