@@ -13,7 +13,7 @@ export default function DashBoardNav() {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Link href="/clinet/admin">
+          <Link href="/client/admin">
             <Button color="primary" variant="outlined">
               Admin
             </Button>

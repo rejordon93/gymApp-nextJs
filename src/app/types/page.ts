@@ -84,3 +84,9 @@ export type UserCardProps = {
     createdAt: string;
   };
 };
+
+export type LoginType = {
+  username: string;
+  email: string;
+  password: string;
+};

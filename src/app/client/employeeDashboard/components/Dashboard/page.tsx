@@ -1,39 +1,83 @@
 "use client";
 
-import React, { useState } from "react";
-import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  Grid,
+  TextField,
+  Typography,
+  Alert,
+} from "@mui/material";
 import axios from "axios";
 
 export default function Dashboard() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    try {
-      e.preventDefault();
+    e.preventDefault();
+    setErrorMsg("");
+    setSuccessMsg("");
 
+    try {
       const res = await axios.post("/api/employee/createDashboard", {
         username,
         email,
         password,
       });
+
       setUsername("");
       setEmail("");
       setPassword("");
-      console.log(res.data);
-    } catch (error) {
-      console.error("Error", error);
+      setSuccessMsg(res.data.message);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        if (status === 403) {
+          setErrorMsg("You must be a STAFF or MANAGER to perform this action.");
+          setUsername("");
+          setEmail("");
+          setPassword("");
+        } else {
+          setErrorMsg(
+            err.response?.data?.message || "An unexpected error occurred."
+          );
+        }
+      } else {
+        setErrorMsg("Something went wrong.");
+      }
     }
   };
 
-  //   useEffect(() => {  this will get Event data later!!!!!!!!!!~~~~~~~~
-  //     const getData = async () => {
-  //       const res = await axios.get("/api/employee/events");
-  //       console.log(res.data);
-  //     };
-  //     getData();
-  //   }, []);
+  // ⏳ Auto-clear alerts after 7 seconds
+  useEffect(() => {
+    if (errorMsg || successMsg) {
+      const timer = setTimeout(() => {
+        setErrorMsg("");
+        setSuccessMsg("");
+      }, 7000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMsg, successMsg]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await axios.get("/api/admin/getEmployee");
+        console.log(res.data); // Assuming you have this API route
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    getData();
+  }, []);
 
   return (
     <Box sx={{ p: 4 }}>
@@ -42,7 +86,7 @@ export default function Dashboard() {
       </Typography>
 
       <Grid container spacing={4}>
-        {/* Left Column - Upcoming Events */}
+        {/* Left Column */}
         <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
             Upcoming Events
@@ -52,7 +96,7 @@ export default function Dashboard() {
           </Card>
         </Grid>
 
-        {/* Right Column - Employee Signup */}
+        {/* Right Column - Create Employee */}
         <Grid item xs={12} md={6}>
           <Box
             component="form"
@@ -67,6 +111,18 @@ export default function Dashboard() {
             <Typography variant="h5" fontWeight={600} mb={2}>
               Create New Clients
             </Typography>
+
+            {errorMsg && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {errorMsg}
+              </Alert>
+            )}
+
+            {successMsg && (
+              <Alert severity="success" sx={{ mb: 2 }}>
+                {successMsg}
+              </Alert>
+            )}
 
             <TextField
               label="Username"
