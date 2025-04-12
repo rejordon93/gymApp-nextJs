@@ -66,19 +66,6 @@ export default function Dashboard() {
     }
   }, [errorMsg, successMsg]);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get("/api/admin/getEmployee");
-        console.log(res.data); // Assuming you have this API route
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    getData();
-  }, []);
-
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" fontWeight={700} mb={4}>

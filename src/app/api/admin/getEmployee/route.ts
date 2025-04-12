@@ -6,9 +6,10 @@ export async function GET() {
     console.log("Starting the query...");
 
     // Query the employee by email
-    const getEmployee = await prisma.employee.findUnique({
-      where: {
-        email: "react1@gmail.com", // Assuming you want to query by email
+    const getEmployee = await prisma.employee.findMany({
+      include: {
+        roles: true,
+        trainer: true,
       },
     });
 

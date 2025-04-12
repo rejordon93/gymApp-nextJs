@@ -1,4 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import {
   Box,
@@ -11,6 +13,24 @@ import {
 import Link from "next/link";
 
 export default function AdminDashboard() {
+  const [activeEmployee, setActiveEmployee] = useState<number>(0);
+  const [activeEvent, setActiveEvents] = useState<number>(0); // for later when i have Events
+  const [activeRoles, setActiveRoles] = useState<number>(0); // same as on top
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await axios.get("/api/admin/getEmployee");
+        console.log(res.data); // Assuming you have this API route
+        setActiveEmployee(res.data.length);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    getData();
+  }, []);
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" fontWeight={700} mb={4}>
@@ -23,7 +43,7 @@ export default function AdminDashboard() {
           <Card>
             <CardContent>
               <Typography variant="h6">Employees</Typography>
-              <Typography variant="h4">25</Typography>
+              <Typography variant="h4">{activeEmployee}</Typography>
             </CardContent>
           </Card>
         </Grid>
