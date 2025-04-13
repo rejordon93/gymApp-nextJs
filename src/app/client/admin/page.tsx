@@ -9,36 +9,59 @@ import {
   Card,
   CardContent,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
 
 export default function AdminDashboard() {
   const [activeEmployee, setActiveEmployee] = useState<number>(0);
-  const [activeEvent, setActiveEvents] = useState<number>(0); // for later when i have Events
-  const [activeRoles, setActiveRoles] = useState<number>(0); // same as on top
+  const [currentUser, setCurrentUser] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const res = await axios.get("/api/admin/getEmployee");
-        console.log(res.data); // Assuming you have this API route
-        setActiveEmployee(res.data.length);
+        setActiveEmployee(res.data.employees.length);
+        setCurrentUser(res.data.currentUser.username);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getData();
   }, []);
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          p: 4,
+          height: "80vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={60} thickness={4} />
+        <Typography variant="h6" mt={2}>
+          Loading admin dashboard...
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" fontWeight={700} mb={4}>
-        Welcome back, Ethan 👋
+        Welcome back, Admin {currentUser} 👋
       </Typography>
 
       <Grid container spacing={3}>
-        {/* Quick Stats */}
         <Grid item xs={12} sm={4}>
           <Card>
             <CardContent>
@@ -65,14 +88,13 @@ export default function AdminDashboard() {
         </Grid>
       </Grid>
 
-      {/* Quick Navigation */}
       <Box mt={4}>
         <Typography variant="h6" mb={2}>
           Quick Actions
         </Typography>
         <Grid container spacing={2}>
           <Grid item>
-            <Link href="/client/admin/employees" passHref>
+            <Link href="/client/admin/manageEmployees" passHref>
               <Button variant="contained">Manage Employees</Button>
             </Link>
           </Grid>
