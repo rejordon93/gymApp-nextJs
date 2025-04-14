@@ -1,8 +1,7 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/admin/getEmployee/route": "app/api/admin/getEmployee/route.js",
-  "/client/admin/page": "app/client/admin/page.js",
+  "/api/employee/loginEmployee/route": "app/api/employee/loginEmployee/route.js",
   "/client/employeeLogin/login/page": "app/client/employeeLogin/login/page.js",
+  "/client/employeeDashboard/page": "app/client/employeeDashboard/page.js",
   "/client/admin/manageEmployees/page": "app/client/admin/manageEmployees/page.js",
-  "/client/employeeDashboard/page": "app/client/employeeDashboard/page.js"
+  "/client/admin/page": "app/client/admin/page.js"
 }

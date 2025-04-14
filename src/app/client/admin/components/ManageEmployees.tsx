@@ -1,187 +1,167 @@
 "use client";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Grid,
-  Card,
-  CardContent,
-  Typography,
   Box,
+  TextField,
+  InputAdornment,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
   CircularProgress,
-  Avatar,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import axios from "axios";
 
-import { deepPurple } from "@mui/material/colors";
-
-type EmployeesProps = {
-  id: number;
+// Define the shape of an employee object
+interface Employee {
+  _id: string;
   username: string;
-  email: string;
-  createdAt: Date;
-  editedAt: Date;
-  name: string;
-};
+  email?: string;
+}
 
 export default function ManageEmployees() {
-  const [employees, setEmployees] = useState<EmployeesProps[]>([]);
-  const [role, setRole] = useState<string>("");
-  const [loading, setLoading] = useState(true);
-  const [selectedEmployee, setSelectedEmployee] =
-    useState<EmployeesProps | null>(null);
-  const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [filteredResults, setFilteredResults] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+    null
+  );
+  const [editedUsername, setEditedUsername] = useState("");
+  const [editedEmail, setEditedEmail] = useState("");
 
   useEffect(() => {
-    const getData = async () => {
+    const fetchEmployees = async () => {
       try {
-        const res = await axios.get("/api/admin/getEmployee");
-        console.log(res.data);
-        setEmployees(res.data.employees);
-        console.log(res.data.employeeRole);
-        console.log(
-          res.data.employeeRole.forEach((r) => console.log(r.role.name))
-        );
+        setLoading(true);
+        const res = await axios.get("/api/employee/getEmployee");
+        setEmployees(res.data.getAllEmployee);
       } catch (err) {
-        console.error("Error fetching employees", err);
+        console.error("Error fetching employees:", err);
       } finally {
         setLoading(false);
       }
     };
-    getData();
+
+    fetchEmployees();
   }, []);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const res = await axios.get("/api/employee/getEmployee");
-  //       console.log(res.data);
-  //     } catch (err) {
-  //       console.error("Error fetching employees", err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredResults([]);
+    } else {
+      const filtered = employees.filter((emp) =>
+        emp.username?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredResults(filtered);
+    }
+  }, [searchQuery, employees]);
 
-  const handleEdit = (employee: EmployeesProps) => {
-    setSelectedEmployee(employee);
-    setOpen(true);
-    console.log(employee);
+  const handleEditClick = (emp: Employee) => {
+    setSelectedEmployee(emp);
+    setEditedUsername(emp.username);
+    setEditedEmail(emp.email || "");
+    setEditDialogOpen(true);
   };
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          height: "70vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress size={60} thickness={4} />
-      </Box>
-    );
-  }
+  const handleEditSave = async () => {
+    if (selectedEmployee) {
+      // Optional: Make an API call to save edited employee
+      try {
+        await axios.put(
+          `/api/employee/updateEmployee/${selectedEmployee._id}`,
+          {
+            username: editedUsername,
+            email: editedEmail,
+          }
+        );
+
+        // Update employee in the local state
+        const updatedEmployees = employees.map((emp) =>
+          emp._id === selectedEmployee._id
+            ? { ...emp, username: editedUsername, email: editedEmail }
+            : emp
+        );
+        setEmployees(updatedEmployees);
+      } catch (err) {
+        console.error("Failed to update employee:", err);
+      } finally {
+        setEditDialogOpen(false);
+      }
+    }
+  };
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h4" fontWeight={700} mb={4}>
+      <Typography variant="h5" mb={2}>
         Manage Employees
       </Typography>
-      <Grid container spacing={3}>
-        {employees.map((employee) => (
-          <Grid item xs={12} sm={6} md={4} key={employee.id}>
-            <Card
-              sx={{
-                p: 2,
-                borderRadius: 3,
-                boxShadow: 3,
-                transition: "0.3s",
-                "&:hover": {
-                  boxShadow: 6,
-                },
-              }}
-            >
-              <CardContent>
-                <Box display="flex" alignItems="center" mb={2}>
-                  <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>
-                    {employee.username[0].toUpperCase()}
-                  </Avatar>
-                  <Box>
-                    <Typography variant="h6">{employee.username}</Typography>
-                    <Typography color="text.secondary" fontSize={14}>
-                      {employee.email}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Typography variant="body2" color="text.secondary" mb={2}>
-                  Joined: {new Date(employee.createdAt).toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mb={2}>
-                  Role: {role}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => handleEdit(employee)}
-                >
-                  Edit
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
 
-      {/* Move the dialog down here, outside the map loop */}
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
+      <TextField
         fullWidth
-        maxWidth="sm"
-      >
+        variant="outlined"
+        placeholder="Search employees..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon color="action" />
+            </InputAdornment>
+          ),
+        }}
+        sx={{ mb: 3 }}
+      />
+
+      {loading ? (
+        <CircularProgress />
+      ) : filteredResults.length > 0 ? (
+        <List>
+          {filteredResults.map((emp) => (
+            <ListItem key={emp._id} sx={{ borderBottom: "1px solid #eee" }}>
+              <ListItemText
+                primary={emp.username}
+                secondary={`Email: ${emp.email || "N/A"}`}
+              />
+              <Button onClick={() => handleEditClick(emp)}>Edit</Button>
+              <Button color="error">X</Button>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Typography>No employees found.</Typography>
+      )}
+
+      {/* Edit Dialog */}
+      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogTitle>Edit Employee</DialogTitle>
-        <DialogContent dividers>
+        <DialogContent>
           <TextField
-            label="Username"
             fullWidth
             margin="normal"
-            value={selectedEmployee?.username || ""}
-            onChange={(e) =>
-              setSelectedEmployee((prev) =>
-                prev ? { ...prev, username: e.target.value } : null
-              )
-            }
+            label="Username"
+            value={editedUsername}
+            onChange={(e) => setEditedUsername(e.target.value)}
           />
           <TextField
-            label="Email"
             fullWidth
             margin="normal"
-            value={selectedEmployee?.email || ""}
-            onChange={(e) =>
-              setSelectedEmployee((prev) =>
-                prev ? { ...prev, email: e.target.value } : null
-              )
-            }
+            label="Email"
+            value={editedEmail}
+            onChange={(e) => setEditedEmail(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button
-            onClick={() => {
-              // TODO: Send PUT request to save changes
-              console.log("Updated employee:", selectedEmployee);
-              setOpen(false);
-            }}
-            variant="contained"
-          >
+          <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleEditSave}>
             Save
           </Button>
         </DialogActions>

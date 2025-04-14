@@ -31,7 +31,7 @@ export default function Signup() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/api/employee/signup", {
+      const res = await axios.post("/api/employee/createEmployee", {
         username,
         email,
         password,

@@ -6,26 +6,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
-    "/client/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/login/page.js"
-    ],
-    "/client/employeeLogin/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/client/employeeLogin/login/page.js"
-    ],
-    "/api/employee/login/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/employee/login/route.js"
-    ],
     "/client/employeeDashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -36,20 +16,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/client/admin/page.js"
     ],
-    "/api/admin/getEmployee/route": [
+    "/api/employee/getEmployee/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/admin/getEmployee/route.js"
+      "static/chunks/app/api/employee/getEmployee/route.js"
     ],
     "/client/admin/manageEmployees/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/client/admin/manageEmployees/page.js"
     ],
-    "/api/employee/getEmployee/route": [
+    "/client/employeeLogin/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/employee/getEmployee/route.js"
+      "static/chunks/app/client/employeeLogin/login/page.js"
+    ],
+    "/api/employee/loginEmployee/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/employee/loginEmployee/route.js"
+    ],
+    "/client/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/client/login/page.js"
     ]
   }
 }

@@ -1,25 +1,26 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/database/prisma";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
 
-export async function GET(req: NextRequest) {
-  const employeeId = getDataFromToken(req);
-
-  if (!employeeId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const employee = await prisma.employee.findUnique({
-    where: { id: employeeId },
-    include: {
-      roles: {
-        include: {
-          role: true,
-        },
+export async function GET() {
+  try {
+    const getAllEmployee = await prisma.employee.findMany({
+      include: {
+        roles: true,
+        trainer: true,
       },
-    },
-  });
-  console.log(employee?.roles);
+    });
+    const getAllRoles = await prisma.role.findMany({
+      include: {
+        employees: true,
+      },
+    });
 
-  return NextResponse.json({ employee }, { status: 200 });
+    return NextResponse.json({ getAllEmployee, getAllRoles });
+  } catch (error) {
+    console.error("Error fetching employees:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch employees" },
+      { status: 500 }
+    );
+  }
 }

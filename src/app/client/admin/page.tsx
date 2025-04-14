@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 import {
   Box,
   Typography,
@@ -15,15 +14,23 @@ import Link from "next/link";
 
 export default function AdminDashboard() {
   const [activeEmployee, setActiveEmployee] = useState<number>(0);
-  const [currentUser, setCurrentUser] = useState<string>("");
+  const [rolesCount, setRolesCount] = useState<number>(0);
+  const [username, setUsername] = useState<string>("Admin");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get("/api/admin/getEmployee");
-        setActiveEmployee(res.data.employees.length);
-        setCurrentUser(res.data.currentUser.username);
+        const res = await axios.get("/api/employee/getEmployee");
+        const employees = res.data.getAllEmployee;
+        const roles = res.data.getAllRoles;
+
+        // Get the first user's username safely
+        const employeeName = employees[0]?.username || "Admin";
+
+        setUsername(employeeName);
+        setActiveEmployee(employees.length);
+        setRolesCount(roles.length);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -58,7 +65,7 @@ export default function AdminDashboard() {
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" fontWeight={700} mb={4}>
-        Welcome back, Admin {currentUser} 👋
+        Welcome back, Admin {username} 👋
       </Typography>
 
       <Grid container spacing={3}>
@@ -82,7 +89,7 @@ export default function AdminDashboard() {
           <Card>
             <CardContent>
               <Typography variant="h6">Roles</Typography>
-              <Typography variant="h4">4</Typography>
+              <Typography variant="h4">{rolesCount}</Typography>
             </CardContent>
           </Card>
         </Grid>

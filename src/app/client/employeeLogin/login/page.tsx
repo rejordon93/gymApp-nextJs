@@ -28,7 +28,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/api/employee/login", {
+      const res = await axios.post("/api/employee/loginEmployee", {
         email,
         password,
       });
