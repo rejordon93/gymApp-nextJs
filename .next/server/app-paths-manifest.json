@@ -1,7 +1,15 @@
 {
-  "/api/employee/loginEmployee/route": "app/api/employee/loginEmployee/route.js",
-  "/client/employeeLogin/login/page": "app/client/employeeLogin/login/page.js",
-  "/client/employeeDashboard/page": "app/client/employeeDashboard/page.js",
-  "/client/admin/manageEmployees/page": "app/client/admin/manageEmployees/page.js",
-  "/client/admin/page": "app/client/admin/page.js"
+  "/api/workouts/getWorkout/route": "app/api/workouts/getWorkout/route.js",
+  "/api/users/login/route": "app/api/users/login/route.js",
+  "/api/visits/getVisits/route": "app/api/visits/getVisits/route.js",
+  "/api/profile/get/route": "app/api/profile/get/route.js",
+  "/api/users/logout/route": "app/api/users/logout/route.js",
+  "/api/visits/updateUsersVisits/route": "app/api/visits/updateUsersVisits/route.js",
+  "/api/workouts/postWorkout/route": "app/api/workouts/postWorkout/route.js",
+  "/client/exercises/page": "app/client/exercises/page.js",
+  "/client/login/page": "app/client/login/page.js",
+  "/client/profile/page": "app/client/profile/page.js",
+  "/client/planner/page": "app/client/planner/page.js",
+  "/client/logout/page": "app/client/logout/page.js",
+  "/page": "app/page.js"
 }
